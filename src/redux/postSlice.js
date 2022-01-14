@@ -3,49 +3,88 @@ import axios from "axios";
 
 const initialState = {
   status: "idle",
+  post: {},
   posts: [],
-  postDetails: {},
-  commentStatus: "idle",
   comments: [],
 };
 
-export const getPosts = createAsyncThunk("post/getPosts", async () => {
+export const getAllPosts = createAsyncThunk("post/getPosts", async () => {
   const { data } = await axios.get("/api/posts/all");
   return data;
 });
 
-export const getPostDetails = createAsyncThunk("post/getPostDetails", async (id) => {
-  const { data } = await axios.get("/api/posts/" + id);
+export const getTimelinePosts = createAsyncThunk("post/getTimelinePosts", async (userId) => {
+  const { data } = await axios.get(`/api/posts/timeline/${userId}`);
+  return data;
+});
+
+export const getPostDetails = createAsyncThunk("post/getPostDetails", async (postId) => {
+  const { data } = await axios.get(`/api/posts/${postId}`);
   return data;
   }
 );
 
-export const getComments = createAsyncThunk("post/getComments", async (id) => {
-  const { data } = await axios.get("/api/comments/" + id);
+export const getComments = createAsyncThunk("post/getComments", async (commentId) => {
+  const { data } = await axios.get(`/api/posts/comments/${commentId}`);
   return data;
 });
 
+export const addPost = createAsyncThunk("post/addPost", async (postData)=>{
+  const {data} = awaitaxios.post(`/api/posts/new`, postData);
+  return data;
+});
+
+export const updatePost = createAsyncThunk("post/updatePost", async (postData)=>{
+  const {data} = awaitaxios.put(`/api/posts/${postData.postId}`, postData);
+  return data;
+});
+
+export const deletePost = createAsyncThunk("post/deletePost", async (postId) => {
+  const { data } = await axios.delete(`/api/posts/${postId}`);
+  return data;
+  }
+);
+
+export const addLike = createAsyncThunk("post/addLike", async (likeData) => {
+  const { data } = await axios.get(`/api/posts/${likeData.postId}/like`, likeData);
+  return data;
+  }
+);
+
+export const addComment = createAsyncThunk("post/addComment", async (commentData)=>{
+  const {data} = await axios.post(`/api/posts/${commentData.postId}/comment`, commentData);
+  return data;
+});
+
+
+
 export const postSlice = createSlice({
   name: "post",
+
   initialState,
-  reducers: {
-    updateLike: (state, action) => {
-      const index = state.posts.findIndex(
-        (post) => post._id === action.payload.id
-      );
-      state.posts[index].isLiked = !state.posts[index].isLiked;
-    },
-  },
+
+  reducers: {},
+
   extraReducers: {
-    [getPosts.pending]: (state, action) => {
+    [getAllPosts.pending]: (state, action) => {
       state.status = "loading";
     },
-    [getPosts.fulfilled]: (state, action) => {
+    [getAllPosts.fulfilled]: (state, action) => {
       state.status = "success";
-      // console.log(action);
       state.posts = action.payload;
     },
-    [getPosts.rejected]: (state, action) => {
+    [getAllPosts.rejected]: (state, action) => {
+      state.status = "failed";
+    },
+
+    [getTimelinePosts.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [getTimelinePosts.fulfilled]: (state, action) => {
+      state.status = "success";
+      state.posts = action.payload;
+    },
+    [getTimelinePosts.rejected]: (state, action) => {
       state.status = "failed";
     },
 
@@ -54,21 +93,76 @@ export const postSlice = createSlice({
     },
     [getPostDetails.fulfilled]: (state, action) => {
       state.status = "success";
-      state.postDetails = action.payload.response.post;
+      state.post = action.payload;
     },
     [getPostDetails.rejected]: (state, action) => {
       state.status = "failed";
     },
 
     [getComments.pending]: (state, action) => {
-      state.commentStatus = "loading";
+      state.status = "loading";
     },
     [getComments.fulfilled]: (state, action) => {
-      state.commentStatus = "success";
-      state.comments = action.payload.response.comments;
+      state.status = "success";
+      state.comments = action.payload;
     },
     [getComments.rejected]: (state, action) => {
-      state.commentStatus = "failed";
+      state.status = "failed";
+    },
+
+    [addPost.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [addPost.fulfilled]: (state, action) => {
+      state.status = "success";
+      state.posts = action.payload;
+    },
+    [addPost.rejected]: (state, action) => {
+      state.status = "failed";
+    },
+
+    [updatePost.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [updatePost.fulfilled]: (state, action) => {
+      state.status = "success";
+      state.posts = action.payload;
+    },
+    [updatePost.rejected]: (state, action) => {
+      state.status = "failed";
+    },
+
+    [deletePost.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [deletePost.fulfilled]: (state, action) => {
+      state.status = "success";
+      state.posts = action.payload;
+    },
+    [deletePost.rejected]: (state, action) => {
+      state.status = "failed";
+    },
+
+    [addLike.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [addLike.fulfilled]: (state, action) => {
+      state.status = "success";
+      state.posts = action.payload;
+    },
+    [addLike.rejected]: (state, action) => {
+      state.status = "failed";
+    },
+
+    [addComment.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [addComment.fulfilled]: (state, action) => {
+      state.status = "success";
+      state.posts = action.payload;
+    },
+    [addComment.rejected]: (state, action) => {
+      state.status = "failed";
     },
   },
 });

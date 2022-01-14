@@ -1,14 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./authSlice";
 import postSlice from "./postSlice";
-import followSlice from "./followSlice";
+import userSlice from "./userSlice";
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     auth: authSlice,
     post: postSlice,
-    follow: followSlice,
+    user: userSlice,
   },
   // middleware:(getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
 });
+
+export default store;

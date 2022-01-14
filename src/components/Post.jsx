@@ -19,8 +19,8 @@ import {
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { getProfile } from "../redux/authSlice";
-import { getPosts, updateLike } from "../redux/postSlice";
+import { getProfile } from "../Redux/authSlice";
+import { getPosts, updateLike } from "../Redux/postSlice";
 import Modal from "./Modal";
 import { addComment, deletePost, likeOrDislikePost } from "../api";
 

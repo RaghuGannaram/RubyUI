@@ -15,12 +15,12 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import DateRangeIcon from "@mui/icons-material/DateRange";
-import Post from "../components/Post";
+import Post from "../Components/Post";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { getProfile } from "../redux/authSlice";
+import { getProfile } from "../Redux/authSlice";
 import { Link as RouteLink } from "react-router-dom";
-import { getFollowers, getFollowings } from "../redux/followSlice";
+import { getFollowers, getFollowings } from "../Redux/followSlice";
 import { followAccount, followingAccount } from "../api";
 import format from "date-fns/format";
 

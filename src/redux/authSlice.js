@@ -4,35 +4,25 @@ import axios from "axios";
 const initialState = {
   isLoggedIn: false,
   status: "idle",
-  userStatus: "idle",
-  profile: {},
   user: {},
-  users: [],
 };
-
-export const loginUser = createAsyncThunk("auth/loginUser", async (userData) => {
-  const { data } = await axios.post("/api/auth/login", userData);
-  return data;
-});
 
 export const registerUser = createAsyncThunk("auth/registerUser", async (userData) => {
   const { data } = await axios.post("/api/auth/register", userData);
   return data;
 });
 
-export const getProfile = createAsyncThunk("auth/getProfile", async (id) => {
-  const { data } = await axios.get("/api/profile/" + id);
+export const loginUser = createAsyncThunk("auth/loginUser", async (userData) => {
+  const { data } = await axios.post("/api/auth/login", userData);
   return data;
 });
 
-export const getUsers = createAsyncThunk("auth/getUsers", async () => {
-  const { data } = await axios.get("/api/users/all");
-  return data;
-});
 
 export const authSlice = createSlice({
   name: "auth",
+
   initialState,
+
   reducers : {
     setAuth: (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn;
@@ -46,12 +36,14 @@ export const authSlice = createSlice({
       state.user = action.payload;
     },
   },
+
   extraReducers: {
     [loginUser.pending]: (state, action) => {
       state.status = "loading";
     },
     [loginUser.fulfilled]: (state, action) => {
-      console.log(`auth slice action`, action)
+      state.status = "success";
+      state.isLoggedIn = true;
       const { username, email, _id } = action.payload;
       localStorage.setItem(
         "login",
@@ -60,8 +52,6 @@ export const authSlice = createSlice({
       state.user.username = username;
       state.user.email = email;
       state.user._id = _id;
-      state.status = "success";
-      state.isLoggedIn = true;
     },
     [loginUser.rejected]: (state, action) => {
       state.status = "failed";
@@ -73,7 +63,7 @@ export const authSlice = createSlice({
     },
     [registerUser.fulfilled]: (state, action) => {
       state.status = "success";
-      // console.log(action)
+      state.isLoggedIn = true;
       const {username, email } = action.payload;
       localStorage.setItem(
         "login",
@@ -81,35 +71,13 @@ export const authSlice = createSlice({
       );
       state.user.username = username;
       state.user.email = email;
-      state.isLoggedIn = true;
     },
     [registerUser.rejected]: (state, action) => {
       state.status = "failed";
       state.isLoggedIn = false;
     },
 
-    [getProfile.pending]: (state, action) => {
-      state.status = "loading";
-    },
-    [getProfile.fulfilled]: (state, action) => {
-      state.status = "success";
-      state.profile = action.payload.profile;
-    },
-    [getProfile.rejected]: (state, action) => {
-      state.status = "failed";
-    },
-
-    [getUsers.pending]: (state, action) => {
-      state.userStatus = "loading";
-    },
-    [getUsers.fulfilled]: (state, action) => {
-      state.userStatus = "success";
-      console.log(action)
-      state.users = action.payload;
-    },
-    [getUsers.rejected]: (state, action) => {
-      state.userStatus = "failed";
-    },
+   
   },
 });
 

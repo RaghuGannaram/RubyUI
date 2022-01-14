@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import {Box,Typography, Link} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import LoginForm from "../components/LoginForm";
-import RegisterForm from "../components/RegisterForm";
+import {LoginForm, RegisterForm} from "../Components";
 
 export default function Login() {
   const [isLoginForm, setIsLoginForm] = useState(true);

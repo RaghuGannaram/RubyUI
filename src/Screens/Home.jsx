@@ -3,15 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress, Grid, IconButton, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import AssistantIcon from "@mui/icons-material/Assistant";
-import { getPosts } from "../redux/postSlice";
-import Post from "../components/Post";
-import AddPost from "../components/AddPost";
+import { getAllPosts } from "../Redux/postSlice";
+import {Post, AddPost} from "../Components";
 
 export default function Home() {
   const dispatch = useDispatch();
   const { status, posts } = useSelector((state) => state.post);
   useEffect(() => {
-    dispatch(getPosts());
+    dispatch(getAllPosts());
   }, [dispatch]);
 
   return (
