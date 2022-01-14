@@ -2,23 +2,19 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  followingStatus: "idle",
-  followings: [],
   followerStatus: "idle",
+  followingStatus: "idle",
   followers: [],
+  followings: [],
 };
 
-export const getFollowings = createAsyncThunk(
-  "follow/getFollowings",
-  async (id) => {
+export const getFollowings = createAsyncThunk("follow/getFollowings", async (id) => {
     const { data } = await axios.get("/api/followings/" + id);
     return data;
   }
 );
 
-export const getFollowers = createAsyncThunk(
-  "follow/getFollowers",
-  async (id) => {
+export const getFollowers = createAsyncThunk("follow/getFollowers", async (id) => {
     const { data } = await axios.get("/api/followers/" + id);
     return data;
   }

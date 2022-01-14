@@ -3,7 +3,7 @@
   "name": "Probook App | A Social Media App for Entrepreneurs",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "icon.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }

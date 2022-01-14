@@ -100,7 +100,7 @@ export default function PostDetails() {
             <Box>
               <Grid container alignItems="center">
                 <Grid item>
-                  <img src="/logo.png" alt="lgogo" width="60px" />
+                  <img src="/icon.png" alt="icon" width="60px" />
                 </Grid>
                 <Grid item flexGrow="1">
                   <Grid container justifyContent="space-between">
@@ -202,7 +202,7 @@ export default function PostDetails() {
             <Box>
               <Grid container>
                 <Grid item>
-                  <img src="/logo.png" alt="logo" width="60px" />
+                  <img src="/icon.png" alt="icon" width="60px" />
                 </Grid>
                 <Grid item flexGrow="1">
                   <Box padding=".5rem 0">

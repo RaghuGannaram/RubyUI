@@ -10,15 +10,13 @@ const initialState = {
 };
 
 export const getPosts = createAsyncThunk("post/getPosts", async () => {
-  const { data } = await axios.get("/api/posts/timeline/all");
+  const { data } = await axios.get("/api/posts/all");
   return data;
 });
 
-export const getPostDetails = createAsyncThunk(
-  "post/getPostDetails",
-  async (id) => {
-    const { data } = await axios.get("/api/posts/" + id);
-    return data;
+export const getPostDetails = createAsyncThunk("post/getPostDetails", async (id) => {
+  const { data } = await axios.get("/api/posts/" + id);
+  return data;
   }
 );
 

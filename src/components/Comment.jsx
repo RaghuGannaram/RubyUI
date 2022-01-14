@@ -16,7 +16,7 @@ export default function Comment({ comment }) {
     >
       <Grid container flexWrap="nowrap">
         <Grid item sx={{ paddingRight: "1rem" }}>
-          <img src="/logo.png" alt="lgoog" width="50px" />
+          <img src="/icon.png" alt="icon" width="50px" />
         </Grid>
         <Grid item flexGrow="1">
           <Box>

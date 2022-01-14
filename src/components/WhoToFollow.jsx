@@ -9,9 +9,9 @@ export default function WhoToFollow({ user }) {
     <Box margin="1rem 0">
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item>
-          <Grid container>
+          <Grid container alignItems="center" ml={"15px"}>
             <Grid item sx={{ paddingRight: "12px" }}>
-              <img src="/logo.png" width="50px" alt="logo" />
+              <img src="/icon.png" width="50px" alt="icon" />
             </Grid>
             <Grid item>
               <Grid container alignItems="center">
@@ -30,7 +30,7 @@ export default function WhoToFollow({ user }) {
                         fontSize: "12px",
                         background: "#ccc",
                         borderRadius: theme.shape.borderRadius,
-                        padding: "0 6px",
+                        padding: "5px 10px",
                         color: "#777",
                       }}
                     >
@@ -48,10 +48,11 @@ export default function WhoToFollow({ user }) {
             sx={{
               borderRadius: theme.shape.borderRadius,
               textTransform: "capitalize",
-              ml: "12px",
-              background: "black",
+              mb: "10px",
+              padding: "3px 20px",
+              background: "#008ace",
               "&:hover": {
-                background: "#333",
+                background: "#006192",
               },
             }}
             variant="contained"

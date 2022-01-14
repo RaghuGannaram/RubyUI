@@ -79,7 +79,7 @@ export default function Post({ post, profile }) {
           <Grid container flexWrap="nowrap">
             <Grid item sx={{ paddingRight: "1rem" }}>
               {/* <Link to={`/profile/${post.author.id}`}> */}
-                <img src="/logo.png" alt="lgoog" width="50px" />
+                <img src="/icon.png" alt="icon" width="50px" />
               {/* </Link> */}
             </Grid>
             <Grid item flexGrow="1">
@@ -196,7 +196,7 @@ export default function Post({ post, profile }) {
           <Box>
             <Grid container>
               <Grid item>
-                <img src="/logo.png" alt="logo" width="60px" />
+                <img src="/icon.png" alt="icon" width="60px" />
               </Grid>
               <Grid item flexGrow="1">
                 <Box padding=".5rem 0">

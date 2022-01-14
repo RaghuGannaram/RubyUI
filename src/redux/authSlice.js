@@ -2,29 +2,23 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  status: "idle",
   isLoggedIn: false,
-  user: {},
-  profile: {},
+  status: "idle",
   userStatus: "idle",
+  profile: {},
+  user: {},
   users: [],
 };
 
-export const loginUser = createAsyncThunk(
-  "auth/loginUser",
-  async (userData) => {
-    const { data } = await axios.post("/api/auth/login", userData);
-    return data;
-  }
-);
+export const loginUser = createAsyncThunk("auth/loginUser", async (userData) => {
+  const { data } = await axios.post("/api/auth/login", userData);
+  return data;
+});
 
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (userData) => {
-    const { data } = await axios.post("/api/auth/register", userData);
-    return data;
-  }
-);
+export const registerUser = createAsyncThunk("auth/registerUser", async (userData) => {
+  const { data } = await axios.post("/api/auth/register", userData);
+  return data;
+});
 
 export const getProfile = createAsyncThunk("auth/getProfile", async (id) => {
   const { data } = await axios.get("/api/profile/" + id);
@@ -32,7 +26,7 @@ export const getProfile = createAsyncThunk("auth/getProfile", async (id) => {
 });
 
 export const getUsers = createAsyncThunk("auth/getUsers", async () => {
-  const { data } = await axios.get("/api/users/");
+  const { data } = await axios.get("/api/users/all");
   return data;
 });
 

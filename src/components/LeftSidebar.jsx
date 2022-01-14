@@ -63,7 +63,7 @@ export default function LeftSidebar() {
               backgroundColor: "inherit",
             }}
           >
-            <img src="/logo.png" alt="logo" width="50px" />
+            <img src="/icon.png" alt="icon" width="50px" />
           </NavLink>
         </Box>
         <List>
@@ -312,7 +312,7 @@ export default function LeftSidebar() {
           <Box>
             <Grid container>
               <Grid item>
-                <img src="/logo.png" alt="logo" width="60px" />
+                <img src="/icon.png" alt="icon" width="60px" />
               </Grid>
               <Grid item flexGrow="1">
                 <Box padding=".5rem 0">

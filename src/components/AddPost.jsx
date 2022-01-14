@@ -20,7 +20,7 @@ export default function AddPost() {
     <Box padding="1rem 1rem 0 1rem" borderBottom="1px solid #ccc">
       <Grid container>
         <Grid item sx={{ paddingRight: "1rem" }}>
-          <img src="/logo.png" alt="lgogo" width="50px" />
+          <img src="/icon.png" alt="icon" width="50px" />
         </Grid>
         <Grid item flexGrow="1">
           <Box padding=".5rem 0">

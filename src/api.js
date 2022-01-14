@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const addPost = async (postData) => {
   try {
-    const { data } = await axios.post("/api/posts", postData);
+    const { data } = await axios.post("/api/posts/new", postData);
     return data;
   } catch (error) {
     alert("Something went wrong.");

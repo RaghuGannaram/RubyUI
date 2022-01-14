@@ -89,7 +89,7 @@ export default function RightSidebar() {
                       alignItems="center"
                     >
                       <Grid item sx={{ paddingRight: "12px" }}>
-                        <img src="/logo.png" width="50px" alt="logo" />
+                        <img src="/icon.png" width="50px" alt="icon" />
                       </Grid>
                       <Grid item>
                         <Grid container alignItems="center">
