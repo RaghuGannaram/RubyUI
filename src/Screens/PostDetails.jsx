@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   CircularProgress,
@@ -9,68 +12,67 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import format from "date-fns/format";
-
+import {
+  ArrowBack as ArrowBackIcon, 
+  MoreHoriz as MoreHorizIcon,
+  ChatBubbleOutline as ChatBubbleOutlineIcon,
+  Sync as SyncIcon,
+  FavoriteBorder as FavoriteBorderIcon,
+  Favorite as FavoriteIcon,
+  IosShare as IosShareIcon
+} from "@mui/icons-material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import SyncIcon from "@mui/icons-material/Sync";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-
-import IosShareIcon from "@mui/icons-material/IosShare";
-import { useHistory, useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { getComments, getPostDetails } from "../redux/postSlice";
-import { addComment, deletePost, likeOrDislikePost } from "../api";
-import Comment from "../components/Comment";
+import format from "date-fns/format";
+import { getPostDetails, getComments, addLike, addComment, deletePost } from "../Redux/postSlice";
+import Comment from "../Components/Comment";
 
 export default function PostDetails() {
-  const [commentText, setCommentText] = useState("");
   const theme = useTheme();
-  const { id } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { status, comments, commentStatus, postDetails } = useSelector(
-    (state) => state.post
-  );
-
+  const { postId } = useParams();
+  const { postStatus, commentStatus, post, comments } = useSelector((state) => state.post);
+  const [commentText, setCommentText] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const { _id } = JSON.parse(localStorage.getItem("login"));
+
+  useEffect(() => {
+    console.log(postId)
+    dispatch(getPostDetails(postId));
+    dispatch(getComments(postId));
+  }, [dispatch, postId]);
+
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const { _id } = JSON.parse(localStorage.getItem("login"));
   const handleDeletePost = async () => {
-    const response = await deletePost({ id: postDetails._id });
+    const response = await deletePost({ id: post._id });
     if (response) {
       history.push("/");
     }
   };
 
-  const handleLike = async (e) => {
-    e.preventDefault();
-    const response = await likeOrDislikePost({ id: postDetails._id });
+  const handleLike = async (event) => {
+    event.preventDefault();
+    const response = await addLike({ postId: post._id, userId: _id });
     if (response) {
-      dispatch(getPostDetails(id));
-      dispatch(getComments(id));
+      dispatch(getPostDetails(postId));
+      dispatch(getComments(postId));
     }
   };
 
-  useEffect(() => {
-    dispatch(getPostDetails(id));
-    dispatch(getComments(id));
-  }, [dispatch, id]);
+
 
   const handleAddComment = async () => {
-    const response = await addComment({ id, text: commentText });
+    const response = await dispatch(addComment({ postId, description: commentText }));
     if (response) {
-      dispatch(getComments(id));
+      dispatch(getComments(postId));
       setCommentText("");
     }
   };
@@ -91,11 +93,11 @@ export default function PostDetails() {
       </Box>
       <Box height="92vh" sx={{ overflowY: "scroll" }}>
         <Box textAlign="center" marginTop="1rem">
-          {status === "loading" && (
+          {postStatus === "loading" && (
             <CircularProgress size={20} color="primary" />
           )}
         </Box>
-        {status === "success" && (
+        {postStatus === "success" && (
           <Box padding="0 20px">
             <Box>
               <Grid container alignItems="center">
@@ -104,23 +106,23 @@ export default function PostDetails() {
                 </Grid>
                 <Grid item flexGrow="1">
                   <Grid container justifyContent="space-between">
-                    <Grid item>
+                    <Grid item sx={{marginLeft:"10px"}}>
                       <Typography sx={{ fontSize: "16px", fontWeight: "500" }}>
-                        {postDetails.author && postDetails.author.name}
+                        {post.author && post.author.name}
                       </Typography>
                       <Typography sx={{ fontSize: "15px", color: "#555" }}>
-                        @{postDetails.author && postDetails.author.handle}
+                        @{post.author && post.author.handle}
                       </Typography>
                     </Grid>
                     <Grid item>
-                      {status === "success" &&
-                        postDetails.author &&
-                        _id === postDetails.author._id && (
+                      {postStatus === "success" &&
+                        post.author &&
+                        _id === post.author._id && (
                           <IconButton
                             aria-expanded={open ? "true" : undefined}
                             onClick={(e) => {
                               e.preventDefault();
-                              handleClick(e);
+                              handleClick(e); 
                             }}
                           >
                             <MoreHorizIcon />
@@ -152,27 +154,23 @@ export default function PostDetails() {
             </Box>
             <Box>
               <Typography sx={{ fontSize: "20px" }}>
-                {postDetails.text}
+                {post.description}
               </Typography>
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                {postDetails &&
-                  postDetails.createdAt &&
-                  format(new Date(postDetails.createdAt), "HH:mm a")}
+                {post && post.createdAt && format(new Date(post.createdAt), "HH:mm a")}
               </Typography>
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
                 .
               </Typography>
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                {postDetails &&
-                  postDetails.createdAt &&
-                  format(new Date(postDetails.createdAt), "MMM dd yyyy")}
+                {post && post.createdAt && format(new Date(post.createdAt), "MMM dd yyyy")}
               </Typography>
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                <strong>{postDetails.likes && postDetails.likes.length}</strong>{" "}
+                <strong>{post.likes && post.likes.length}</strong>{" "}
                 Likes
               </Typography>
             </Box>
@@ -189,11 +187,7 @@ export default function PostDetails() {
                 <SyncIcon fontSize="small" />
               </IconButton>
               <IconButton onClick={handleLike} size="small">
-                {postDetails.isLiked ? (
-                  <FavoriteIcon fontSize="small" />
-                ) : (
-                  <FavoriteBorderIcon fontSize="small" />
-                )}
+                {post && post.likes && post.likes.includes(_id) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" /> }
               </IconButton>
               <IconButton size="small">
                 <IosShareIcon fontSize="small" />
@@ -207,27 +201,22 @@ export default function PostDetails() {
                 <Grid item flexGrow="1">
                   <Box padding=".5rem 0">
                     <Input
-                      onChange={(e) => setCommentText(e.target.value)}
+                      sx={{ width: "100%" }}
+                      type="text"
                       value={commentText}
+                      placeholder="Post your comment"
                       multiline
                       rows="2"
                       disableUnderline
-                      type="text"
-                      placeholder="Post your comment"
-                      sx={{ width: "100%" }}
+                      onChange={(event) => setCommentText(event.target.value)}
                     />
                   </Box>
                   <Box textAlign="right" paddingBottom=".5rem">
                     <Button
+                      sx={{ fontSize: "12px",color:"primary", borderRadius: theme.shape.borderRadius}}
                       disabled={commentText.length === 0}
-                      onClick={handleAddComment}
                       variant="contained"
-                      color="primary"
-                      size="small"
-                      sx={{
-                        borderRadius: theme.shape.borderRadius,
-                        fontSize: "12px",
-                      }}
+                      onClick={handleAddComment}
                     >
                       Comment
                     </Button>
@@ -240,8 +229,8 @@ export default function PostDetails() {
                 )}
               </Box>
               {commentStatus === "success" &&
-                comments.map((comment) => (
-                  <Comment key={comment._id} comment={comment} />
+                comments.map((comment,index) => (
+                  <Comment key={index} comment={comment} />
                 ))}
             </Box>
           </Box>

@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
-import { Box } from "@mui/system";
+import { useParams } from "react-router";
+import { Link as RouteLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   CircularProgress,
@@ -9,67 +11,66 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import InsertLinkIcon from "@mui/icons-material/InsertLink";
-import DateRangeIcon from "@mui/icons-material/DateRange";
-import Post from "../Components/Post";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
-import { getProfile } from "../Redux/authSlice";
-import { Link as RouteLink } from "react-router-dom";
-import { getFollowers, getFollowings } from "../Redux/followSlice";
-import { followAccount, followingAccount } from "../api";
+import {
+  ArrowBack as ArrowBackIcon,
+  MoreHoriz as MoreHorizIcon,
+  MailOutline as MailOutlineIcon,
+  LocationOn as LocationOnIcon,
+  InsertLink as InsertLinkIcon,
+  DateRange as DateRangeIcon,
+} from "@mui/icons-material/";
+import { Box } from "@mui/system";
 import format from "date-fns/format";
+import Post from "../Components/Post";
+import { getUserDetails } from "../Redux/userSlice";
 
 export default function Profile() {
+
+  const dispatch = useDispatch();
+  const {user, followers, followings } = useSelector((state) => state.user);
+  const { profile, status } = useSelector((state) => state.auth);
+  
   const theme = useTheme();
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const { profile, status } = useSelector((state) => state.auth);
-  const { followingStatus, followerStatus, followers, followings } =
-    useSelector((state) => state.follow);
   const { _id } = JSON.parse(localStorage.getItem("login"));
 
-  useEffect(() => {
-    dispatch(getProfile(id));
-  }, [dispatch, id]);
+  // useEffect(() => {
+  //   dispatch(getProfile(id));
+  // }, [dispatch, id]);
 
-  useEffect(() => {
-    if (profile.userId) {
-      dispatch(getFollowers(profile.userId._id));
-      dispatch(getFollowings(profile.userId._id));
-    }
-  }, [dispatch, profile.userId]);
+  // useEffect(() => {
+  //   if (profile.userId) {
+  //     dispatch(getFollowers(profile.userId._id));
+  //     dispatch(getFollowings(profile.userId._id));
+  //   }
+  // }, [dispatch, profile.userId]);
 
-  const handleFollow = async () => {
-    const responseFollow = await followAccount({
-      userId: profile.userId._id,
-      followerId: _id,
-    });
-    const responseFlwing = await followingAccount({
-      followingId: profile.userId._id,
-      userId: _id,
-    });
-    if (responseFollow) {
-      dispatch(getFollowers(id));
-    }
-    if (responseFlwing) {
-      dispatch(getFollowings(id));
-    }
-  };
+  // const handleFollow = async () => {
+  //   const responseFollow = await followAccount({
+  //     userId: profile.userId._id,
+  //     followerId: _id,
+  //   });
+  //   const responseFlwing = await followingAccount({
+  //     followingId: profile.userId._id,
+  //     userId: _id,
+  //   });
+  //   if (responseFollow) {
+  //     dispatch(getFollowers(id));
+  //   }
+  //   if (responseFlwing) {
+  //     dispatch(getFollowings(id));
+  //   }
+  // };
 
-  function hideFollow() {
-    if (profile.userId) {
-      if (followings.length !== 0) {
-        return (
-          followings[0].followingId.includes(_id) || _id === profile.userId._id
-        );
-      }
-    }
-  }
+  // function hideFollow() {
+  //   if (profile.userId) {
+  //     if (followings.length !== 0) {
+  //       return (
+  //         followings[0].followingId.includes(_id) || _id === profile.userId._id
+  //       );
+  //     }
+  //   }
+  // }
 
   return (
     <Box>
@@ -103,7 +104,7 @@ export default function Profile() {
           <Box position="relative">
             <img
               width="100%"
-              src={profile.backgroundImageUrl}
+              src={profile.backgroundImage}
               alt="background"
             />
             <Box
@@ -115,7 +116,7 @@ export default function Profile() {
                 borderRadius: "50%",
               }}
             >
-              <img width="150px" src={profile.profileImageUrl} alt="profile" />
+              <img width="150px" src={profile.profilePicture} alt="profile" />
             </Box>
           </Box>
           <Box textAlign="right" padding="10px 20px">
@@ -125,7 +126,7 @@ export default function Profile() {
             <IconButton>
               <MailOutlineIcon />
             </IconButton>
-            {!hideFollow() && (
+            {/* {!hideFollow() && (
               <Button
                 onClick={handleFollow}
                 size="small"
@@ -142,7 +143,7 @@ export default function Profile() {
               >
                 Follow
               </Button>
-            )}
+            )} */}
           </Box>
           <Box padding="10px 20px">
             <Typography variant="h6" sx={{ fontWeight: "500" }}>
@@ -188,7 +189,7 @@ export default function Profile() {
             <Box display="flex">
               <Typography color="#555" marginRight="1rem">
                 <strong style={{ color: "black" }}>
-                  {followingStatus === "success" &&
+                  {"success" === "success" &&
                     followings.length !== 0 &&
                     followings[0].followingId.length}
                 </strong>
@@ -196,7 +197,7 @@ export default function Profile() {
               </Typography>
               <Typography color="#555" marginRight="1rem">
                 <strong style={{ color: "black" }}>
-                  {followerStatus === "success" &&
+                  {"success" === "success" &&
                     followers.length !== 0 &&
                     followers[0].followerId.length}
                 </strong>

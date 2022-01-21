@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import {Box,Typography, Link} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import {LoginForm, RegisterForm} from "../Components";
+import LoginForm from "../Components/LoginForm";
+import RegisterForm from "../Components/RegisterForm";
 
 export default function Login() {
   const [isLoginForm, setIsLoginForm] = useState(true);
@@ -25,7 +26,7 @@ export default function Login() {
         }}
       >
         <Box textAlign="center" marginBottom="1rem">
-          <img src="/icon.png" alt="icon" />
+          <img src="/icon.png" width={100} height={100} alt="icon" />
         </Box>
         {isLoginForm ? (
           <Typography variant="h5">Login to your account</Typography>

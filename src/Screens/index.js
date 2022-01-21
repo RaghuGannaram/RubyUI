@@ -1,1 +1,0 @@
-export {Home, Login, PostDetails, Profile} from "./"

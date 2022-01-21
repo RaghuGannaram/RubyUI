@@ -4,37 +4,37 @@ import axios from "axios";
 const initialState = {
   isLoggedIn: false,
   status: "idle",
-  user: {},
+  profile: {},
 };
 
-export const registerUser = createAsyncThunk("auth/registerUser", async (userData) => {
-  const { data } = await axios.post("/api/auth/register", userData);
+export const registerUser = createAsyncThunk("auth/registerUser", async (signUpData) => {
+  const { data } = await axios.post("/api/auth/register", signUpData);
   return data;
 });
 
-export const loginUser = createAsyncThunk("auth/loginUser", async (userData) => {
-  const { data } = await axios.post("/api/auth/login", userData);
+export const loginUser = createAsyncThunk("auth/loginUser", async (signInData) => {
+  const { data } = await axios.post("/api/auth/login", signInData);
   return data;
 });
 
 
 export const authSlice = createSlice({
+
   name: "auth",
 
   initialState,
 
   reducers : {
-    setAuth: (state, action) => {
+    setAuthStatus: (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn;
+      state.profile = JSON.parse(localStorage.getItem("login"));
     },
-    logout: (state, action) => {
+    logoutUser: (state, action) => {
       localStorage.clear();
       state.isLoggedIn = false;
-      axios.defaults.headers.common["authorization"] = null;
-    },
-    setUser: (state, action) => {
-      state.user = action.payload;
-    },
+      state.profile={};
+      // axios.defaults.headers.common["authorization"] = null;
+    }
   },
 
   extraReducers: {
@@ -42,16 +42,11 @@ export const authSlice = createSlice({
       state.status = "loading";
     },
     [loginUser.fulfilled]: (state, action) => {
-      state.status = "success";
       state.isLoggedIn = true;
-      const { username, email, _id } = action.payload;
-      localStorage.setItem(
-        "login",
-        JSON.stringify({ username, email, _id, isLoggedIn: true })
-      );
-      state.user.username = username;
-      state.user.email = email;
-      state.user._id = _id;
+      state.status = "success";
+      state.profile = action.payload;
+      const { _id, username, handle, email } = action.payload;
+      localStorage.setItem("login", JSON.stringify({isLoggedIn: true, _id, username, handle, email }));
     },
     [loginUser.rejected]: (state, action) => {
       state.status = "failed";
@@ -64,13 +59,9 @@ export const authSlice = createSlice({
     [registerUser.fulfilled]: (state, action) => {
       state.status = "success";
       state.isLoggedIn = true;
-      const {username, email } = action.payload;
-      localStorage.setItem(
-        "login",
-        JSON.stringify({ username, email, isLoggedIn: true })
-      );
-      state.user.username = username;
-      state.user.email = email;
+      state.profile = action.payload;
+      const { _id, username, handle, email } = action.payload;
+      localStorage.setItem("login", JSON.stringify({isLoggedIn: true, _id, username, handle, email }));
     },
     [registerUser.rejected]: (state, action) => {
       state.status = "failed";
@@ -82,4 +73,4 @@ export const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-export const { setAuth, logout } = authSlice.actions;
+export const { setAuthStatus, logoutUser } = authSlice.actions;

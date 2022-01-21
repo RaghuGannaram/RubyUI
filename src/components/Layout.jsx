@@ -4,15 +4,15 @@ import RightSidebar from "./RightSidebar";
 import Box from "@mui/material/Box";
 import { Grid, Hidden } from "@mui/material";
 import { useTheme } from "@mui/system";
-import { getUsers } from "../redux/authSlice";
+// import { getUsers } from "../Redux/authSlice";
 import { useDispatch } from "react-redux";
 
 export default function Layout({ children }) {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(getUsers());
+  // }, [dispatch]);
   return (
     <Box
       sx={{

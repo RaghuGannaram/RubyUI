@@ -1,21 +1,28 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Grid, Input } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
-import { getPosts } from "../redux/postSlice";
-import { addPost } from "../api";
+import { addNewPost } from "../Redux/postSlice";
 
 export default function AddPost() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const [postText, setPostText] = useState("");
+  const {profile} = useSelector((state) => state.auth);
+
   const handleAddPost = async () => {
-    const data = await addPost({ text: postText });
-    if (data) {
-      dispatch(getPosts());
-      setPostText("");
+    console.log("in the handlepost");
+    let post ={
+      author : {
+        id: profile._id,
+        name: profile.username,
+        handle: profile.handle
+      },
+      description: postText
     }
+    await dispatch(addNewPost(post));
   };
+
   return (
     <Box padding="1rem 1rem 0 1rem" borderBottom="1px solid #ccc">
       <Grid container>
@@ -25,31 +32,26 @@ export default function AddPost() {
         <Grid item flexGrow="1">
           <Box padding=".5rem 0">
             <Input
-              value={postText}
-              onChange={(event) => setPostText(event.target.value)}
+              sx={{ width: "100%" }}
               multiline
               rows="2"
               disableUnderline
               type="text"
+              value={postText}
               placeholder="What's happening?"
-              sx={{ width: "100%" }}
+              onChange={(event) => setPostText(event.target.value)}
             />
           </Box>
           <Box
             textAlign="right"
-            paddingBottom=".5rem"
-            paddingTop=".5rem"
+            padding=".5rem auto"
             borderTop="1px solid #ccc"
           >
             <Button
-              onClick={handleAddPost}
-              disabled={postText.length === 0}
+              sx={{ fontSize: "12px", margin: "5px",color:"primary" ,borderRadius: theme.shape.borderRadius }}
               variant="contained"
-              color="primary"
-              sx={{
-                borderRadius: theme.shape.borderRadius,
-                fontSize: "12px",
-              }}
+              disabled={postText.length === 0}
+              onClick={handleAddPost}
             >
               Post
             </Button>

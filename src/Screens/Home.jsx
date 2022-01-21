@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress, Grid, IconButton, Typography } from "@mui/material";
+import {Assistant as AssistantIcon} from "@mui/icons-material";
 import { Box } from "@mui/system";
-import AssistantIcon from "@mui/icons-material/Assistant";
 import { getAllPosts } from "../Redux/postSlice";
-import {Post, AddPost} from "../Components";
+import AddPost from "../Components/AddPost";
+import Post from "../Components/Post";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { status, posts } = useSelector((state) => state.post);
+  const { postStatus, posts } = useSelector((state) => state.post);
+
   useEffect(() => {
     dispatch(getAllPosts());
   }, [dispatch]);
@@ -30,11 +32,11 @@ export default function Home() {
       <Box height="92vh" sx={{ overflowY: "scroll" }}>
         <AddPost />
         <Box textAlign="center" marginTop="1rem">
-          {status === "loading" && (
+          {postStatus === "loading" && (
             <CircularProgress size={20} color="primary" />
           )}
         </Box>
-        {status === "success" &&
+        {postStatus === "success" &&
           posts.map((post) => <Post key={post._id} post={post} />)}
       </Box>
     </Box>

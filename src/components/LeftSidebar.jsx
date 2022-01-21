@@ -27,10 +27,9 @@ import {
   MoreHoriz as MoreHorizIcon,
   AddCircleOutline as AddCircleOutlineIcon,
 } from "@mui/icons-material";
-import { logout } from "../redux/authSlice";
+import { logoutUser } from "../Redux/authSlice";
 import Modal from "./Modal";
-import { getPosts } from "../redux/postSlice";
-import { addPost } from "../api";
+import { getAllPosts, addNewPost } from "../Redux/postSlice";
 
 export default function LeftSidebar() {
   const theme = useTheme();
@@ -44,9 +43,9 @@ export default function LeftSidebar() {
  
  
   const handleAddPost = async () => {
-    const data = await addPost({ text: postText });
+    const data = await addNewPost({ text: postText });
     if (data) {
-      dispatch(getPosts());
+      dispatch(getAllPosts());
       setPostText("");
     }
   };
@@ -54,7 +53,7 @@ export default function LeftSidebar() {
   return (
     <>
       <Box sx={{ height: "100vh", maxWidth: "100%" ,backgroundColor:"inherit"}}>
-        <Box textAlign="center">
+        <Box textAlign="center" paddingTop={2}>
           <NavLink
             to="/"
             style={{
@@ -293,7 +292,7 @@ export default function LeftSidebar() {
         >
           <MenuItem
             onClick={() => {
-              dispatch(logout());
+              dispatch(logoutUser());
               setAnchorEl(null);
             }}
           >

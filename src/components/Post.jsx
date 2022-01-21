@@ -19,47 +19,45 @@ import {
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { getProfile } from "../Redux/authSlice";
-import { getPosts, updateLike } from "../Redux/postSlice";
-import Modal from "./Modal";
-import { addComment, deletePost, likeOrDislikePost } from "../api";
+// import {addLike, addComment } from "../Redux/postSlice";
+// import Modal from "./Modal";
 
-export default function Post({ post, profile }) {
+export default function Post({ post }) {
 
   const dispatch = useDispatch();
   const [commentText, setCommentText] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  // const [openModal, setOpenModal] = useState(false);
+  // const [anchorEl, setAnchorEl] = useState(null);
+  // const open = Boolean(anchorEl);
 
-  const { _id } = JSON.parse(localStorage.getItem("login"));
+  // const { _id } = JSON.parse(localStorage.getItem("login"));
 
-  const handleLike = async (event) => {
-    event.preventDefault();
-    dispatch(updateLike({ id: post._id }));
-    const response = await likeOrDislikePost({ id: post._id });
-    if (response.message !== "Post updated successfully.") {
-      dispatch(updateLike({ id: post._id }));
-    }
-  };
+  // const handleLike = async (event) => {
+  //   event.preventDefault();
+  //   dispatch(addLike({ id: post._id }));
+  //   const response = await addLike({ id: post._id });
+  //   if (response.message !== "Post updated successfully.") {
+  //     dispatch(addLike({ id: post._id }));
+  //   }
+  // };
 
-  const handleAddComment = async () => {
-    const response = await addComment({ id: post._id, text: commentText });
-    if (response) {
-      setCommentText("");
-    }
-  };
+  // const handleAddComment = async () => {
+  //   const response = await addComment({ id: post._id, text: commentText });
+  //   if (response) {
+  //     setCommentText("");
+  //   }
+  // };
 
-  const handleDeletePost = async () => {
-    const response = await deletePost({ id: post._id });
-    if (response) {
-      if (profile) {
-        dispatch(getProfile(post.author.id));
-      } else {
-        dispatch(getPosts());
-      }
-    }
-  };
+  // const handleDeletePost = async () => {
+  //   const response = await deletePost({ id: post._id });
+  //   if (response) {
+  //     if (profile) {
+  //       dispatch(getProfile(post.author.id));
+  //     } else {
+  //       dispatch(getAllPosts());
+  //     }
+  //   }
+  // };
 
   
   return (
@@ -78,9 +76,9 @@ export default function Post({ post, profile }) {
         >
           <Grid container flexWrap="nowrap">
             <Grid item sx={{ paddingRight: "1rem" }}>
-              {/* <Link to={`/profile/${post.author.id}`}> */}
+              {/* <Link to={`/profile/${post.author.id}`}>
                 <img src="/icon.png" alt="icon" width="50px" />
-              {/* </Link> */}
+              </Link> */}
             </Grid>
             <Grid item flexGrow="1">
               <Box>
@@ -120,18 +118,18 @@ export default function Post({ post, profile }) {
                     </Box>
                   </Grid>
                   <Grid item>
-                    {post.author.id === _id && (
+                    {/* {post.author.id === _id && ( */}
                       <IconButton
-                        aria-expanded={open ? "true" : undefined}
+                        // aria-expanded={open ? "true" : undefined}
                         onClick={(event) => {
                           event.preventDefault();
-                          setAnchorEl(event.currentTarget)
+                          // setAnchorEl(event.currentTarget)
                         }}
                       >
                         <MoreHorizIcon />
                       </IconButton>
-                    )}
-                    <Menu
+                    {/* )} */}
+                    {/* <Menu
                       id="basic-menu"
                       anchorEl={anchorEl}
                       open={open}
@@ -148,7 +146,7 @@ export default function Post({ post, profile }) {
                       >
                         Delete Post
                       </MenuItem>
-                    </Menu>
+                    </Menu> */}
                   </Grid>
                 </Grid>
                 <Box
@@ -157,7 +155,7 @@ export default function Post({ post, profile }) {
                   marginRight="5rem"
                   marginTop=".8rem"
                 >
-                  <IconButton
+                  {/* <IconButton
                     onClick={(event) => {
                       event.preventDefault();
                       setOpenModal(true);
@@ -165,11 +163,11 @@ export default function Post({ post, profile }) {
                     size="small"
                   >
                     <ChatBubbleOutlineIcon fontSize="small" />
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton size="small">
                     <SyncIcon fontSize="small" />
                   </IconButton>
-                  <IconButton onClick={handleLike} size="small">
+                  <IconButton size="small">
                     {post.isLiked ? (
                       <FavoriteIcon fontSize="small" />
                     ) : (
@@ -185,7 +183,7 @@ export default function Post({ post, profile }) {
           </Grid>
         </Box>
       </Link>
-      {openModal && (
+      {/* {openModal && (
         <Modal
           open={openModal}
           handleClose={()=>{setOpenModal(false)}}
@@ -215,7 +213,9 @@ export default function Post({ post, profile }) {
             </Grid>
           </Box>
         </Modal>
-      )}
+      )} */}
     </>
   );
 }
+
+

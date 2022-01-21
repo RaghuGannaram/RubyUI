@@ -2,9 +2,13 @@ import React, { useEffect } from "react";
 import { Route, Switch } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 // import axios from "axios";
-import {Home, Login, PostDetails, Profile} from "./Screens"
-import {Layout, PrivateRoute} from "./Components";
-import { setAuth } from "./Redux/authSlice";
+import Home from "./Screens/Home";
+import Login from "./Screens/Login";
+import PostDetails from "./Screens/PostDetails";
+import Profile from "./Screens/Profile";
+import Layout from "./Components/Layout";
+import PrivateRoute from "./Components/PrivateRoute";
+import { setAuthStatus } from "./Redux/authSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -19,18 +23,20 @@ function App() {
 
   useEffect(() => {
     const { isLoggedIn } = JSON.parse(localStorage.getItem("login")) || {};
-    isLoggedIn&&dispatch(setAuth({ isLoggedIn }));
+    isLoggedIn&&dispatch(setAuthStatus({ isLoggedIn }));
   }, [dispatch, isLoggedIn]);
   
-  return (
+  return (    
     <Switch>
-      
+      <Route path="/login">
+        <Login />
+      </Route>
       <PrivateRoute exact path="/">
         <Layout>
           <Home />
         </Layout>
       </PrivateRoute>
-      <PrivateRoute exact path="/posts/:id">
+      <PrivateRoute exact path="/posts/:postId">
         <Layout>
           <PostDetails />
         </Layout>
@@ -40,9 +46,6 @@ function App() {
           <Profile />
         </Layout>
       </PrivateRoute>
-      <Route path="/login">
-        <Login />
-      </Route>
     </Switch>
   );
 }

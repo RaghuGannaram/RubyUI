@@ -2,7 +2,7 @@ import { Grid, IconButton, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { parseDate } from "../utils/parseDate";
+import { parseDate } from "../Utilities/parseDate";
 
 export default function Comment({ comment }) {
   return (
@@ -46,12 +46,12 @@ export default function Comment({ comment }) {
                   <Typography
                     sx={{ fontSize: "15px", mr: "6px", color: "#555" }}
                   >
-                    {parseDate(comment.createdAt)}
+                    {/* {parseDate(comment.createdAt)} */}
                   </Typography>
                 </Box>
                 <Box>
                   <Typography sx={{ fontSize: "15px", color: "#555" }}>
-                    {comment.text}
+                    {comment.description}
                   </Typography>
                 </Box>
               </Grid>

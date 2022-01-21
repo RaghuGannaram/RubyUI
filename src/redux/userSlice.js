@@ -5,8 +5,6 @@ const initialState = {
   status : "idle",
   user: {},
   users: [],
-  followerStatus: "idle",
-  followingStatus: "idle",
   followers: [],
   followings: [],
 };

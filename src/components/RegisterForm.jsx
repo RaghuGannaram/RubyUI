@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, CircularProgress, TextField } from "@mui/material";
-import { registerUser } from "../redux/authSlice";
+import { registerUser } from "../Redux/authSlice";
 
 export default function RegisterForm() {
   const [registerData, setRegisterData] = useState({});
@@ -19,81 +19,78 @@ export default function RegisterForm() {
     if (isLoggedIn) {
       history.push("/");
     }
-  }, [isLoggedIn, history]);
+  }, [history, isLoggedIn]);
+
   return (
     <form onSubmit={handleSubmit}>
       <TextField
+        sx={{ width: "100%", margin: "1rem 0", bgcolor: "#fff" }}
+        variant="outlined"
+        label="Enter full name"
+        name="username"
+        type="text"
+        required
         onChange={(event) =>
           setRegisterData((prev) => ({
             ...prev,
             [event.target.name]: event.target.value,
           }))
         }
-        name="username"
-        sx={{ width: "100%", margin: "1rem 0", bgcolor: "#fff" }}
-        variant="outlined"
-        label="Enter full name"
-        type="text"
-        required
       />
       <TextField
-        name="handle"
-        onChange={(e) =>
-          setRegisterData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-          }))
-        }
         sx={{ width: "100%", margin: "1rem 0", bgcolor: "#fff" }}
         variant="outlined"
         label="Choose an handle"
+        name="handle"
         type="text"
         required
-      />
-      <TextField
-        name="email"
-        onChange={(e) =>
+        onChange={(event) =>
           setRegisterData((prev) => ({
             ...prev,
-            [e.target.name]: e.target.value,
+            [event.target.name]: event.target.value,
           }))
         }
+      />
+      <TextField
         sx={{ width: "100%", margin: "1rem 0", bgcolor: "#fff" }}
         variant="outlined"
         label="Enter Email"
+        name="email"
         type="email"
         required
-      />
-      <TextField
-        name="password"
-        onChange={(e) =>
+        onChange={(event) =>
           setRegisterData((prev) => ({
             ...prev,
-            [e.target.name]: e.target.value,
+            [event.target.name]: event.target.value,
           }))
         }
+      />
+      <TextField
         sx={{ width: "100%", margin: "1rem 0", bgcolor: "#fff" }}
         variant="outlined"
         label="Enter Password"
+        name="password"
         type="password"
         required
+        onChange={(event) =>
+          setRegisterData((prev) => ({
+            ...prev,
+            [event.target.name]: event.target.value,
+          }))
+        }
       />
       <Button
-        type="submit"
         sx={{
           width: "100%",
           margin: "1.5rem 0",
           padding: "12px 0",
           borderRadius: "28px",
+          color:"primary"
         }}
         variant="contained"
-        color="primary"
+        type="submit"
       >
-        {status === "loading" ? (
-          <CircularProgress size={24} sx={{ color: "#FFF" }} />
-        ) : (
-          "Register"
-        )}
+        {status === "loading" ? <CircularProgress size={24} sx={{ color: "#FFF" }} /> : "Register" }
       </Button>
     </form>
   );
