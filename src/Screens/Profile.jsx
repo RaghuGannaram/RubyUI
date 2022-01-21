@@ -22,55 +22,35 @@ import {
 import { Box } from "@mui/system";
 import format from "date-fns/format";
 import Post from "../Components/Post";
-import { getUserDetails } from "../Redux/userSlice";
+import { getUserDetails,followUser } from "../Redux/userSlice";
+import { getUserPosts, getPostDetails } from "../Redux/postSlice";
+import axios from "axios";
 
 export default function Profile() {
 
-  const dispatch = useDispatch();
-  const {user, followers, followings } = useSelector((state) => state.user);
-  const { profile, status } = useSelector((state) => state.auth);
-  
   const theme = useTheme();
-  const { id } = useParams();
+  const { userId } = useParams();
+  const dispatch = useDispatch();
+  const {user, status, followers, followings } = useSelector((state) => state.user);
+  const { postStatus, posts } = useSelector((state) => state.post);
+  
   const { _id } = JSON.parse(localStorage.getItem("login"));
 
-  // useEffect(() => {
-  //   dispatch(getProfile(id));
-  // }, [dispatch, id]);
+  useEffect(() => {
+    console.log(userId)
+    dispatch(getUserDetails(userId));
+    dispatch(getUserPosts(userId));
+  }, [dispatch, userId]);
 
-  // useEffect(() => {
-  //   if (profile.userId) {
-  //     dispatch(getFollowers(profile.userId._id));
-  //     dispatch(getFollowings(profile.userId._id));
-  //   }
-  // }, [dispatch, profile.userId]);
-
-  // const handleFollow = async () => {
-  //   const responseFollow = await followAccount({
-  //     userId: profile.userId._id,
-  //     followerId: _id,
-  //   });
-  //   const responseFlwing = await followingAccount({
-  //     followingId: profile.userId._id,
-  //     userId: _id,
-  //   });
-  //   if (responseFollow) {
-  //     dispatch(getFollowers(id));
-  //   }
-  //   if (responseFlwing) {
-  //     dispatch(getFollowings(id));
-  //   }
-  // };
-
-  // function hideFollow() {
-  //   if (profile.userId) {
-  //     if (followings.length !== 0) {
-  //       return (
-  //         followings[0].followingId.includes(_id) || _id === profile.userId._id
-  //       );
-  //     }
-  //   }
-  // }
+  const handleFollow = async () => {
+    const followData = {
+      followerId : _id,
+      userId : userId
+    }
+    const response =await dispatch(followUser(followData));
+    console.log(response);
+    dispatch(getUserDetails(userId));
+  };
 
   return (
     <Box>
@@ -87,10 +67,10 @@ export default function Profile() {
           {status === "success" && (
             <Grid item>
               <Typography variant="h6">
-                {profile.userId && profile.userId && profile.userId.name}
+                {user?.username}
               </Typography>
               <Typography sx={{ fontSize: "12px", color: "#555" }}>
-                {profile.posts && profile.posts.length} posts
+                {user?.posts?.length} posts
               </Typography>{" "}
             </Grid>
           )}
@@ -104,7 +84,7 @@ export default function Profile() {
           <Box position="relative">
             <img
               width="100%"
-              src={profile.backgroundImage}
+              src={user?.backgroundImage}
               alt="background"
             />
             <Box
@@ -116,7 +96,7 @@ export default function Profile() {
                 borderRadius: "50%",
               }}
             >
-              <img width="150px" src={profile.profilePicture} alt="profile" />
+              <img width="150px" src={user?.profilePicture} alt="profile" />
             </Box>
           </Box>
           <Box textAlign="right" padding="10px 20px">
@@ -126,34 +106,35 @@ export default function Profile() {
             <IconButton>
               <MailOutlineIcon />
             </IconButton>
-            {/* {!hideFollow() && (
+            {(userId !== _id) &&(
               <Button
-                onClick={handleFollow}
-                size="small"
-                sx={{
-                  borderRadius: theme.shape.borderRadius,
-                  textTransform: "capitalize",
-                  padding: "6px 20px",
-                  background: "black",
-                  "&:hover": {
-                    background: "#333",
-                  },
-                }}
-                variant="contained"
-              >
-                Follow
-              </Button>
-            )} */}
+              onClick={handleFollow}
+              size="small"
+              sx={{
+                borderRadius: theme.shape.borderRadius,
+                textTransform: "capitalize",
+                padding: "6px 20px",
+                background: "black",
+                "&:hover": {
+                  background: "#333",
+                },
+              }}
+              variant="contained"
+            >
+              { followers.includes(_id) ? "Follow" : "Unfollow" }
+            </Button>
+            )
+            }
           </Box>
           <Box padding="10px 20px">
             <Typography variant="h6" sx={{ fontWeight: "500" }}>
-              {profile.userId && profile.userId.name}
+              {user?.username}
             </Typography>
             <Typography sx={{ fontSize: "14px", color: "#555" }}>
-              @{profile.userId && profile.userId.handle}
+              @{user?.handle}
             </Typography>
             <Typography fontSize="16px" color="#333" padding="10px 0">
-              {profile.bio}
+              {user?.description}
             </Typography>
             <Box
               display="flex"
@@ -164,10 +145,10 @@ export default function Profile() {
               <Box display="flex">
                 <LocationOnIcon htmlColor="#555" />
                 <Typography sx={{ ml: "6px", color: "#555" }}>
-                  {profile.location}
+                  {user?.city}
                 </Typography>
               </Box>
-              <Box display="flex" marginLeft="1rem">
+              {/* <Box display="flex" marginLeft="1rem">
                 <InsertLinkIcon htmlColor="#555" />
                 <Link
                   sx={{ textDecoration: "none", marginLeft: "6px" }}
@@ -175,31 +156,24 @@ export default function Profile() {
                 >
                   {profile.website ? profile.website : "www"}
                 </Link>
-              </Box>
+              </Box> */}
               <Box display="flex" marginLeft="1rem">
                 <DateRangeIcon htmlColor="#555" />
                 <Typography sx={{ ml: "6px", color: "#555" }}>
-                  {profile.userId &&
-                    profile.userId &&
-                    profile.userId.createdAt &&
-                    format(new Date(profile.userId.createdAt), "MMM dd yyyy")}
+                  {user && format(new Date(user?.createdAt), "MMM dd yyyy")}
                 </Typography>
               </Box>
             </Box>
             <Box display="flex">
               <Typography color="#555" marginRight="1rem">
-                <strong style={{ color: "black" }}>
-                  {"success" === "success" &&
-                    followings.length !== 0 &&
-                    followings[0].followingId.length}
+                <strong style={{ color: "black", marginRight: "5px"}}>
+                  {followings.length}
                 </strong>
                 Following
               </Typography>
               <Typography color="#555" marginRight="1rem">
-                <strong style={{ color: "black" }}>
-                  {"success" === "success" &&
-                    followers.length !== 0 &&
-                    followers[0].followerId.length}
+                <strong style={{ color: "black", marginRight: "5px"}}>
+                    {followers.length}
                 </strong>
                 Followers
               </Typography>
@@ -218,10 +192,13 @@ export default function Profile() {
               Posts
             </Typography>
           </Box>
-          {profile.posts &&
-            profile.posts.map((post) => (
+          {/* {user.posts.map((post) => (
               <Post key={post._id} post={post} profile={true} />
-            ))}
+            ))} */}
+          <Box textAlign="center" marginTop="1rem">
+            {postStatus === "loading" &&  <CircularProgress size={20} color="primary" /> }
+          </Box>
+          {postStatus === "success" && posts.map((post) => <Post key={post._id} post={post} />)}
         </Box>
       )}
     </Box>

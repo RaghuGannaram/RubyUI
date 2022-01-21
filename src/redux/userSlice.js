@@ -30,14 +30,14 @@ export const deleteUser = createAsyncThunk("user/deleteUser", async (userData) =
 });
 
 export const followUser = createAsyncThunk("user/followUser", async (followData) => {
-  const {data} = await axios.post(`/api/users/${followData.followerId}/follow`, followData);
+  const {data} = await axios.put(`/api/users/${followData.followerId}/follow`, followData);
   return data;
 })
 
-export const unFollowUser = createAsyncThunk("user/unfollowUser", async (unFollowData) => {
-  const {data} = await axios.post(`/api/users/${unFollowData.followerId}/unfollow`, unFollowData);
-  return data;
-})
+// export const unFollowUser = createAsyncThunk("user/unfollowUser", async (unFollowData) => {
+//   const {data} = await axios.post(`/api/users/${unFollowData.followerId}/unfollow`, unFollowData);
+//   return data;
+// })
 
 
 export const userSlice = createSlice({
@@ -66,6 +66,8 @@ export const userSlice = createSlice({
     [getUserDetails.fulfilled]: (state, action) => {
       state.status = "success";
       state.user = action.payload;
+      state.followers = action.payload.followers;
+      state.follwings = action.payload.followings;
     },
     [getUserDetails.rejected]: (state, action) => {
       state.status = "failed";
@@ -98,22 +100,22 @@ export const userSlice = createSlice({
     },
     [followUser.fulfilled]: (state, action) => {
       state.status = "success";
-      state.user = action.payload;
+      // state.user = action.payload;
     },
     [followUser.rejected]: (state, action) => {
       state.status = "failed";
     },
 
-    [unFollowUser.pending]: (state, action) => {
-      state.status = "loading";
-    },
-    [unFollowUser.fulfilled]: (state, action) => {
-      state.status = "success";
-      state.user = action.payload;
-    },
-    [unFollowUser.rejected]: (state, action) => {
-      state.status = "failed";
-    },
+    // [unFollowUser.pending]: (state, action) => {
+    //   state.status = "loading";
+    // },
+    // [unFollowUser.fulfilled]: (state, action) => {
+    //   state.status = "success";
+    //   state.user = action.payload;
+    // },
+    // [unFollowUser.rejected]: (state, action) => {
+    //   state.status = "failed";
+    // },
 
   },
 });

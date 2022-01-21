@@ -19,45 +19,69 @@ import {
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-// import {addLike, addComment } from "../Redux/postSlice";
-// import Modal from "./Modal";
+import {getAllPosts, addLike, addComment, deletePost } from "../Redux/postSlice";
+import Modal from "./Modal";
 
 export default function Post({ post }) {
 
   const dispatch = useDispatch();
   const [commentText, setCommentText] = useState("");
-  // const [openModal, setOpenModal] = useState(false);
-  // const [anchorEl, setAnchorEl] = useState(null);
-  // const open = Boolean(anchorEl);
+  const [openModal, setOpenModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
-  // const { _id } = JSON.parse(localStorage.getItem("login"));
+  const {username,handle, _id} =JSON.parse(localStorage.getItem("login"));
+  const userId = _id;
 
-  // const handleLike = async (event) => {
-  //   event.preventDefault();
-  //   dispatch(addLike({ id: post._id }));
-  //   const response = await addLike({ id: post._id });
-  //   if (response.message !== "Post updated successfully.") {
-  //     dispatch(addLike({ id: post._id }));
-  //   }
-  // };
 
-  // const handleAddComment = async () => {
-  //   const response = await addComment({ id: post._id, text: commentText });
-  //   if (response) {
-  //     setCommentText("");
-  //   }
-  // };
 
-  // const handleDeletePost = async () => {
-  //   const response = await deletePost({ id: post._id });
-  //   if (response) {
-  //     if (profile) {
-  //       dispatch(getProfile(post.author.id));
-  //     } else {
-  //       dispatch(getAllPosts());
-  //     }
-  //   }
-  // };
+  const handleChatIconClick = (event) => {
+    event.preventDefault();
+    setOpenModal(true);
+  }
+
+  const handleLikePost = async (event) => {
+    event.preventDefault();
+    const likeData = { 
+      postId: post._id,
+      userId: userId 
+    }
+    const response = await dispatch(addLike(likeData));
+    if (response){
+      dispatch(getAllPosts());
+    }
+  };
+
+  const handleAddComment = async () => {
+    const commentData = {
+      postId: post._id,
+      author:{
+        id: userId,
+        name: username,
+        handle: handle
+      }, 
+      description: commentText
+    }
+    const response = await dispatch(addComment(commentData));
+    console.log(response);
+    if (response) {
+      setCommentText("");
+    }
+  };
+
+
+  const handleDeletePost = async (event) => {
+    console.log("clicked deletePost");
+    event.preventDefault();
+    const postData = {
+      postId : post._id,
+      userId : userId
+    };
+    const response = await dispatch(deletePost(postData))
+    if(response){
+      dispatch(getAllPosts())
+    }
+  };
 
   
   return (
@@ -76,9 +100,9 @@ export default function Post({ post }) {
         >
           <Grid container flexWrap="nowrap">
             <Grid item sx={{ paddingRight: "1rem" }}>
-              {/* <Link to={`/profile/${post.author.id}`}>
+              <Link to={`/profile/${post.author.id}`}>
                 <img src="/icon.png" alt="icon" width="50px" />
-              </Link> */}
+              </Link>
             </Grid>
             <Grid item flexGrow="1">
               <Box>
@@ -118,18 +142,19 @@ export default function Post({ post }) {
                     </Box>
                   </Grid>
                   <Grid item>
-                    {/* {post.author.id === _id && ( */}
+                    {post.author.id === userId && (
                       <IconButton
-                        // aria-expanded={open ? "true" : undefined}
+                        aria-expanded={open ? "true" : undefined}
                         onClick={(event) => {
                           event.preventDefault();
-                          // setAnchorEl(event.currentTarget)
+                          setAnchorEl(event.currentTarget);
+                          console.log(event.currentTarget);
                         }}
                       >
                         <MoreHorizIcon />
                       </IconButton>
-                    {/* )} */}
-                    {/* <Menu
+                    )}
+                    <Menu
                       id="basic-menu"
                       anchorEl={anchorEl}
                       open={open}
@@ -139,14 +164,11 @@ export default function Post({ post }) {
                       }}
                     >
                       <MenuItem
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleDeletePost();
-                        }}
+                        onClick={(event) => handleDeletePost(event)}
                       >
                         Delete Post
                       </MenuItem>
-                    </Menu> */}
+                    </Menu>
                   </Grid>
                 </Grid>
                 <Box
@@ -155,24 +177,19 @@ export default function Post({ post }) {
                   marginRight="5rem"
                   marginTop=".8rem"
                 >
-                  {/* <IconButton
-                    onClick={(event) => {
-                      event.preventDefault();
-                      setOpenModal(true);
-                    }}
+                  <IconButton
                     size="small"
+                    onClick={handleChatIconClick}
                   >
                     <ChatBubbleOutlineIcon fontSize="small" />
-                  </IconButton> */}
+                  </IconButton>
                   <IconButton size="small">
                     <SyncIcon fontSize="small" />
                   </IconButton>
-                  <IconButton size="small">
-                    {post.isLiked ? (
-                      <FavoriteIcon fontSize="small" />
-                    ) : (
-                      <FavoriteBorderIcon fontSize="small" />
-                    )}
+                  <IconButton size="small"
+                    onClick = {event => handleLikePost(event)}
+                  >
+                    {post.likes.includes(userId) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" /> }
                   </IconButton>
                   <IconButton size="small">
                     <IosShareIcon fontSize="small" />
@@ -183,37 +200,35 @@ export default function Post({ post }) {
           </Grid>
         </Box>
       </Link>
-      {/* {openModal && (
-        <Modal
-          open={openModal}
-          handleClose={()=>{setOpenModal(false)}}
-          saveText={"Comment"}
-          len={commentText.length}
-          handleSave={handleAddComment}
-        >
-          <Box>
-            <Grid container>
-              <Grid item>
-                <img src="/icon.png" alt="icon" width="60px" />
-              </Grid>
-              <Grid item flexGrow="1">
-                <Box padding=".5rem 0">
-                  <Input
-                    onChange={(e) => setCommentText(e.target.value)}
-                    value={commentText}
-                    multiline
-                    rows="2"
-                    disableUnderline
-                    type="text"
-                    placeholder="Post your comment"
-                    sx={{ width: "100%" }}
-                  />
-                </Box>
-              </Grid>
+      <Modal
+        open={openModal}
+        saveText={"Comment"}
+        textLength={commentText.length}
+        handleSave={handleAddComment}
+        handleClose={()=>setOpenModal(false)}
+      >
+        <Box>
+          <Grid container>
+            <Grid item>
+              <img src="/icon.png" alt="icon" width="60px" />
             </Grid>
-          </Box>
-        </Modal>
-      )} */}
+            <Grid item flexGrow="1">
+              <Box padding=".5rem">
+                <Input
+                  sx={{ width:"95%", ml: "10px" }}
+                  placeholder="Post your comment"
+                  rows="2"
+                  multiline
+                  disableUnderline
+                  type="text"
+                  value={commentText}
+                  onChange={(event) => setCommentText(event.target.value)}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      </Modal>
     </>
   );
 }

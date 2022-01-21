@@ -19,6 +19,11 @@ export const getTimelinePosts = createAsyncThunk("post/getTimelinePosts", async 
   return data;
 });
 
+export const getUserPosts = createAsyncThunk("post/getUserPosts", async (userId) => {
+  const { data } = await axios.get(`/api/posts/list/${userId}`);
+  return data;
+})
+
 export const getPostDetails = createAsyncThunk("post/getPostDetails", async (postId) => {
   const { data } = await axios.get(`/api/posts/${postId}`);
   return data;
@@ -41,8 +46,8 @@ export const updatePost = createAsyncThunk("post/updatePost", async (postData)=>
   return data;
 });
 
-export const deletePost = createAsyncThunk("post/deletePost", async (postId) => {
-  const { data } = await axios.delete(`/api/posts/${postId}`);
+export const deletePost = createAsyncThunk("post/deletePost", async (postData) => {
+  const { data } = await axios.delete(`/api/posts/${postData.postId}`,{data:postData});
   return data;
   }
 );
@@ -54,7 +59,8 @@ export const addLike = createAsyncThunk("post/addLike", async (likeData) => {
 );
 
 export const addComment = createAsyncThunk("post/addComment", async (commentData)=>{
-  const {data} = await axios.put(`/api/posts/${commentData.postId}/comment`, commentData);
+  const {postId, ...remainingData} = commentData;
+  const {data} = await axios.put(`/api/posts/${postId}/comment`, remainingData);
   return data;
 });
 
@@ -87,6 +93,17 @@ export const postSlice = createSlice({
       state.posts = action.payload;
     },
     [getTimelinePosts.rejected]: (state, action) => {
+      state.postStatus = "failed";
+    },
+
+    [getUserPosts.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [getUserPosts.fulfilled]: (state, action) => {
+      state.postStatus = "success";
+      state.posts = action.payload;
+    },
+    [getUserPosts.rejected]: (state, action) => {
       state.postStatus = "failed";
     },
 
@@ -139,7 +156,7 @@ export const postSlice = createSlice({
     },
     [deletePost.fulfilled]: (state, action) => {
       state.postStatus = "success";
-      state.posts = action.payload;
+      // state.posts = action.payload;
     },
     [deletePost.rejected]: (state, action) => {
       state.postStatus = "failed";

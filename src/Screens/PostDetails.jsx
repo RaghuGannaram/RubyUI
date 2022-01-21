@@ -29,13 +29,15 @@ import Comment from "../Components/Comment";
 export default function PostDetails() {
   const theme = useTheme();
   const history = useHistory();
-  const dispatch = useDispatch();
   const { postId } = useParams();
+  const dispatch = useDispatch();
   const { postStatus, commentStatus, post, comments } = useSelector((state) => state.post);
   const [commentText, setCommentText] = useState("");
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const { _id } = JSON.parse(localStorage.getItem("login"));
+  const open = Boolean(anchorEl);
+  const {username,handle, _id} =JSON.parse(localStorage.getItem("login"));
+  const profileId = _id;
 
   useEffect(() => {
     console.log(postId)
@@ -43,14 +45,7 @@ export default function PostDetails() {
     dispatch(getComments(postId));
   }, [dispatch, postId]);
 
-  const open = Boolean(anchorEl);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const handleDeletePost = async () => {
     const response = await deletePost({ id: post._id });
     if (response) {
@@ -58,22 +53,35 @@ export default function PostDetails() {
     }
   };
 
-  const handleLike = async (event) => {
+
+
+  const handleLikePost = async (event) => {
     event.preventDefault();
-    const response = await addLike({ postId: post._id, userId: _id });
-    if (response) {
+    const likeData = { 
+      postId: post._id,
+      userId: profileId 
+    }
+    const response = await dispatch(addLike(likeData));
+    if(response){
       dispatch(getPostDetails(postId));
-      dispatch(getComments(postId));
     }
   };
 
 
-
   const handleAddComment = async () => {
-    const response = await dispatch(addComment({ postId, description: commentText }));
+    const commentData = {
+      postId: post._id,
+      author:{
+        id: profileId,
+        name: username,
+        handle: handle
+      }, 
+      description: commentText
+    }
+    const response = await dispatch(addComment(commentData));
     if (response) {
-      dispatch(getComments(postId));
       setCommentText("");
+      dispatch(getComments(postId));
     }
   };
 
@@ -108,21 +116,21 @@ export default function PostDetails() {
                   <Grid container justifyContent="space-between">
                     <Grid item sx={{marginLeft:"10px"}}>
                       <Typography sx={{ fontSize: "16px", fontWeight: "500" }}>
-                        {post.author && post.author.name}
+                        {post?.author.name}
                       </Typography>
                       <Typography sx={{ fontSize: "15px", color: "#555" }}>
-                        @{post.author && post.author.handle}
+                        @{post?.author.handle}
                       </Typography>
                     </Grid>
                     <Grid item>
                       {postStatus === "success" &&
                         post.author &&
-                        _id === post.author._id && (
+                        profileId === post?.author._id && (
                           <IconButton
                             aria-expanded={open ? "true" : undefined}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleClick(e); 
+                            onClick={(event) => {
+                              event.preventDefault();
+                              setAnchorEl(event.currentTarget);
                             }}
                           >
                             <MoreHorizIcon />
@@ -133,14 +141,14 @@ export default function PostDetails() {
                         id="basic-menu"
                         anchorEl={anchorEl}
                         open={open}
-                        onClose={handleClose}
+                        onClose={()=>setAnchorEl(null)}
                         MenuListProps={{
                           "aria-labelledby": "basic-button",
                         }}
                       >
                         <MenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
+                          onClick={(event) => {
+                            event.preventDefault();
                             handleDeletePost();
                           }}
                         >
@@ -153,24 +161,24 @@ export default function PostDetails() {
               </Grid>
             </Box>
             <Box>
-              <Typography sx={{ fontSize: "20px" }}>
+              <Typography sx={{ fontSize: "20px", p:"10px"}}>
                 {post.description}
               </Typography>
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                {post && post.createdAt && format(new Date(post.createdAt), "HH:mm a")}
+                {post?.createdAt && format(new Date(post.createdAt), "HH:mm a")}
               </Typography>
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
                 .
               </Typography>
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                {post && post.createdAt && format(new Date(post.createdAt), "MMM dd yyyy")}
+                {post?.createdAt && format(new Date(post.createdAt), "MMM dd yyyy")}
               </Typography>
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                <strong>{post.likes && post.likes.length}</strong>{" "}
+                <strong>{post?.likes?.length}</strong>{" "}
                 Likes
               </Typography>
             </Box>
@@ -180,34 +188,34 @@ export default function PostDetails() {
               padding=".5rem 0"
               borderBottom="1px solid #ccc"
             >
-              <IconButton size="small">
+              {/* <IconButton size="small">
                 <ChatBubbleOutlineIcon fontSize="small" />
-              </IconButton>
+              </IconButton> */}
               <IconButton size="small">
                 <SyncIcon fontSize="small" />
               </IconButton>
-              <IconButton onClick={handleLike} size="small">
-                {post && post.likes && post.likes.includes(_id) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" /> }
+              <IconButton onClick={handleLikePost} size="small">
+                {post?.likes?.includes(profileId) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" /> }
               </IconButton>
               <IconButton size="small">
                 <IosShareIcon fontSize="small" />
               </IconButton>
             </Box>
             <Box>
-              <Grid container>
+              <Grid container sx={{mt:"10px"}}>
                 <Grid item>
                   <img src="/icon.png" alt="icon" width="60px" />
                 </Grid>
                 <Grid item flexGrow="1">
-                  <Box padding=".5rem 0">
+                  <Box padding=".5rem">
                     <Input
-                      sx={{ width: "100%" }}
+                      sx={{ width: "95%", ml:"10px"}}
+                      placeholder="Post your comment"
+                      rows="2"
+                      multiline
+                      disableUnderline
                       type="text"
                       value={commentText}
-                      placeholder="Post your comment"
-                      multiline
-                      rows="2"
-                      disableUnderline
                       onChange={(event) => setCommentText(event.target.value)}
                     />
                   </Box>

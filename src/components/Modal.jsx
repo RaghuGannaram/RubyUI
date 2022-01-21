@@ -1,25 +1,26 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
+import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import { IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import {Close as CloseIcon} from "@mui/icons-material";
 import { Box, useTheme } from "@mui/system";
+
+
 export default function Modal({
   children,
   open,
   handleClose,
   handleSave,
   saveText,
-  len,
+  textLength,
 }) {
   const theme = useTheme();
+
   const handleClick = () => {
     handleSave();
     handleClose();
   };
+
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>
@@ -32,14 +33,10 @@ export default function Modal({
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button
-          disabled={len === 0}
+          sx={{ borderRadius: theme.shape.borderRadius, fontSize: "12px", color:"primary"}}
+          disabled={textLength === 0}
           variant="contained"
-          color="primary"
           size="small"
-          sx={{
-            borderRadius: theme.shape.borderRadius,
-            fontSize: "12px",
-          }}
           onClick={handleClick}
         >
           {saveText}

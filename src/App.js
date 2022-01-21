@@ -41,7 +41,7 @@ function App() {
           <PostDetails />
         </Layout>
       </PrivateRoute>
-      <PrivateRoute exact path="/profile/:id">
+      <PrivateRoute exact path="/profile/:userId">
         <Layout>
           <Profile />
         </Layout>
