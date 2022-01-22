@@ -121,7 +121,7 @@ export default function Profile() {
               }}
               variant="contained"
             >
-              { followers.includes(_id) ? "Follow" : "Unfollow" }
+              { followers.includes(_id) ? "Unfollow" : "Follow" }
             </Button>
             )
             }
@@ -192,9 +192,6 @@ export default function Profile() {
               Posts
             </Typography>
           </Box>
-          {/* {user.posts.map((post) => (
-              <Post key={post._id} post={post} profile={true} />
-            ))} */}
           <Box textAlign="center" marginTop="1rem">
             {postStatus === "loading" &&  <CircularProgress size={20} color="primary" /> }
           </Box>

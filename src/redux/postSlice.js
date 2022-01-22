@@ -64,6 +64,16 @@ export const addComment = createAsyncThunk("post/addComment", async (commentData
   return data;
 });
 
+export const deleteComment = createAsyncThunk("post/deleteComment", async (commentData)=>{
+  const {data} = await axios.delete(`/api/posts/${commentData.postId}/comment/`, {data: commentData});
+  return data;
+});
+
+export const likeSpecificComment = createAsyncThunk("post/likeSpecificComment", async (likeCommentData)=>{
+const {data} = await axios.put(`/api/posts/${likeCommentData.postId}/comment/like`, likeCommentData)
+  return data;
+})
+
 
 
 export const postSlice = createSlice({

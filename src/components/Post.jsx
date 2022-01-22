@@ -28,7 +28,6 @@ export default function Post({ post }) {
   const [commentText, setCommentText] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
 
   const {username,handle, _id} =JSON.parse(localStorage.getItem("login"));
   const userId = _id;
@@ -144,11 +143,10 @@ export default function Post({ post }) {
                   <Grid item>
                     {post.author.id === userId && (
                       <IconButton
-                        aria-expanded={open ? "true" : undefined}
+                        aria-expanded={Boolean(anchorEl) ? "true" : undefined}
                         onClick={(event) => {
                           event.preventDefault();
                           setAnchorEl(event.currentTarget);
-                          console.log(event.currentTarget);
                         }}
                       >
                         <MoreHorizIcon />
@@ -157,8 +155,8 @@ export default function Post({ post }) {
                     <Menu
                       id="basic-menu"
                       anchorEl={anchorEl}
-                      open={open}
-                      onClose={()=>{setAnchorEl(null)}}
+                      open={Boolean(anchorEl)}
+                      onClose={()=>setAnchorEl(null)}
                       MenuListProps={{
                         "aria-labelledby": "basic-button",
                       }}

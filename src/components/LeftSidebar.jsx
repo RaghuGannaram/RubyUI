@@ -314,7 +314,7 @@ export default function LeftSidebar() {
                 <img src="/icon.png" alt="icon" width="60px" />
               </Grid>
               <Grid item flexGrow="1">
-                <Box padding=".5rem 0">
+                <Box padding=".5rem">
                   <Input
                     value={postText}
                     onChange={(event) => setPostText(event.target.value)}

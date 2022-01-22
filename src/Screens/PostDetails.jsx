@@ -35,7 +35,6 @@ export default function PostDetails() {
   const [commentText, setCommentText] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const open = Boolean(anchorEl);
   const {username,handle, _id} =JSON.parse(localStorage.getItem("login"));
   const profileId = _id;
 
@@ -78,11 +77,9 @@ export default function PostDetails() {
       }, 
       description: commentText
     }
-    const response = await dispatch(addComment(commentData));
-    if (response) {
-      setCommentText("");
-      dispatch(getComments(postId));
-    }
+    await dispatch(addComment(commentData));
+    await dispatch(getComments(postId));
+    setCommentText("");
   };
 
   return (
@@ -116,18 +113,16 @@ export default function PostDetails() {
                   <Grid container justifyContent="space-between">
                     <Grid item sx={{marginLeft:"10px"}}>
                       <Typography sx={{ fontSize: "16px", fontWeight: "500" }}>
-                        {post?.author.name}
+                        {post?.author?.name}
                       </Typography>
                       <Typography sx={{ fontSize: "15px", color: "#555" }}>
-                        @{post?.author.handle}
+                        @{post?.author?.handle}
                       </Typography>
                     </Grid>
                     <Grid item>
-                      {postStatus === "success" &&
-                        post.author &&
-                        profileId === post?.author._id && (
+                      {profileId === post?.author?.id && (
                           <IconButton
-                            aria-expanded={open ? "true" : undefined}
+                            aria-expanded={ Boolean(anchorEl) ? "true" : undefined}
                             onClick={(event) => {
                               event.preventDefault();
                               setAnchorEl(event.currentTarget);
@@ -136,11 +131,10 @@ export default function PostDetails() {
                             <MoreHorizIcon />
                           </IconButton>
                         )}
-
                       <Menu
                         id="basic-menu"
                         anchorEl={anchorEl}
-                        open={open}
+                        open={Boolean(anchorEl)}
                         onClose={()=>setAnchorEl(null)}
                         MenuListProps={{
                           "aria-labelledby": "basic-button",
@@ -188,9 +182,6 @@ export default function PostDetails() {
               padding=".5rem 0"
               borderBottom="1px solid #ccc"
             >
-              {/* <IconButton size="small">
-                <ChatBubbleOutlineIcon fontSize="small" />
-              </IconButton> */}
               <IconButton size="small">
                 <SyncIcon fontSize="small" />
               </IconButton>
@@ -238,7 +229,7 @@ export default function PostDetails() {
               </Box>
               {commentStatus === "success" &&
                 comments.map((comment,index) => (
-                  <Comment key={index} comment={comment} />
+                  <Comment key={index} comment={comment} post={post} />
                 ))}
             </Box>
           </Box>

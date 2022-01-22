@@ -34,10 +34,6 @@ export const followUser = createAsyncThunk("user/followUser", async (followData)
   return data;
 })
 
-// export const unFollowUser = createAsyncThunk("user/unfollowUser", async (unFollowData) => {
-//   const {data} = await axios.post(`/api/users/${unFollowData.followerId}/unfollow`, unFollowData);
-//   return data;
-// })
 
 
 export const userSlice = createSlice({
@@ -100,23 +96,10 @@ export const userSlice = createSlice({
     },
     [followUser.fulfilled]: (state, action) => {
       state.status = "success";
-      // state.user = action.payload;
     },
     [followUser.rejected]: (state, action) => {
       state.status = "failed";
     },
-
-    // [unFollowUser.pending]: (state, action) => {
-    //   state.status = "loading";
-    // },
-    // [unFollowUser.fulfilled]: (state, action) => {
-    //   state.status = "success";
-    //   state.user = action.payload;
-    // },
-    // [unFollowUser.rejected]: (state, action) => {
-    //   state.status = "failed";
-    // },
-
   },
 });
 
