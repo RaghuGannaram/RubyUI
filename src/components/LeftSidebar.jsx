@@ -23,6 +23,8 @@ import {
   MailOutline as MailOutlineIcon,
   Bookmark as BookmarkIcon,
   ListAlt as ListAltIcon,
+  Logout as LogoutIcon,
+  Close as CloseIcon,
   PersonOutline as PersonOutlineIcon,
   MoreHoriz as MoreHorizIcon,
   AddCircleOutline as AddCircleOutlineIcon,
@@ -43,11 +45,9 @@ export default function LeftSidebar() {
  
  
   const handleAddPost = async () => {
-    const data = await addNewPost({ text: postText });
-    if (data) {
-      dispatch(getAllPosts());
-      setPostText("");
-    }
+    await dispatch(addNewPost({ text: postText }));
+    await dispatch(getAllPosts());
+    setPostText("");
   };
 
   return (
@@ -290,47 +290,49 @@ export default function LeftSidebar() {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem
-            onClick={() => {
-              dispatch(logoutUser());
-              setAnchorEl(null);
-            }}
-          >
-            Logout
+          <MenuItem onClick={() =>dispatch(logoutUser())}>
+            Logout 
+            <IconButton >
+              <LogoutIcon fontSize="small"/>
+            </IconButton> 
+          </MenuItem>
+          <MenuItem onClick={()=>setAnchorEl(null)}>
+            Close
+            <IconButton >
+              <CloseIcon fontSize="small"/>
+            </IconButton> 
           </MenuItem>
         </Menu>
       </Box>
-      {openModal && (
-        <Modal
-          open={openModal}
-          handleClose={()=>setOpenModal(false)}
-          saveText={"Post"}
-          len={postText.length}
-          handleSave={handleAddPost}
-        >
-          <Box>
-            <Grid container>
-              <Grid item>
-                <img src="/icon.png" alt="icon" width="60px" />
-              </Grid>
-              <Grid item flexGrow="1">
-                <Box padding=".5rem">
-                  <Input
-                    value={postText}
-                    onChange={(event) => setPostText(event.target.value)}
-                    multiline
-                    rows="2"
-                    disableUnderline
-                    type="text"
-                    placeholder="What's happening?"
-                    sx={{ width: "100%" }}
-                  />
-                </Box>
-              </Grid>
+      <Modal
+        open={openModal}
+        handleClose={()=>setOpenModal(false)}
+        button={"Post"}
+        text={postText.length}
+        handleSubmit={handleAddPost}
+      >
+        <Box>
+          <Grid container>
+            <Grid item>
+              <img src="/icon.png" alt="icon" width="60px" />
             </Grid>
-          </Box>
-        </Modal>
-      )}
+            <Grid item flexGrow="1">
+              <Box padding=".5rem">
+                <Input
+                  value={postText}
+                  onChange={(event) => setPostText(event.target.value)}
+                  multiline
+                  rows="2"
+                  disableUnderline
+                  type="text"
+                  placeholder="What's happening?"
+                  sx={{ width: "100%" }}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      </Modal>
     </>
   );
 }

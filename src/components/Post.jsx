@@ -13,6 +13,8 @@ import {
   MoreHoriz as MoreHorizIcon, 
   ChatBubbleOutline as ChatBubbleOutlineIcon,
   Sync as SyncIcon,
+  Close as CloseIcon,
+  Delete as DeleteIcon,
   FavoriteBorder as FavoriteBorderIcon,
   Favorite as FavoriteIcon,
   IosShare as IosShareIcon
@@ -45,10 +47,8 @@ export default function Post({ post }) {
       postId: post._id,
       userId: userId 
     }
-    const response = await dispatch(addLike(likeData));
-    if (response){
-      dispatch(getAllPosts());
-    }
+    await dispatch(addLike(likeData));
+    await dispatch(getAllPosts());
   };
 
   const handleAddComment = async () => {
@@ -61,11 +61,8 @@ export default function Post({ post }) {
       }, 
       description: commentText
     }
-    const response = await dispatch(addComment(commentData));
-    console.log(response);
-    if (response) {
-      setCommentText("");
-    }
+    await dispatch(addComment(commentData));
+    setCommentText("");
   };
 
 
@@ -76,10 +73,8 @@ export default function Post({ post }) {
       postId : post._id,
       userId : userId
     };
-    const response = await dispatch(deletePost(postData))
-    if(response){
-      dispatch(getAllPosts())
-    }
+    await dispatch(deletePost(postData));
+    await dispatch(getAllPosts());
   };
 
   
@@ -149,7 +144,7 @@ export default function Post({ post }) {
                           setAnchorEl(event.currentTarget);
                         }}
                       >
-                        <MoreHorizIcon />
+                        <MoreHorizIcon/>
                       </IconButton>
                     )}
                     <Menu
@@ -161,11 +156,18 @@ export default function Post({ post }) {
                         "aria-labelledby": "basic-button",
                       }}
                     >
-                      <MenuItem
-                        onClick={(event) => handleDeletePost(event)}
-                      >
+                      <MenuItem onClick={(event) => handleDeletePost(event)}>
                         Delete Post
+                        <IconButton >
+                            <DeleteIcon fontSize="small"/>
+                        </IconButton> 
                       </MenuItem>
+                      <MenuItem onClick={()=>setAnchorEl(null)}>
+                          Close Menu
+                          <IconButton >
+                            <CloseIcon fontSize="small"/>
+                          </IconButton> 
+                        </MenuItem>
                     </Menu>
                   </Grid>
                 </Grid>
@@ -200,10 +202,10 @@ export default function Post({ post }) {
       </Link>
       <Modal
         open={openModal}
-        saveText={"Comment"}
-        textLength={commentText.length}
-        handleSave={handleAddComment}
         handleClose={()=>setOpenModal(false)}
+        button={"Comment"}
+        text={commentText.length}
+        handleSubmit={handleAddComment}
       >
         <Box>
           <Grid container>

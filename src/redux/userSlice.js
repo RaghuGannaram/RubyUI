@@ -19,8 +19,8 @@ export const getUserDetails = createAsyncThunk("user/getUserDetails", async (use
   return data;
 });
 
-export const updateUser = createAsyncThunk("user/updateUser", async (userData) => {
-  const { data } = await axios.put(`/api/users/${userData.userId}`, userData);
+export const updateUser = createAsyncThunk("user/updateUser", async (updateData) => {
+  const { data } = await axios.put(`/api/users/${updateData.userId}`, updateData);
   return data;
 });
 
@@ -74,7 +74,6 @@ export const userSlice = createSlice({
     },
     [updateUser.fulfilled]: (state, action) => {
       state.status = "success";
-      state.user = action.payload;
     },
     [updateUser.rejected]: (state, action) => {
       state.status = "failed";

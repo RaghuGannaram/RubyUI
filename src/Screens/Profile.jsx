@@ -1,43 +1,50 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { Link as RouteLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   CircularProgress,
   Grid,
   IconButton,
-  Link,
   Typography,
   useTheme,
+  Menu,
+  MenuItem
 } from "@mui/material";
 import {
   ArrowBack as ArrowBackIcon,
   MoreHoriz as MoreHorizIcon,
   MailOutline as MailOutlineIcon,
+  Close as CloseIcon,
+  Autorenew as AutorenewIcon,
   LocationOn as LocationOnIcon,
-  InsertLink as InsertLinkIcon,
   DateRange as DateRangeIcon,
 } from "@mui/icons-material/";
 import { Box } from "@mui/system";
 import format from "date-fns/format";
 import Post from "../Components/Post";
-import { getUserDetails,followUser } from "../Redux/userSlice";
-import { getUserPosts, getPostDetails } from "../Redux/postSlice";
-import axios from "axios";
+import Modal from "../Components/Modal";
+import UpdateForm from "../Components/UpdateForm";
+import { getUserDetails,followUser, updateUser } from "../Redux/userSlice";
+import { getUserPosts } from "../Redux/postSlice";
 
 export default function Profile() {
 
   const theme = useTheme();
   const { userId } = useParams();
+  const history = useHistory();
   const dispatch = useDispatch();
   const {user, status, followers, followings } = useSelector((state) => state.user);
   const { postStatus, posts } = useSelector((state) => state.post);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openModal, setOpenModal] =useState(false);
+  const [profileData, setProfileData] = useState({});
+
   
   const { _id } = JSON.parse(localStorage.getItem("login"));
 
-  useEffect(() => {
-    console.log(userId)
+  useEffect( () =>  {
     dispatch(getUserDetails(userId));
     dispatch(getUserPosts(userId));
   }, [dispatch, userId]);
@@ -47,21 +54,28 @@ export default function Profile() {
       followerId : _id,
       userId : userId
     }
-    const response =await dispatch(followUser(followData));
-    console.log(response);
-    dispatch(getUserDetails(userId));
+    await dispatch(followUser(followData));
+    await dispatch(getUserDetails(userId));
   };
+
+  const handleUpdateUser = async () => {
+    console.log(profileData)
+    const updateData = {
+      userId: _id,
+      data: profileData
+    }
+    await dispatch(updateUser(updateData));
+    await dispatch(getUserDetails(_id)); 
+  }
 
   return (
     <Box>
       <Box borderBottom="1px solid #ccc" padding="8px 20px">
         <Grid container alignItems="center">
           <Grid item sx={{ mr: "10px" }}>
-            <RouteLink to="/">
-              <IconButton>
-                <ArrowBackIcon />
-              </IconButton>
-            </RouteLink>
+            <IconButton onClick={()=>history.goBack()}>
+              <ArrowBackIcon />
+            </IconButton>
           </Grid>
 
           {status === "success" && (
@@ -100,9 +114,41 @@ export default function Profile() {
             </Box>
           </Box>
           <Box textAlign="right" padding="10px 20px">
-            <IconButton>
-              <MoreHorizIcon />
-            </IconButton>
+            {userId === _id && (
+                <IconButton
+                  aria-expanded={ Boolean(anchorEl) ? "true" : undefined}
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                >
+                  <MoreHorizIcon />
+                </IconButton>
+              )}
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={()=>setAnchorEl(null)}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                onClick={(event) => {
+                  event.preventDefault();
+                  setOpenModal(true);
+                }}
+              >
+                Update Info
+                <IconButton >
+                  <AutorenewIcon fontSize="small"/>
+                </IconButton>
+              </MenuItem>
+              <MenuItem onClick={()=>setAnchorEl(null)}>
+                Close Menu
+                <IconButton >
+                  <CloseIcon fontSize="small"/>
+                </IconButton> 
+              </MenuItem>
+            </Menu>
             <IconButton>
               <MailOutlineIcon />
             </IconButton>
@@ -148,15 +194,6 @@ export default function Profile() {
                   {user?.city}
                 </Typography>
               </Box>
-              {/* <Box display="flex" marginLeft="1rem">
-                <InsertLinkIcon htmlColor="#555" />
-                <Link
-                  sx={{ textDecoration: "none", marginLeft: "6px" }}
-                  href={profile.website || "https:/wasifbaliyan.com"}
-                >
-                  {profile.website ? profile.website : "www"}
-                </Link>
-              </Box> */}
               <Box display="flex" marginLeft="1rem">
                 <DateRangeIcon htmlColor="#555" />
                 <Typography sx={{ ml: "6px", color: "#555" }}>
@@ -198,6 +235,17 @@ export default function Profile() {
           {postStatus === "success" && posts.map((post) => <Post key={post._id} post={post} />)}
         </Box>
       )}
+    <Modal
+      open={openModal}
+      handleClose={()=>{
+          setOpenModal(false)
+          setAnchorEl(null)
+        }}
+      button={"Update"}
+      handleSubmit={handleUpdateUser}
+    >
+        <UpdateForm setProfileData ={setProfileData}/>
+    </Modal>
     </Box>
   );
 }

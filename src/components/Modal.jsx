@@ -3,21 +3,13 @@ import Button from "@mui/material/Button";
 import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import { IconButton } from "@mui/material";
 import {Close as CloseIcon} from "@mui/icons-material";
-import { Box, useTheme } from "@mui/system";
+import { Box } from "@mui/system";
 
 
-export default function Modal({
-  children,
-  open,
-  handleClose,
-  handleSave,
-  saveText,
-  textLength,
-}) {
-  const theme = useTheme();
+export default function Modal({children, open, handleClose, button, text, handleSubmit }) {
 
   const handleClick = () => {
-    handleSave();
+    handleSubmit();
     handleClose();
   };
 
@@ -33,13 +25,13 @@ export default function Modal({
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button
-          sx={{ borderRadius: theme.shape.borderRadius, fontSize: "12px", color:"primary"}}
-          disabled={textLength === 0}
+          sx={{ borderRadius: "5px",padding: "2px 5px ", fontSize: "13px", color:"primary"}}
+          disabled={text === 0}
           variant="contained"
           size="small"
           onClick={handleClick}
         >
-          {saveText}
+          {button}
         </Button>
       </DialogActions>
     </Dialog>

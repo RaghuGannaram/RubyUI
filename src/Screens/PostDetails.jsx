@@ -15,9 +15,10 @@ import {
 import {
   ArrowBack as ArrowBackIcon, 
   MoreHoriz as MoreHorizIcon,
-  ChatBubbleOutline as ChatBubbleOutlineIcon,
   Sync as SyncIcon,
   FavoriteBorder as FavoriteBorderIcon,
+  Close as CloseIcon,
+  Delete as DeleteIcon,
   Favorite as FavoriteIcon,
   IosShare as IosShareIcon
 } from "@mui/icons-material";
@@ -87,7 +88,7 @@ export default function PostDetails() {
       <Box borderBottom="1px solid #ccc" padding="8px 20px">
         <Grid container alignItems="center">
           <Grid item sx={{ mr: "10px" }}>
-            <IconButton onClick={() => history.push("/")}>
+            <IconButton onClick={() => history.goBack()}>
               <ArrowBackIcon />
             </IconButton>
           </Grid>
@@ -123,10 +124,7 @@ export default function PostDetails() {
                       {profileId === post?.author?.id && (
                           <IconButton
                             aria-expanded={ Boolean(anchorEl) ? "true" : undefined}
-                            onClick={(event) => {
-                              event.preventDefault();
-                              setAnchorEl(event.currentTarget);
-                            }}
+                            onClick={(event) => setAnchorEl(event.currentTarget)}
                           >
                             <MoreHorizIcon />
                           </IconButton>
@@ -147,6 +145,15 @@ export default function PostDetails() {
                           }}
                         >
                           Delete Post
+                          <IconButton >
+                            <DeleteIcon fontSize="small"/>
+                          </IconButton> 
+                        </MenuItem>
+                        <MenuItem onClick={()=>setAnchorEl(null)}>
+                          Close Menu
+                          <IconButton >
+                            <CloseIcon fontSize="small"/>
+                          </IconButton> 
                         </MenuItem>
                       </Menu>
                     </Grid>
