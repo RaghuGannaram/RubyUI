@@ -20,7 +20,16 @@ export const getUserDetails = createAsyncThunk("user/getUserDetails", async (use
 });
 
 export const updateUser = createAsyncThunk("user/updateUser", async (updateData) => {
-  const { data } = await axios.put(`/api/users/${updateData.userId}`, updateData);
+  const formData = new FormData();
+  formData.append('userId',"updateData.userId")
+  formData.append('handle',updateData.data.handle)
+  formData.append('description',updateData.data.description)
+  formData.append('city',updateData.data.city)
+  formData.append('from',updateData.data.from)
+  formData.append('file',updateData.data.profilePicture)
+          // 'content-type': 'multipart/form-data'
+          console.log(formData)
+  const { data } = await axios.put(`/api/users/${updateData.userId}`, formData);
   return data;
 });
 

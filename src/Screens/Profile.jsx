@@ -59,7 +59,6 @@ export default function Profile() {
   };
 
   const handleUpdateUser = async () => {
-    console.log(profileData)
     const updateData = {
       userId: _id,
       data: profileData
@@ -135,6 +134,7 @@ export default function Profile() {
                 onClick={(event) => {
                   event.preventDefault();
                   setOpenModal(true);
+                  setAnchorEl(null)
                 }}
               >
                 Update Info
@@ -237,10 +237,7 @@ export default function Profile() {
       )}
     <Modal
       open={openModal}
-      handleClose={()=>{
-          setOpenModal(false)
-          setAnchorEl(null)
-        }}
+      handleClose={()=>setOpenModal(false)}
       button={"Update"}
       handleSubmit={handleUpdateUser}
     >

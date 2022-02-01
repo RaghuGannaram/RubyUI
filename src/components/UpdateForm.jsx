@@ -1,13 +1,16 @@
-import React from 'react';
-import { TextField } from "@mui/material";
+import React,{useState} from 'react';
+import {Grid,IconButton, Box,Button, TextField, Input, Typography } from "@mui/material";
+import { borderRadius } from '@mui/system';
+import {Close as CloseIcon} from "@mui/icons-material";
 
 function UpdateForm({setProfileData}) {
+    const [image, setImage] = useState(null);
 
   return (
         <>
             <form>
                 <TextField
-                    sx={{ width: "100%", margin: "1rem 0", bgcolor: "#fff" }}
+                    sx={{ width: "100%", margin: "10px 0px", bgcolor: "#fff" }}
                     variant="outlined"
                     label="Handle"
                     name="handle"
@@ -19,15 +22,15 @@ function UpdateForm({setProfileData}) {
                         }))
                     }
                 />
-
+ 
                 <TextField
-                    sx={{ width: "100%", margin: "1rem 0", bgcolor: "#fff" }}
+                    sx={{ width: "100%", margin: "10px 0px", bgcolor: "#fff"}}
                     variant="outlined"
                     label="Description"
                     name="description"
                     type="text"
                     multiline
-                    rows={3}
+                    rows={1}
                     onChange={(event) =>
                         setProfileData((prev) => ({
                         ...prev,
@@ -37,7 +40,7 @@ function UpdateForm({setProfileData}) {
                 />
 
                 <TextField
-                    sx={{ width: "100%", margin: "1rem 0", bgcolor: "#fff" }}
+                    sx={{ width: "100%", margin: "10px 0px", bgcolor: "#fff" }}
                     variant="outlined"
                     label="Current Location"
                     name="city"
@@ -51,7 +54,7 @@ function UpdateForm({setProfileData}) {
                 />
 
                 <TextField
-                    sx={{ width: "100%", margin: "1rem 0", bgcolor: "#fff" }}
+                    sx={{ width: "100%", margin: "10px 0px", bgcolor: "#fff" }}
                     variant="outlined"
                     label="Native Location"
                     name="from"
@@ -63,20 +66,41 @@ function UpdateForm({setProfileData}) {
                         }))
                     }
                 />
-
-                <TextField
-                    sx={{ width: "40%", margin: "1rem 0", bgcolor: "#fff" }}
-                    variant="outlined"
-                    label="Native Location"
-                    name="from"
-                    type="file"
-                    onChange={(event) =>
-                        setProfileData((prev) => ({
-                        ...prev,
-                        [event.target.name]: event.target.value,
-                        }))
-                    }
-                />
+                <Typography sx={{mb:"10px"}} >Update profile picture : </Typography>
+                <Grid container spacing={4} sx={{display:"flex", justifyContent:"space-evenly", alignItems:"center"}}> 
+                    <Grid item xs={4}  >
+                        <Box>
+                        <label htmlFor="contained-button-file">
+                            <Button variant="contained" margin="auto" color="primary" component="span" sx={{width:"100%"}}>
+                                Upload
+                            </Button>
+                        </label>
+                        <Input
+                            id="contained-button-file"
+                            style={{ display: "none", margin:"auto" }}
+                            name="profilePicture"
+                            type="file"
+                            onChange={(event) =>{
+                                setProfileData((prev) => ({
+                                    ...prev,
+                                    [event.target.name]: event.target.files[0],
+                                }))
+                                setImage(event.target.files[0]); 
+                            }}
+                        />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={4} >
+                        {image&&
+                            <Box>
+                                <IconButton  sx={{bgcolor:"#1976d2"}} onClick={()=>setImage(null)}>
+                                    <CloseIcon fontSize="small"/>
+                                </IconButton> 
+                                <img src={URL.createObjectURL(image)} style={{borderRadius:"10px"}} alt="icon" width="100%" height="100%" />
+                            </Box>
+                        }
+                    </Grid>
+                </Grid>
             </form>
         </>
   )
