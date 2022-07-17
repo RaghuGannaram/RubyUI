@@ -10,43 +10,45 @@ import {
   MenuItem,
 } from "@mui/material";
 import {
-  MoreHoriz as MoreHorizIcon, 
+  MoreHoriz as MoreHorizIcon,
   ChatBubbleOutline as ChatBubbleOutlineIcon,
   Sync as SyncIcon,
   Close as CloseIcon,
   Delete as DeleteIcon,
   FavoriteBorder as FavoriteBorderIcon,
   Favorite as FavoriteIcon,
-  IosShare as IosShareIcon
+  IosShare as IosShareIcon,
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import {getAllPosts, addLike, addComment, deletePost } from "../Redux/postSlice";
+import {
+  getAllPosts,
+  addLike,
+  addComment,
+  deletePost,
+} from "../Redux/postSlice";
 import Modal from "./Modal";
 
 export default function Post({ post }) {
-
   const dispatch = useDispatch();
   const [commentText, setCommentText] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const {username,handle, _id} =JSON.parse(localStorage.getItem("login"));
+  const { username, handle, _id } = JSON.parse(localStorage.getItem("login"));
   const userId = _id;
-
-
 
   const handleChatIconClick = (event) => {
     event.preventDefault();
     setOpenModal(true);
-  }
+  };
 
   const handleLikePost = async (event) => {
     event.preventDefault();
-    const likeData = { 
+    const likeData = {
       postId: post._id,
-      userId: userId 
-    }
+      userId: userId,
+    };
     await dispatch(addLike(likeData));
     await dispatch(getAllPosts());
   };
@@ -54,30 +56,28 @@ export default function Post({ post }) {
   const handleAddComment = async () => {
     const commentData = {
       postId: post._id,
-      author:{
+      author: {
         id: userId,
         name: username,
-        handle: handle
-      }, 
-      description: commentText
-    }
+        handle: handle,
+      },
+      description: commentText,
+    };
     await dispatch(addComment(commentData));
     setCommentText("");
   };
-
 
   const handleDeletePost = async (event) => {
     console.log("clicked deletePost");
     event.preventDefault();
     const postData = {
-      postId : post._id,
-      userId : userId
+      postId: post._id,
+      userId: userId,
     };
     await dispatch(deletePost(postData));
     await dispatch(getAllPosts());
   };
 
-  
   return (
     <>
       <Link
@@ -144,30 +144,35 @@ export default function Post({ post }) {
                           setAnchorEl(event.currentTarget);
                         }}
                       >
-                        <MoreHorizIcon/>
+                        <MoreHorizIcon />
                       </IconButton>
                     )}
                     <Menu
                       id="basic-menu"
                       anchorEl={anchorEl}
                       open={Boolean(anchorEl)}
-                      onClose={()=>setAnchorEl(null)}
+                      onClose={() => setAnchorEl(null)}
                       MenuListProps={{
                         "aria-labelledby": "basic-button",
                       }}
                     >
                       <MenuItem onClick={(event) => handleDeletePost(event)}>
                         Delete Post
-                        <IconButton >
-                            <DeleteIcon fontSize="small"/>
-                        </IconButton> 
+                        <IconButton>
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
                       </MenuItem>
-                      <MenuItem onClick={()=>setAnchorEl(null)}>
-                          Close Menu
-                          <IconButton >
-                            <CloseIcon fontSize="small"/>
-                          </IconButton> 
-                        </MenuItem>
+                      <MenuItem
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setAnchorEl(null);
+                        }}
+                      >
+                        Close Menu
+                        <IconButton>
+                          <CloseIcon fontSize="small" />
+                        </IconButton>
+                      </MenuItem>
                     </Menu>
                   </Grid>
                 </Grid>
@@ -177,19 +182,21 @@ export default function Post({ post }) {
                   marginRight="5rem"
                   marginTop=".8rem"
                 >
-                  <IconButton
-                    size="small"
-                    onClick={handleChatIconClick}
-                  >
+                  <IconButton size="small" onClick={handleChatIconClick}>
                     <ChatBubbleOutlineIcon fontSize="small" />
                   </IconButton>
                   <IconButton size="small">
                     <SyncIcon fontSize="small" />
                   </IconButton>
-                  <IconButton size="small"
-                    onClick = {event => handleLikePost(event)}
+                  <IconButton
+                    size="small"
+                    onClick={(event) => handleLikePost(event)}
                   >
-                    {post.likes.includes(userId) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" /> }
+                    {post.likes.includes(userId) ? (
+                      <FavoriteIcon fontSize="small" />
+                    ) : (
+                      <FavoriteBorderIcon fontSize="small" />
+                    )}
                   </IconButton>
                   <IconButton size="small">
                     <IosShareIcon fontSize="small" />
@@ -202,7 +209,7 @@ export default function Post({ post }) {
       </Link>
       <Modal
         open={openModal}
-        handleClose={()=>setOpenModal(false)}
+        handleClose={() => setOpenModal(false)}
         button={"Comment"}
         text={commentText.length}
         handleSubmit={handleAddComment}
@@ -215,7 +222,7 @@ export default function Post({ post }) {
             <Grid item flexGrow="1">
               <Box padding=".5rem">
                 <Input
-                  sx={{ width:"95%", ml: "10px" }}
+                  sx={{ width: "95%", ml: "10px" }}
                   placeholder="Post your comment"
                   rows="2"
                   multiline
@@ -232,5 +239,3 @@ export default function Post({ post }) {
     </>
   );
 }
-
-

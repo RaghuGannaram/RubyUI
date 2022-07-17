@@ -10,7 +10,7 @@ import {
   Typography,
   useTheme,
   Menu,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import {
   ArrowBack as ArrowBackIcon,
@@ -26,34 +26,34 @@ import format from "date-fns/format";
 import Post from "../Components/Post";
 import Modal from "../Components/Modal";
 import UpdateForm from "../Components/UpdateForm";
-import { getUserDetails,followUser, updateUser } from "../Redux/userSlice";
+import { getUserDetails, followUser, updateUser } from "../Redux/userSlice";
 import { getUserPosts } from "../Redux/postSlice";
 
 export default function Profile() {
-
   const theme = useTheme();
   const { userId } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
-  const {user, status, followers, followings } = useSelector((state) => state.user);
+  const { user, status, followers, followings } = useSelector(
+    (state) => state.user
+  );
   const { postStatus, posts } = useSelector((state) => state.post);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [openModal, setOpenModal] =useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [profileData, setProfileData] = useState({});
 
-  
   const { _id } = JSON.parse(localStorage.getItem("login"));
 
-  useEffect( () =>  {
+  useEffect(() => {
     dispatch(getUserDetails(userId));
     dispatch(getUserPosts(userId));
   }, [dispatch, userId]);
 
   const handleFollow = async () => {
     const followData = {
-      followerId : _id,
-      userId : userId
-    }
+      followerId: _id,
+      userId: userId,
+    };
     await dispatch(followUser(followData));
     await dispatch(getUserDetails(userId));
   };
@@ -61,27 +61,26 @@ export default function Profile() {
   const handleUpdateUser = async () => {
     const updateData = {
       userId: _id,
-      data: profileData
-    }
+      data: profileData,
+    };
+    console.log("updateData", updateData)
     await dispatch(updateUser(updateData));
-    await dispatch(getUserDetails(_id)); 
-  }
+    await dispatch(getUserDetails(_id));
+  };
 
   return (
     <Box>
       <Box borderBottom="1px solid #ccc" padding="8px 20px">
         <Grid container alignItems="center">
           <Grid item sx={{ mr: "10px" }}>
-            <IconButton onClick={()=>history.goBack()}>
+            <IconButton onClick={() => history.goBack()}>
               <ArrowBackIcon />
             </IconButton>
           </Grid>
 
           {status === "success" && (
             <Grid item>
-              <Typography variant="h6">
-                {user?.username}
-              </Typography>
+              <Typography variant="h6">{user?.username}</Typography>
               <Typography sx={{ fontSize: "12px", color: "#555" }}>
                 {user?.posts?.length} posts
               </Typography>{" "}
@@ -95,11 +94,7 @@ export default function Profile() {
       {status === "success" && (
         <Box height="90vh" sx={{ overflowY: "scroll" }}>
           <Box position="relative">
-            <img
-              width="100%"
-              src={user?.backgroundImage}
-              alt="background"
-            />
+            <img width="100%" src={`data:image/jpg; base64,${user?.backgroundImage}`} alt="background" />
             <Box
               sx={{
                 position: "absolute",
@@ -109,23 +104,23 @@ export default function Profile() {
                 borderRadius: "50%",
               }}
             >
-              <img width="150px" src={user?.profilePicture} alt="profile" />
+              <img width="150px" src={`data:image/jpg; base64,${user?.profilePicture}`} alt="profile" />
             </Box>
           </Box>
           <Box textAlign="right" padding="10px 20px">
             {userId === _id && (
-                <IconButton
-                  aria-expanded={ Boolean(anchorEl) ? "true" : undefined}
-                  onClick={(event) => setAnchorEl(event.currentTarget)}
-                >
-                  <MoreHorizIcon />
-                </IconButton>
-              )}
+              <IconButton
+                aria-expanded={Boolean(anchorEl) ? "true" : undefined}
+                onClick={(event) => setAnchorEl(event.currentTarget)}
+              >
+                <MoreHorizIcon />
+              </IconButton>
+            )}
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
-              onClose={()=>setAnchorEl(null)}
+              onClose={() => setAnchorEl(null)}
               MenuListProps={{
                 "aria-labelledby": "basic-button",
               }}
@@ -134,43 +129,47 @@ export default function Profile() {
                 onClick={(event) => {
                   event.preventDefault();
                   setOpenModal(true);
-                  setAnchorEl(null)
+                  setAnchorEl(null);
                 }}
               >
                 Update Info
-                <IconButton >
-                  <AutorenewIcon fontSize="small"/>
+                <IconButton>
+                  <AutorenewIcon fontSize="small" />
                 </IconButton>
               </MenuItem>
-              <MenuItem onClick={()=>setAnchorEl(null)}>
+              <MenuItem
+                onClick={(event) => {
+                  event.preventDefault();
+                  setAnchorEl(null);
+                }}
+              >
                 Close Menu
-                <IconButton >
-                  <CloseIcon fontSize="small"/>
-                </IconButton> 
+                <IconButton>
+                  <CloseIcon fontSize="small" />
+                </IconButton>
               </MenuItem>
             </Menu>
             <IconButton>
               <MailOutlineIcon />
             </IconButton>
-            {(userId !== _id) &&(
+            {userId !== _id && (
               <Button
-              onClick={handleFollow}
-              size="small"
-              sx={{
-                borderRadius: theme.shape.borderRadius,
-                textTransform: "capitalize",
-                padding: "6px 20px",
-                background: "black",
-                "&:hover": {
-                  background: "#333",
-                },
-              }}
-              variant="contained"
-            >
-              { followers.includes(_id) ? "Unfollow" : "Follow" }
-            </Button>
-            )
-            }
+                onClick={handleFollow}
+                size="small"
+                sx={{
+                  borderRadius: theme.shape.borderRadius,
+                  textTransform: "capitalize",
+                  padding: "6px 20px",
+                  background: "black",
+                  "&:hover": {
+                    background: "#333",
+                  },
+                }}
+                variant="contained"
+              >
+                {followers.includes(_id) ? "Unfollow" : "Follow"}
+              </Button>
+            )}
           </Box>
           <Box padding="10px 20px">
             <Typography variant="h6" sx={{ fontWeight: "500" }}>
@@ -203,14 +202,14 @@ export default function Profile() {
             </Box>
             <Box display="flex">
               <Typography color="#555" marginRight="1rem">
-                <strong style={{ color: "black", marginRight: "5px"}}>
+                <strong style={{ color: "black", marginRight: "5px" }}>
                   {followings.length}
                 </strong>
                 Following
               </Typography>
               <Typography color="#555" marginRight="1rem">
-                <strong style={{ color: "black", marginRight: "5px"}}>
-                    {followers.length}
+                <strong style={{ color: "black", marginRight: "5px" }}>
+                  {followers.length}
                 </strong>
                 Followers
               </Typography>
@@ -230,19 +229,22 @@ export default function Profile() {
             </Typography>
           </Box>
           <Box textAlign="center" marginTop="1rem">
-            {postStatus === "loading" &&  <CircularProgress size={20} color="primary" /> }
+            {postStatus === "loading" && (
+              <CircularProgress size={20} color="primary" />
+            )}
           </Box>
-          {postStatus === "success" && posts.map((post) => <Post key={post._id} post={post} />)}
+          {postStatus === "success" &&
+            posts.map((post) => <Post key={post._id} post={post} />)}
         </Box>
       )}
-    <Modal
-      open={openModal}
-      handleClose={()=>setOpenModal(false)}
-      button={"Update"}
-      handleSubmit={handleUpdateUser}
-    >
-        <UpdateForm setProfileData ={setProfileData}/>
-    </Modal>
+      <Modal
+        open={openModal}
+        handleClose={() => setOpenModal(false)}
+        button={"Update"}
+        handleSubmit={handleUpdateUser}
+      >
+        <UpdateForm setProfileData={setProfileData} />
+      </Modal>
     </Box>
   );
 }

@@ -149,7 +149,10 @@ export default function PostDetails() {
                             <DeleteIcon fontSize="small"/>
                           </IconButton> 
                         </MenuItem>
-                        <MenuItem onClick={()=>setAnchorEl(null)}>
+                        <MenuItem onClick={(event)=>{
+                          event.preventDefault();
+                          setAnchorEl(null);
+                          }}>
                           Close Menu
                           <IconButton >
                             <CloseIcon fontSize="small"/>

@@ -8,7 +8,7 @@ function UpdateForm({setProfileData}) {
 
   return (
         <>
-            <form>
+            <form enctype='multipart/form-data'>
                 <TextField
                     sx={{ width: "100%", margin: "10px 0px", bgcolor: "#fff" }}
                     variant="outlined"

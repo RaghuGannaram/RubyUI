@@ -21,6 +21,7 @@ export default function AddPost() {
       description: postText
     }
     await dispatch(addNewPost(post));
+    setPostText("");
   };
 
   return (
