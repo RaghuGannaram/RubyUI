@@ -13,18 +13,24 @@ import {
   useTheme,
 } from "@mui/material";
 import {
-  ArrowBack as ArrowBackIcon, 
+  ArrowBack as ArrowBackIcon,
   MoreHoriz as MoreHorizIcon,
   Sync as SyncIcon,
   FavoriteBorder as FavoriteBorderIcon,
   Close as CloseIcon,
   Delete as DeleteIcon,
   Favorite as FavoriteIcon,
-  IosShare as IosShareIcon
+  IosShare as IosShareIcon,
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import format from "date-fns/format";
-import { getPostDetails, getComments, addLike, addComment, deletePost } from "../Redux/postSlice";
+import {
+  getPostDetails,
+  getComments,
+  addLike,
+  addComment,
+  deletePost,
+} from "../Redux/postSlice";
 import Comment from "../Components/Comment";
 
 export default function PostDetails() {
@@ -32,19 +38,20 @@ export default function PostDetails() {
   const history = useHistory();
   const { postId } = useParams();
   const dispatch = useDispatch();
-  const { postStatus, commentStatus, post, comments } = useSelector((state) => state.post);
+  const { postStatus, commentStatus, post, comments } = useSelector(
+    (state) => state.post
+  );
   const [commentText, setCommentText] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const {username,handle, _id} =JSON.parse(localStorage.getItem("login"));
+  const { username, handle, _id } = JSON.parse(localStorage.getItem("login"));
   const profileId = _id;
 
   useEffect(() => {
-    console.log(postId)
+    console.log(postId);
     dispatch(getPostDetails(postId));
     dispatch(getComments(postId));
   }, [dispatch, postId]);
-
 
   const handleDeletePost = async () => {
     const response = await deletePost({ id: post._id });
@@ -53,31 +60,28 @@ export default function PostDetails() {
     }
   };
 
-
-
   const handleLikePost = async (event) => {
     event.preventDefault();
-    const likeData = { 
+    const likeData = {
       postId: post._id,
-      userId: profileId 
-    }
+      userId: profileId,
+    };
     const response = await dispatch(addLike(likeData));
-    if(response){
+    if (response) {
       dispatch(getPostDetails(postId));
     }
   };
 
-
   const handleAddComment = async () => {
     const commentData = {
       postId: post._id,
-      author:{
+      author: {
         id: profileId,
         name: username,
-        handle: handle
-      }, 
-      description: commentText
-    }
+        handle: handle,
+      },
+      description: commentText,
+    };
     await dispatch(addComment(commentData));
     await dispatch(getComments(postId));
     setCommentText("");
@@ -108,11 +112,15 @@ export default function PostDetails() {
             <Box>
               <Grid container alignItems="center">
                 <Grid item>
-                  <img src="/icon.png" alt="icon" width="60px" />
+                  <img
+                    width="150px"
+                    src={`data:image/jpg; base64,${post?.profilePicture}`}
+                    alt="profile"
+                  />
                 </Grid>
                 <Grid item flexGrow="1">
                   <Grid container justifyContent="space-between">
-                    <Grid item sx={{marginLeft:"10px"}}>
+                    <Grid item sx={{ marginLeft: "10px" }}>
                       <Typography sx={{ fontSize: "16px", fontWeight: "500" }}>
                         {post?.author?.name}
                       </Typography>
@@ -122,18 +130,18 @@ export default function PostDetails() {
                     </Grid>
                     <Grid item>
                       {profileId === post?.author?.id && (
-                          <IconButton
-                            aria-expanded={ Boolean(anchorEl) ? "true" : undefined}
-                            onClick={(event) => setAnchorEl(event.currentTarget)}
-                          >
-                            <MoreHorizIcon />
-                          </IconButton>
-                        )}
+                        <IconButton
+                          aria-expanded={Boolean(anchorEl) ? "true" : undefined}
+                          onClick={(event) => setAnchorEl(event.currentTarget)}
+                        >
+                          <MoreHorizIcon />
+                        </IconButton>
+                      )}
                       <Menu
                         id="basic-menu"
                         anchorEl={anchorEl}
                         open={Boolean(anchorEl)}
-                        onClose={()=>setAnchorEl(null)}
+                        onClose={() => setAnchorEl(null)}
                         MenuListProps={{
                           "aria-labelledby": "basic-button",
                         }}
@@ -145,18 +153,20 @@ export default function PostDetails() {
                           }}
                         >
                           Delete Post
-                          <IconButton >
-                            <DeleteIcon fontSize="small"/>
-                          </IconButton> 
+                          <IconButton>
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
                         </MenuItem>
-                        <MenuItem onClick={(event)=>{
-                          event.preventDefault();
-                          setAnchorEl(null);
-                          }}>
+                        <MenuItem
+                          onClick={(event) => {
+                            event.preventDefault();
+                            setAnchorEl(null);
+                          }}
+                        >
                           Close Menu
-                          <IconButton >
-                            <CloseIcon fontSize="small"/>
-                          </IconButton> 
+                          <IconButton>
+                            <CloseIcon fontSize="small" />
+                          </IconButton>
                         </MenuItem>
                       </Menu>
                     </Grid>
@@ -165,7 +175,7 @@ export default function PostDetails() {
               </Grid>
             </Box>
             <Box>
-              <Typography sx={{ fontSize: "20px", p:"10px"}}>
+              <Typography sx={{ fontSize: "20px", p: "10px" }}>
                 {post.description}
               </Typography>
             </Box>
@@ -177,13 +187,13 @@ export default function PostDetails() {
                 .
               </Typography>
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                {post?.createdAt && format(new Date(post.createdAt), "MMM dd yyyy")}
+                {post?.createdAt &&
+                  format(new Date(post.createdAt), "MMM dd yyyy")}
               </Typography>
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                <strong>{post?.likes?.length}</strong>{" "}
-                Likes
+                <strong>{post?.likes?.length}</strong> Likes
               </Typography>
             </Box>
             <Box
@@ -196,21 +206,25 @@ export default function PostDetails() {
                 <SyncIcon fontSize="small" />
               </IconButton>
               <IconButton onClick={handleLikePost} size="small">
-                {post?.likes?.includes(profileId) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" /> }
+                {post?.likes?.includes(profileId) ? (
+                  <FavoriteIcon fontSize="small" />
+                ) : (
+                  <FavoriteBorderIcon fontSize="small" />
+                )}
               </IconButton>
               <IconButton size="small">
                 <IosShareIcon fontSize="small" />
               </IconButton>
             </Box>
             <Box>
-              <Grid container sx={{mt:"10px"}}>
+              <Grid container sx={{ mt: "10px" }}>
                 <Grid item>
                   <img src="/icon.png" alt="icon" width="60px" />
                 </Grid>
                 <Grid item flexGrow="1">
                   <Box padding=".5rem">
                     <Input
-                      sx={{ width: "95%", ml:"10px"}}
+                      sx={{ width: "95%", ml: "10px" }}
                       placeholder="Post your comment"
                       rows="2"
                       multiline
@@ -222,7 +236,11 @@ export default function PostDetails() {
                   </Box>
                   <Box textAlign="right" paddingBottom=".5rem">
                     <Button
-                      sx={{ fontSize: "12px",color:"primary", borderRadius: theme.shape.borderRadius}}
+                      sx={{
+                        fontSize: "12px",
+                        color: "primary",
+                        borderRadius: theme.shape.borderRadius,
+                      }}
                       disabled={commentText.length === 0}
                       variant="contained"
                       onClick={handleAddComment}
@@ -238,7 +256,7 @@ export default function PostDetails() {
                 )}
               </Box>
               {commentStatus === "success" &&
-                comments.map((comment,index) => (
+                comments.map((comment, index) => (
                   <Comment key={index} comment={comment} post={post} />
                 ))}
             </Box>

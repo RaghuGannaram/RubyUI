@@ -95,7 +95,11 @@ export default function Post({ post }) {
           <Grid container flexWrap="nowrap">
             <Grid item sx={{ paddingRight: "1rem" }}>
               <Link to={`/profile/${post.author.id}`}>
-                <img src="/icon.png" alt="icon" width="50px" />
+              <img
+                width="150px"
+                src={`data:image/jpg; base64,${post?.profilePicture}`}
+                alt="profile"
+              />
               </Link>
             </Grid>
             <Grid item flexGrow="1">

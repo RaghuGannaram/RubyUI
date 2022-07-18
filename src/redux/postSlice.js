@@ -36,7 +36,6 @@ export const getComments = createAsyncThunk("post/getComments", async (postId) =
 });
 
 export const addNewPost = createAsyncThunk("post/addNewPost", async (postData) => {
-  console.log("in the addpost");
   const {data} = await axios.post(`/api/posts/new`, postData);
   return data;
 });

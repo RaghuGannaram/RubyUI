@@ -63,10 +63,12 @@ export default function Profile() {
       userId: _id,
       data: profileData,
     };
-    console.log("updateData", updateData)
+    console.log("updateData", updateData);
     await dispatch(updateUser(updateData));
     await dispatch(getUserDetails(_id));
   };
+
+  const handleBGIupdate = async () => {};
 
   return (
     <Box>
@@ -94,7 +96,11 @@ export default function Profile() {
       {status === "success" && (
         <Box height="90vh" sx={{ overflowY: "scroll" }}>
           <Box position="relative">
-            <img width="100%" src={`data:image/jpg; base64,${user?.backgroundImage}`} alt="background" />
+            <img
+              width="100%"
+              src={`data:image/jpg; base64,${user?.backgroundImage}`}
+              alt="background"
+            />
             <Box
               sx={{
                 position: "absolute",
@@ -104,7 +110,11 @@ export default function Profile() {
                 borderRadius: "50%",
               }}
             >
-              <img width="150px" src={`data:image/jpg; base64,${user?.profilePicture}`} alt="profile" />
+              <img
+                width="150px"
+                src={`data:image/jpg; base64,${user?.profilePicture}`}
+                alt="profile"
+              />
             </Box>
           </Box>
           <Box textAlign="right" padding="10px 20px">
@@ -227,6 +237,11 @@ export default function Profile() {
             >
               Posts
             </Typography>
+          </Box>
+          <Box borderBottom="1px solid #ccc">
+            <IconButton onClick={() => handleBGIupdate()}>
+              <ArrowBackIcon />
+            </IconButton>
           </Box>
           <Box textAlign="center" marginTop="1rem">
             {postStatus === "loading" && (

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Route, Switch } from "react-router";
+import { BrowserRouter as Router } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // import axios from "axios";
 import Home from "./Screens/Home";
@@ -23,30 +24,33 @@ function App() {
 
   useEffect(() => {
     const { isLoggedIn } = JSON.parse(localStorage.getItem("login")) || {};
-    isLoggedIn&&dispatch(setAuthStatus({ isLoggedIn }));
+    isLoggedIn && dispatch(setAuthStatus({ isLoggedIn }));
   }, [dispatch, isLoggedIn]);
-  
-  return (    
-    <Switch>
-      <Route path="/login">
-        <Login />
-      </Route>
-      <PrivateRoute exact path="/">
-        <Layout>
-          <Home />
-        </Layout>
-      </PrivateRoute>
-      <PrivateRoute exact path="/posts/:postId">
-        <Layout>
-          <PostDetails />
-        </Layout>
-      </PrivateRoute>
-      <PrivateRoute exact path="/profile/:userId">
-        <Layout>
-          <Profile />
-        </Layout>
-      </PrivateRoute>
-    </Switch>
+
+  return (
+    <Router>
+      <Switch>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <PrivateRoute exact path="/">
+          <Layout>
+            <Home />
+          </Layout>
+        </PrivateRoute>
+        <PrivateRoute exact path="/posts/:postId">
+          <Layout>
+            <PostDetails />
+          </Layout>
+        </PrivateRoute>
+        <PrivateRoute exact path="/profile/:userId">
+          <Layout>
+            <Profile />
+          </Layout>
+        </PrivateRoute>
+        {/* <Redirect to = "/login"/> */}
+      </Switch>
+    </Router>
   );
 }
 
