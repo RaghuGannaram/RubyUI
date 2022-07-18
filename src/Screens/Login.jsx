@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Box,Typography, Link} from "@mui/material";
+import { Box, Typography, Link } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import LoginForm from "../Components/LoginForm";
 import RegisterForm from "../Components/RegisterForm";
@@ -7,6 +7,7 @@ import RegisterForm from "../Components/RegisterForm";
 export default function Login() {
   const [isLoginForm, setIsLoginForm] = useState(true);
   const theme = useTheme();
+
   return (
     <Box
       display="flex"

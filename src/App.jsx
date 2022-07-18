@@ -23,7 +23,7 @@ function App() {
   // }, [isLoggedIn]);
 
   useEffect(() => {
-    const { isLoggedIn } = JSON.parse(localStorage.getItem("login")) || {};
+    const { isLoggedIn } = JSON.parse(localStorage.getItem("rubyNet")) || {};
     isLoggedIn && dispatch(setAuthStatus({ isLoggedIn }));
   }, [dispatch, isLoggedIn]);
 

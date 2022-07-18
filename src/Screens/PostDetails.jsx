@@ -41,11 +41,13 @@ export default function PostDetails() {
   const { postStatus, commentStatus, post, comments } = useSelector(
     (state) => state.post
   );
+  const { profile } = useSelector((state) => state.auth);
+
   const [commentText, setCommentText] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const { username, handle, _id } = JSON.parse(localStorage.getItem("login"));
-  const profileId = _id;
+  // const { username, handle, _id, profilePicture } = JSON.parse(localStorage.getItem("login"));
+  // const profileId = profile._id;
 
   useEffect(() => {
     console.log(postId);
@@ -64,7 +66,7 @@ export default function PostDetails() {
     event.preventDefault();
     const likeData = {
       postId: post._id,
-      userId: profileId,
+      userId: profile._id,
     };
     const response = await dispatch(addLike(likeData));
     if (response) {
@@ -76,9 +78,9 @@ export default function PostDetails() {
     const commentData = {
       postId: post._id,
       author: {
-        id: profileId,
-        name: username,
-        handle: handle,
+        id: profile._id,
+        name: profile.username,
+        handle: profile.handle,
       },
       description: commentText,
     };
@@ -129,7 +131,7 @@ export default function PostDetails() {
                       </Typography>
                     </Grid>
                     <Grid item>
-                      {profileId === post?.author?.id && (
+                      {profile._id === post?.author?.id && (
                         <IconButton
                           aria-expanded={Boolean(anchorEl) ? "true" : undefined}
                           onClick={(event) => setAnchorEl(event.currentTarget)}
@@ -206,7 +208,7 @@ export default function PostDetails() {
                 <SyncIcon fontSize="small" />
               </IconButton>
               <IconButton onClick={handleLikePost} size="small">
-                {post?.likes?.includes(profileId) ? (
+                {post?.likes?.includes(profile._id) ? (
                   <FavoriteIcon fontSize="small" />
                 ) : (
                   <FavoriteBorderIcon fontSize="small" />
@@ -219,7 +221,11 @@ export default function PostDetails() {
             <Box>
               <Grid container sx={{ mt: "10px" }}>
                 <Grid item>
-                  <img src="/icon.png" alt="icon" width="60px" />
+                <img
+                    width="150px"
+                    src={`data:image/jpg; base64,${profile.profilePicture}`}
+                    alt="profile"
+                  />
                 </Grid>
                 <Grid item flexGrow="1">
                   <Box padding=".5rem">

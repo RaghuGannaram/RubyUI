@@ -28,40 +28,44 @@ export default function AddPost() {
     <Box padding="1rem 1rem 0 1rem" borderBottom="1px solid #ccc">
       <Grid container>
         <Grid item sx={{ paddingRight: "1rem" }}>
-          <img src="/icon.png" alt="icon" width="50px" />
+          <img
+            width="150px"
+            src={`data:image/jpg; base64,${profile?.profilePicture}`}
+            alt="profile"
+          />
         </Grid>
         <Grid item flexGrow="1">
-            <Box padding=".5rem 0">
-              <Input
-                sx={{ width: "100%" }}
-                multiline
-                rows="2"
-                disableUnderline
-                type="text"
-                value={postText}
-                placeholder="What's happening?"
-                onChange={(event) => setPostText(event.target.value)}
-              />
-            </Box>
-            <Box
-              textAlign="right"
-              padding=".5rem auto"
-              borderTop="1px solid #ccc"
+          <Box padding=".5rem 0">
+            <Input
+              sx={{ width: "100%" }}
+              multiline
+              rows="2"
+              disableUnderline
+              type="text"
+              value={postText}
+              placeholder="What's happening?"
+              onChange={(event) => setPostText(event.target.value)}
+            />
+          </Box>
+          <Box
+            textAlign="right"
+            padding=".5rem auto"
+            borderTop="1px solid #ccc"
+          >
+            <Button
+              sx={{
+                fontSize: "12px",
+                margin: "5px",
+                color: "primary",
+                borderRadius: theme.shape.borderRadius,
+              }}
+              variant="contained"
+              disabled={postText.length === 0}
+              onClick={handleAddPost}
             >
-              <Button
-                sx={{
-                  fontSize: "12px",
-                  margin: "5px",
-                  color: "primary",
-                  borderRadius: theme.shape.borderRadius,
-                }}
-                variant="contained"
-                disabled={postText.length === 0}
-                onClick={handleAddPost}
-              >
-                Post
-              </Button>
-            </Box>
+              Post
+            </Button>
+          </Box>
         </Grid>
       </Grid>
     </Box>

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, CircularProgress, TextField } from "@mui/material";
 import { registerUser } from "../Redux/authSlice";
 
 export default function RegisterForm() {
-  const [registerData, setRegisterData] = useState({});
-  const dispatch = useDispatch();
   const history = useHistory();
+  const dispatch = useDispatch();
   const { status, isLoggedIn } = useSelector((state) => state.auth);
+  const [registerData, setRegisterData] = useState({});
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -85,12 +85,16 @@ export default function RegisterForm() {
           margin: "1.5rem 0",
           padding: "12px 0",
           borderRadius: "28px",
-          color:"primary"
+          color: "primary",
         }}
         variant="contained"
         type="submit"
       >
-        {status === "loading" ? <CircularProgress size={24} sx={{ color: "#FFF" }} /> : "Register" }
+        {status === "loading" ? (
+          <CircularProgress size={24} sx={{ color: "#FFF" }} />
+        ) : (
+          "Register"
+        )}
       </Button>
     </form>
   );

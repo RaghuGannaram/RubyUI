@@ -6,19 +6,18 @@ import {
   Favorite as FavoriteIcon,
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
-import {useDispatch} from "react-redux";
+import { useSelector, useDispatch} from "react-redux";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import {getComments, deleteComment, likeSpecificComment} from "../Redux/postSlice";
 
 export default function Comment({ comment, post }) {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const {_id} =JSON.parse(localStorage.getItem("login"));
+  const { profile } = useSelector((state) => state.auth);
 
   const handleLikeAComment = async () => {
     const likeCommentData = {
-      userId : _id,
+      userId : profile._id,
       postId : post._id,
       commentId : comment._id
     }
@@ -47,7 +46,11 @@ export default function Comment({ comment, post }) {
     >
       <Grid container flexWrap="nowrap">
         <Grid item sx={{ paddingRight: "1rem" }}>
-          <img src="/icon.png" alt="icon" width="50px" />
+        <img
+            width="150px"
+            src={`data:image/jpg; base64,${profile?.profilePicture}`}
+            alt="profile"
+          />
         </Grid>
         <Grid item flexGrow="1">
           <Box>
@@ -78,7 +81,7 @@ export default function Comment({ comment, post }) {
               </Grid>
               <Grid item>
                 {console.log(comment)}
-                {comment?.author?.id === _id && (
+                {comment?.author?.id === profile._id && (
                   <IconButton
                     aria-expanded={Boolean(anchorEl) ? "true" : undefined}
                     onClick={(event) => {
@@ -120,7 +123,7 @@ export default function Comment({ comment, post }) {
                 size="small"
                 onClick={handleLikeAComment}
               >
-                {comment?.likes?.includes(_id) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" /> }
+                {comment?.likes?.includes(profile._id) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" /> }
               </IconButton>
             </Box>
           </Box>

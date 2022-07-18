@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import {
   Button,
@@ -39,11 +39,10 @@ export default function LeftSidebar() {
   const [openModal, setOpenModal] = useState(false);
   const [postText, setPostText] = useState("");
   const dispatch = useDispatch();
+  const { profile } = useSelector((state) => state.auth);
   
   const open = Boolean(anchorEl);
-  const { _id } = JSON.parse(localStorage.getItem("login"));
- 
- 
+  
   const handleAddPost = async () => {
     await dispatch(addNewPost({ text: postText }));
     await dispatch(getAllPosts());
@@ -197,7 +196,7 @@ export default function LeftSidebar() {
             </Hidden>
           </ListItem>
           <NavLink
-            to={`/profile/${_id}`}
+            to={`/profile/${profile._id}`}
             style={{
               textDecoration: "none",
               color: "inherit",
@@ -314,7 +313,11 @@ export default function LeftSidebar() {
         <Box>
           <Grid container>
             <Grid item>
-              <img src="/icon.png" alt="icon" width="60px" />
+            <img
+                width="150px"
+                src={`data:image/jpg; base64,${profile.profilePicture}`}
+                alt="profile"
+              />
             </Grid>
             <Grid item flexGrow="1">
               <Box padding=".5rem">

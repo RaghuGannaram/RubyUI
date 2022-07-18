@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, CircularProgress, TextField } from "@mui/material";
@@ -21,7 +21,7 @@ export default function LoginForm() {
   };
 
   useEffect(() => {
-    isLoggedIn&&history.push("/");
+    isLoggedIn && history.push("/");
   }, [history, isLoggedIn]);
 
   return (
@@ -61,12 +61,16 @@ export default function LoginForm() {
             width: "100%",
             margin: "1.5rem 0",
             padding: "12px 0",
-            borderRadius: "28px"
+            borderRadius: "28px",
           }}
           variant="contained"
           type="submit"
         >
-          {status === "loading" ? <CircularProgress size={24} sx={{ color: "#FFF" }} /> : "Login"}
+          {status === "loading" ? (
+            <CircularProgress size={24} sx={{ color: "#FFF" }} />
+          ) : (
+            "Login"
+          )}
         </Button>
       </form>
       <Button

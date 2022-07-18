@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import {useSelector, useDispatch } from "react-redux";
 import {
   Grid,
   IconButton,
@@ -34,9 +34,7 @@ export default function Post({ post }) {
   const [commentText, setCommentText] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const { username, handle, _id } = JSON.parse(localStorage.getItem("login"));
-  const userId = _id;
+  const { profile } = useSelector((state) => state.auth);
 
   const handleChatIconClick = (event) => {
     event.preventDefault();
@@ -47,7 +45,7 @@ export default function Post({ post }) {
     event.preventDefault();
     const likeData = {
       postId: post._id,
-      userId: userId,
+      userId: profile._id,
     };
     await dispatch(addLike(likeData));
     await dispatch(getAllPosts());
@@ -57,9 +55,9 @@ export default function Post({ post }) {
     const commentData = {
       postId: post._id,
       author: {
-        id: userId,
-        name: username,
-        handle: handle,
+        id: profile._id,
+        name: profile.username,
+        handle: profile.handle,
       },
       description: commentText,
     };
@@ -72,7 +70,7 @@ export default function Post({ post }) {
     event.preventDefault();
     const postData = {
       postId: post._id,
-      userId: userId,
+      userId: profile._id,
     };
     await dispatch(deletePost(postData));
     await dispatch(getAllPosts());
@@ -140,7 +138,7 @@ export default function Post({ post }) {
                     </Box>
                   </Grid>
                   <Grid item>
-                    {post.author.id === userId && (
+                    {post.author.id === profile._id && (
                       <IconButton
                         aria-expanded={Boolean(anchorEl) ? "true" : undefined}
                         onClick={(event) => {
@@ -196,7 +194,7 @@ export default function Post({ post }) {
                     size="small"
                     onClick={(event) => handleLikePost(event)}
                   >
-                    {post.likes.includes(userId) ? (
+                    {post.likes.includes(profile._id) ? (
                       <FavoriteIcon fontSize="small" />
                     ) : (
                       <FavoriteBorderIcon fontSize="small" />
@@ -221,7 +219,11 @@ export default function Post({ post }) {
         <Box>
           <Grid container>
             <Grid item>
-              <img src="/icon.png" alt="icon" width="60px" />
+            <img
+                width="150px"
+                src={`data:image/jpg; base64,${profile.profilePicture}`}
+                alt="profile"
+              />
             </Grid>
             <Grid item flexGrow="1">
               <Box padding=".5rem">

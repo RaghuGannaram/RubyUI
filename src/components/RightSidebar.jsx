@@ -8,9 +8,10 @@ import WhoToFollow from "./WhoToFollow";
 
 export default function RightSidebar() {
   const [query, setQuery] = useState("");
-  const { _id } = JSON.parse(localStorage.getItem("login"));
+  
+  const { profile } = useSelector((state) => state.auth);
+  const { users, userStatus } = useSelector((state) => state.user);
 
-  const { users, userStatus } = useSelector((state) => state.auth);
 
   function queriedUsers() {
     return users.filter(
@@ -137,7 +138,7 @@ export default function RightSidebar() {
           </Typography>
           {userStatus === "success" &&
             users
-              .filter((user) => user._id !== _id)
+              .filter((user) => user._id !== profile._id)
               .slice(0, 7)
               .map((item, index) => <WhoToFollow key={index} user={item} />)}
         </Box>
