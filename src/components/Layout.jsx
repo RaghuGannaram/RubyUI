@@ -21,10 +21,10 @@ export default function Layout({ children }) {
       }}
     >
       <Grid container>
-        <Grid item xs={2} lg={2}>
+        <Grid item xs={2} md={1} lg={2}>
           <LeftSidebar />
         </Grid>
-        <Grid item xs={10} lg={10}>
+        <Grid item xs={10} md={11} lg={10}>
           <Grid container>
             <Grid item xs={12} md={8} lg={9}>
               <Box
@@ -38,7 +38,7 @@ export default function Layout({ children }) {
                 {children}
               </Box>
             </Grid>
-            <Grid item xs={0} md={3} lg={3} sx={{display : {xs: "none", md:"block"}}}>
+            <Grid item xs={0} md={4} lg={3} sx={{display : {xs: "none", md:"block"}}}>
               <RightSidebar />
             </Grid>
           </Grid>

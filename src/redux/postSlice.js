@@ -106,7 +106,7 @@ export const postSlice = createSlice({
     },
 
     [getUserPosts.pending]: (state, action) => {
-      state.status = "loading";
+      state.postStatus = "loading";
     },
     [getUserPosts.fulfilled]: (state, action) => {
       state.postStatus = "success";

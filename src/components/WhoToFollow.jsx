@@ -9,11 +9,11 @@ export default function WhoToFollow({ user }) {
 
   return (
     <Box
-      margin="1rem 0"
       sx={{
         border: "2px solid #333",
         padding: "5px",
         borderRadius: "5px",
+        mt:"10px"
       }}
     >
       <Grid container sx={{ display: "flex", flexDirection: "column" }}>

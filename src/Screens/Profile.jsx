@@ -243,11 +243,6 @@ export default function Profile() {
               Posts
             </Typography>
           </Box>
-          {/* <Box borderBottom="1px solid #ccc">
-            <IconButton onClick={() => handleBGIupdate()}>
-              <ArrowBackIcon />
-            </IconButton>
-          </Box> */}
           <Box textAlign="center" marginTop="1rem">
             {postStatus === "loading" && (
               <CircularProgress size={20} color="primary" />

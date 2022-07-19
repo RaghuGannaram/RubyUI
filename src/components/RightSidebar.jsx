@@ -26,7 +26,7 @@ export default function RightSidebar() {
   }, [dispatch]);
 
   return (
-    <Box sx={{ height: "100%" }}>
+    <Box sx={{ width: "100%", overflow:"hidden" }}>
       <Box paddingTop="10px">
         <Box
           width="100%"
@@ -141,13 +141,16 @@ export default function RightSidebar() {
             margin: "1rem 0",
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+          <Typography variant="h6" sx={{ fontWeight: "bold", textAlign:"center" }}>
             Who to follow
           </Typography>
           {status === "success" &&
             users
               .filter((user) => user._id !== profile._id)
-              .slice(0, 7)
+              .sort((a,b)=>{
+                return b.followers.length-a.followers.length
+              })
+              .slice(0, 3)
               .map((item, index) => <WhoToFollow key={index} user={item} />)}
         </Box>
       </Box>
