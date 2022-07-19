@@ -94,9 +94,9 @@ export default function Post({ post }) {
             <Grid item sx={{ paddingRight: "1rem" }}>
               <Link to={`/profile/${post.author.id}`}>
               <img
-                width="150px"
                 src={`data:image/jpg; base64,${post?.profilePicture}`}
                 alt="profile"
+                style={{width:"80px", borderRadius:"50%"}}
               />
               </Link>
             </Grid>
@@ -220,9 +220,9 @@ export default function Post({ post }) {
           <Grid container>
             <Grid item>
             <img
-                width="150px"
                 src={`data:image/jpg; base64,${profile.profilePicture}`}
                 alt="profile"
+                style={{width:"80px", borderRadius:"50%"}}
               />
             </Grid>
             <Grid item flexGrow="1">

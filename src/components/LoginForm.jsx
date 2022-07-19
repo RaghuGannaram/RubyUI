@@ -5,10 +5,10 @@ import { Button, CircularProgress, TextField } from "@mui/material";
 import { loginUser } from "../Redux/authSlice";
 
 export default function LoginForm() {
-  const [logInData, setLogInData] = useState({});
+  const history = useHistory();
   const dispatch = useDispatch();
   const { status, isLoggedIn } = useSelector((state) => state.auth);
-  const history = useHistory();
+  const [logInData, setLogInData] = useState({});
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -64,7 +64,7 @@ export default function LoginForm() {
             borderRadius: "28px",
           }}
           variant="contained"
-          type="submit"
+          type="default"
         >
           {status === "loading" ? (
             <CircularProgress size={24} sx={{ color: "#FFF" }} />

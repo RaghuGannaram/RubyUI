@@ -1,17 +1,17 @@
-import React,{useState} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Input, Typography, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { Search } from "@mui/icons-material";
 import WhoToFollow from "./WhoToFollow";
+import { getAllUsers } from "../Redux/userSlice";
 
 export default function RightSidebar() {
-  const [query, setQuery] = useState("");
-  
+  const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.auth);
-  const { users, userStatus } = useSelector((state) => state.user);
-
+  const { users, status } = useSelector((state) => state.user);
+  const [query, setQuery] = useState("");
 
   function queriedUsers() {
     return users.filter(
@@ -20,6 +20,10 @@ export default function RightSidebar() {
         user.handle.toLowerCase().includes(query.toLowerCase())
     );
   }
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
 
   return (
     <Box sx={{ height: "100%" }}>
@@ -90,7 +94,11 @@ export default function RightSidebar() {
                       alignItems="center"
                     >
                       <Grid item sx={{ paddingRight: "12px" }}>
-                        <img src="/icon.png" width="50px" alt="icon" />
+                        <img
+                          src={`data:image/jpg; base64,${user?.profilePicture}`}
+                          alt="profilPicture"
+                          style={{width:"80px", borderRadius:"50%"}}
+                        />
                       </Grid>
                       <Grid item>
                         <Grid container alignItems="center">
@@ -102,7 +110,7 @@ export default function RightSidebar() {
                                 color: "#000",
                               }}
                             >
-                              {user.name}
+                              {user.username}
                             </Typography>
                             <Box display="flex" alignItems="center">
                               <Typography
@@ -112,7 +120,7 @@ export default function RightSidebar() {
                                   color: "#555",
                                 }}
                               >
-                                {user.handle}
+                                @{user.handle}
                               </Typography>
                             </Box>
                           </Grid>
@@ -136,7 +144,7 @@ export default function RightSidebar() {
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             Who to follow
           </Typography>
-          {userStatus === "success" &&
+          {status === "success" &&
             users
               .filter((user) => user._id !== profile._id)
               .slice(0, 7)

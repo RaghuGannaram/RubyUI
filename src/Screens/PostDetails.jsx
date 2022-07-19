@@ -38,29 +38,10 @@ export default function PostDetails() {
   const history = useHistory();
   const { postId } = useParams();
   const dispatch = useDispatch();
-  const { postStatus, commentStatus, post, comments } = useSelector(
-    (state) => state.post
-  );
   const { profile } = useSelector((state) => state.auth);
-
+  const { postStatus, commentStatus, post, comments } = useSelector((state) => state.post);
   const [commentText, setCommentText] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-
-  // const { username, handle, _id, profilePicture } = JSON.parse(localStorage.getItem("login"));
-  // const profileId = profile._id;
-
-  useEffect(() => {
-    console.log(postId);
-    dispatch(getPostDetails(postId));
-    dispatch(getComments(postId));
-  }, [dispatch, postId]);
-
-  const handleDeletePost = async () => {
-    const response = await deletePost({ id: post._id });
-    if (response) {
-      history.push("/");
-    }
-  };
 
   const handleLikePost = async (event) => {
     event.preventDefault();
@@ -69,9 +50,7 @@ export default function PostDetails() {
       userId: profile._id,
     };
     const response = await dispatch(addLike(likeData));
-    if (response) {
-      dispatch(getPostDetails(postId));
-    }
+    response && dispatch(getPostDetails(postId));
   };
 
   const handleAddComment = async () => {
@@ -88,6 +67,16 @@ export default function PostDetails() {
     await dispatch(getComments(postId));
     setCommentText("");
   };
+
+  const handleDeletePost = async () => {
+    const response = await deletePost({ id: post._id });
+    response && history.push("/");
+  };
+  
+  useEffect(() => {
+    dispatch(getPostDetails(postId));
+    dispatch(getComments(postId));
+  }, [dispatch, postId]);
 
   return (
     <Box>
@@ -115,9 +104,9 @@ export default function PostDetails() {
               <Grid container alignItems="center">
                 <Grid item>
                   <img
-                    width="150px"
                     src={`data:image/jpg; base64,${post?.profilePicture}`}
                     alt="profile"
+                    style={{width:"80px", borderRadius:"50%"}}
                   />
                 </Grid>
                 <Grid item flexGrow="1">
@@ -222,9 +211,9 @@ export default function PostDetails() {
               <Grid container sx={{ mt: "10px" }}>
                 <Grid item>
                 <img
-                    width="150px"
                     src={`data:image/jpg; base64,${profile.profilePicture}`}
                     alt="profile"
+                    style={{width:"80px", borderRadius:"50%"}}
                   />
                 </Grid>
                 <Grid item flexGrow="1">

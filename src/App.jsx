@@ -48,7 +48,6 @@ function App() {
             <Profile />
           </Layout>
         </PrivateRoute>
-        {/* <Redirect to = "/login"/> */}
       </Switch>
     </Router>
   );

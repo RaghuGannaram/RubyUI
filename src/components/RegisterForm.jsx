@@ -16,9 +16,7 @@ export default function RegisterForm() {
   };
 
   useEffect(() => {
-    if (isLoggedIn) {
-      history.push("/");
-    }
+    isLoggedIn && history.push("/");
   }, [history, isLoggedIn]);
 
   return (

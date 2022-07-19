@@ -29,9 +29,9 @@ export default function AddPost() {
       <Grid container>
         <Grid item sx={{ paddingRight: "1rem" }}>
           <img
-            width="150px"
             src={`data:image/jpg; base64,${profile?.profilePicture}`}
             alt="profile"
+            style={{width:"80px", borderRadius:"50%"}}
           />
         </Grid>
         <Grid item flexGrow="1">

@@ -27,7 +27,7 @@ export const authSlice = createSlice({
   reducers : {
     setAuthStatus: (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn;
-      state.profile = JSON.parse(localStorage.getItem("rubyNet"));
+      state.profile = JSON.parse(localStorage.getItem("rubyNet")).profile;
     },
     logoutUser: (state, action) => {
       localStorage.clear();
@@ -45,9 +45,7 @@ export const authSlice = createSlice({
       state.isLoggedIn = true;
       state.status = "success";
       state.profile = action.payload;
-      console.log(action.payload);
-      const { _id, username, handle, email, profilePicture } = action.payload;
-      localStorage.setItem("rubyNet", JSON.stringify({isLoggedIn: true, _id, username, handle, email, profilePicture }));
+      localStorage.setItem("rubyNet", JSON.stringify({isLoggedIn: true, profile: {...action.payload}}));
     },
     [loginUser.rejected]: (state, action) => {
       state.status = "failed";
@@ -61,15 +59,13 @@ export const authSlice = createSlice({
       state.status = "success";
       state.isLoggedIn = true;
       state.profile = action.payload;
-      const { _id, username, handle, email, profilePicture } = action.payload;
-      localStorage.setItem("rubyNet", JSON.stringify({isLoggedIn: true, _id, username, handle, email, profilePicture }));
+      localStorage.setItem("rubyNet", JSON.stringify({isLoggedIn: true, profile: {...action.payload}}));
     },
     [registerUser.rejected]: (state, action) => {
       state.status = "failed";
       state.isLoggedIn = false;
     },
 
-   
   },
 });
 

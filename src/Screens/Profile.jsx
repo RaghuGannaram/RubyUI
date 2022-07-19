@@ -20,12 +20,14 @@ import {
   Autorenew as AutorenewIcon,
   LocationOn as LocationOnIcon,
   DateRange as DateRangeIcon,
+  EditOutlined as EditOutlinedIcon,
 } from "@mui/icons-material/";
 import { Box } from "@mui/system";
 import format from "date-fns/format";
 import Post from "../Components/Post";
 import Modal from "../Components/Modal";
 import UpdateForm from "../Components/UpdateForm";
+import UpdateBGIImage from "../Components/UpdateBGIImage";
 import { getUserDetails, followUser, updateUser } from "../Redux/userSlice";
 import { getUserPosts } from "../Redux/postSlice";
 
@@ -34,15 +36,14 @@ export default function Profile() {
   const { userId } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { user, status, followers, followings } = useSelector(
-    (state) => state.user
-  );
+  const { profile } = useSelector((state)=> state.auth);
+  const { user, status, followers, followings } = useSelector((state) => state.user);
   const { postStatus, posts } = useSelector((state) => state.post);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [openBGIModal, setOpenBGIModal] = useState(false);
   const [profileData, setProfileData] = useState({});
 
-  const { _id } = JSON.parse(localStorage.getItem("login"));
 
   useEffect(() => {
     dispatch(getUserDetails(userId));
@@ -51,7 +52,7 @@ export default function Profile() {
 
   const handleFollow = async () => {
     const followData = {
-      followerId: _id,
+      followerId: profile._id,
       userId: userId,
     };
     await dispatch(followUser(followData));
@@ -60,15 +61,16 @@ export default function Profile() {
 
   const handleUpdateUser = async () => {
     const updateData = {
-      userId: _id,
+      userId: profile._id,
       data: profileData,
     };
-    console.log("updateData", updateData);
     await dispatch(updateUser(updateData));
-    await dispatch(getUserDetails(_id));
+    await dispatch(getUserDetails(profile._id));
   };
 
-  const handleBGIupdate = async () => {};
+  const handleBGIupdate = async () => {
+    setOpenBGIModal(true);
+  };
 
   return (
     <Box>
@@ -97,28 +99,28 @@ export default function Profile() {
         <Box height="90vh" sx={{ overflowY: "scroll" }}>
           <Box position="relative">
             <img
-              width="100%"
               src={`data:image/jpg; base64,${user?.backgroundImage}`}
               alt="background"
+              style={{width:"150px", borderRadius:"50%"}}
             />
             <Box
               sx={{
                 position: "absolute",
-                top: 120,
-                left: 15,
+                top: 160,
+                right: 25,
                 background: "#eee",
                 borderRadius: "50%",
               }}
             >
               <img
-                width="150px"
                 src={`data:image/jpg; base64,${user?.profilePicture}`}
                 alt="profile"
+                style={{width:"80px", borderRadius:"50%"}}
               />
             </Box>
           </Box>
           <Box textAlign="right" padding="10px 20px">
-            {userId === _id && (
+            {userId === profile._id && (
               <IconButton
                 aria-expanded={Boolean(anchorEl) ? "true" : undefined}
                 onClick={(event) => setAnchorEl(event.currentTarget)}
@@ -162,7 +164,10 @@ export default function Profile() {
             <IconButton>
               <MailOutlineIcon />
             </IconButton>
-            {userId !== _id && (
+            <IconButton title="Update Background Image" onClick={handleBGIupdate}>
+              <EditOutlinedIcon />
+            </IconButton>
+            {userId !== profile._id && (
               <Button
                 onClick={handleFollow}
                 size="small"
@@ -177,7 +182,7 @@ export default function Profile() {
                 }}
                 variant="contained"
               >
-                {followers.includes(_id) ? "Unfollow" : "Follow"}
+                {followers.includes(profile._id) ? "Unfollow" : "Follow"}
               </Button>
             )}
           </Box>
@@ -206,7 +211,7 @@ export default function Profile() {
               <Box display="flex" marginLeft="1rem">
                 <DateRangeIcon htmlColor="#555" />
                 <Typography sx={{ ml: "6px", color: "#555" }}>
-                  {user && format(new Date(user?.createdAt), "MMM dd yyyy")}
+                  {user && user.createdAt && format(new Date(user.createdAt), "MMM dd yyyy")}
                 </Typography>
               </Box>
             </Box>
@@ -238,11 +243,11 @@ export default function Profile() {
               Posts
             </Typography>
           </Box>
-          <Box borderBottom="1px solid #ccc">
+          {/* <Box borderBottom="1px solid #ccc">
             <IconButton onClick={() => handleBGIupdate()}>
               <ArrowBackIcon />
             </IconButton>
-          </Box>
+          </Box> */}
           <Box textAlign="center" marginTop="1rem">
             {postStatus === "loading" && (
               <CircularProgress size={20} color="primary" />
@@ -259,6 +264,14 @@ export default function Profile() {
         handleSubmit={handleUpdateUser}
       >
         <UpdateForm setProfileData={setProfileData} />
+      </Modal>
+
+      <Modal
+        open={openBGIModal}
+        handleClose={() => setOpenBGIModal(false)}
+        button={"Update"}
+      >
+        <UpdateBGIImage />
       </Modal>
     </Box>
   );

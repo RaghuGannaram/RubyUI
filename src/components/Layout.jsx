@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import React, { } from "react";
 import LeftSidebar from "./LeftSidebar";
 import RightSidebar from "./RightSidebar";
 import Box from "@mui/material/Box";
-import { Grid, Hidden } from "@mui/material";
-import { useTheme } from "@mui/system";
+import { Grid } from "@mui/material";
+// import { useTheme } from "@mui/system";
 // import { getUsers } from "../Redux/authSlice";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 
 export default function Layout({ children }) {
-  const theme = useTheme();
+  // const theme = useTheme();
   // const dispatch = useDispatch();
   // useEffect(() => {
   //   dispatch(getUsers());
@@ -16,7 +16,7 @@ export default function Layout({ children }) {
   return (
     <Box
       sx={{
-        maxWidth: theme.breakpoints.values.lg,
+        maxWidth: "90vw",
         margin: "0 auto",
       }}
     >
@@ -38,7 +38,7 @@ export default function Layout({ children }) {
                 {children}
               </Box>
             </Grid>
-            <Grid item md={3} lg={3} sx={{display : {xs: "none", md:"block"}}}>
+            <Grid item xs={0} md={3} lg={3} sx={{display : {xs: "none", md:"block"}}}>
               <RightSidebar />
             </Grid>
           </Grid>

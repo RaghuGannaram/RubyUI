@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
   Grid,
@@ -14,7 +14,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
 } from "@mui/material";
 import {
   Home as HomeIcon,
@@ -30,19 +30,19 @@ import {
   AddCircleOutline as AddCircleOutlineIcon,
 } from "@mui/icons-material";
 import { logoutUser } from "../Redux/authSlice";
-import Modal from "./Modal";
 import { getAllPosts, addNewPost } from "../Redux/postSlice";
+import Modal from "./Modal";
 
 export default function LeftSidebar() {
   const theme = useTheme();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
-  const [postText, setPostText] = useState("");
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.auth);
-  
+  const [openModal, setOpenModal] = useState(false);
+  const [postText, setPostText] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const open = Boolean(anchorEl);
-  
+
   const handleAddPost = async () => {
     await dispatch(addNewPost({ text: postText }));
     await dispatch(getAllPosts());
@@ -51,7 +51,9 @@ export default function LeftSidebar() {
 
   return (
     <>
-      <Box sx={{ height: "100vh", maxWidth: "100%" ,backgroundColor:"inherit"}}>
+      <Box
+        sx={{ height: "100vh", maxWidth: "100%"}}
+      >
         <Box textAlign="center" paddingTop={2}>
           <NavLink
             to="/"
@@ -229,7 +231,9 @@ export default function LeftSidebar() {
             aria-controls="basic-menu"
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
-            onClick={(event)=>{setAnchorEl(event.currentTarget)}}
+            onClick={(event) => {
+              setAnchorEl(event.currentTarget);
+            }}
             button
             sx={{
               borderRadius: "28px",
@@ -252,7 +256,7 @@ export default function LeftSidebar() {
         </List>
         <Hidden lgDown>
           <Button
-            onClick={()=>setOpenModal(true)}
+            onClick={() => setOpenModal(true)}
             variant="contained"
             color="primary"
             fullWidth
@@ -267,7 +271,7 @@ export default function LeftSidebar() {
         </Hidden>
         <Hidden lgUp>
           <IconButton
-            onClick={()=>setOpenModal(true)}
+            onClick={() => setOpenModal(true)}
             variant="contained"
             color="primary"
             style={{
@@ -284,28 +288,30 @@ export default function LeftSidebar() {
           id="basic-menu"
           anchorEl={anchorEl}
           open={open}
-          onClose={()=>{setAnchorEl(null)}}
+          onClose={() => {
+            setAnchorEl(null);
+          }}
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={() =>dispatch(logoutUser())}>
-            Logout 
-            <IconButton >
-              <LogoutIcon fontSize="small"/>
-            </IconButton> 
+          <MenuItem onClick={() => dispatch(logoutUser())}>
+            Logout
+            <IconButton>
+              <LogoutIcon fontSize="small" />
+            </IconButton>
           </MenuItem>
-          <MenuItem onClick={()=>setAnchorEl(null)}>
+          <MenuItem onClick={() => setAnchorEl(null)}>
             Close
-            <IconButton >
-              <CloseIcon fontSize="small"/>
-            </IconButton> 
+            <IconButton>
+              <CloseIcon fontSize="small" />
+            </IconButton>
           </MenuItem>
         </Menu>
       </Box>
       <Modal
         open={openModal}
-        handleClose={()=>setOpenModal(false)}
+        handleClose={() => setOpenModal(false)}
         button={"Post"}
         text={postText.length}
         handleSubmit={handleAddPost}
@@ -313,10 +319,10 @@ export default function LeftSidebar() {
         <Box>
           <Grid container>
             <Grid item>
-            <img
-                width="150px"
+              <img
                 src={`data:image/jpg; base64,${profile.profilePicture}`}
                 alt="profile"
+                style={{width:"80px", borderRadius:"50%"}}
               />
             </Grid>
             <Grid item flexGrow="1">

@@ -5,8 +5,8 @@ import LoginForm from "../Components/LoginForm";
 import RegisterForm from "../Components/RegisterForm";
 
 export default function Login() {
-  const [isLoginForm, setIsLoginForm] = useState(true);
   const theme = useTheme();
+  const [isLoginForm, setIsLoginForm] = useState(true);
 
   return (
     <Box
