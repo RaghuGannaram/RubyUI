@@ -3,21 +3,17 @@ import LeftSidebar from "./LeftSidebar";
 import RightSidebar from "./RightSidebar";
 import Box from "@mui/material/Box";
 import { Grid } from "@mui/material";
-// import { useTheme } from "@mui/system";
-// import { getUsers } from "../Redux/authSlice";
-// import { useDispatch } from "react-redux";
+import { useTheme } from "@mui/system";
 
 export default function Layout({ children }) {
-  // const theme = useTheme();
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getUsers());
-  // }, [dispatch]);
+  const theme = useTheme();
+ 
   return (
     <Box
       sx={{
         maxWidth: "90vw",
         margin: "0 auto",
+        backgroundColor: theme.palette.background.main,
       }}
     >
       <Grid container>
@@ -31,8 +27,8 @@ export default function Layout({ children }) {
                 sx={{
                   height: "100vh",
                   margin: "0 1rem",
-                  borderLeft: "1px solid #ccc",
-                  borderRight: "1px solid #ccc",
+                  borderLeft: `1px solid ${theme.palette.background.light}`,
+                  borderRight: `1px solid ${theme.palette.background.light}`,
                 }}
               >
                 {children}

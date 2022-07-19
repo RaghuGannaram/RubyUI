@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  Button,
   Grid,
+  Box,
+  useTheme,
   Hidden,
   IconButton,
+  Button,
   Input,
   Menu,
   MenuItem,
-  useTheme,
-  Box,
   List,
   ListItem,
   ListItemIcon,
@@ -23,10 +23,10 @@ import {
   MailOutline as MailOutlineIcon,
   Bookmark as BookmarkIcon,
   ListAlt as ListAltIcon,
-  Logout as LogoutIcon,
-  Close as CloseIcon,
   PersonOutline as PersonOutlineIcon,
   MoreHoriz as MoreHorizIcon,
+  Logout as LogoutIcon,
+  Close as CloseIcon,
   AddCircleOutline as AddCircleOutlineIcon,
 } from "@mui/icons-material";
 import { logoutUser } from "../Redux/authSlice";
@@ -51,177 +51,138 @@ export default function LeftSidebar() {
 
   return (
     <>
-      <Box
-        sx={{ height: "100vh", maxWidth: "100%"}}
-      >
-        <Box textAlign="center" paddingTop={2}>
-          <NavLink
-            to="/"
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-              backgroundColor: "inherit",
-            }}
-          >
-            <img src="/icon.png" alt="icon" width="50px" />
+      <Box sx={{ height: "100vh", maxWidth: "100%" }}>
+        <Box sx={{ textAlign: "center", pt: "2rem" }}>
+          <NavLink to="/">
+            <img src="/logo.png" alt="logo" width="50px" />
           </NavLink>
         </Box>
         <List>
-          <NavLink
-            to="/"
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-              backgroundColor: "inherit",
-            }}
-          >
-            <ListItem
-              button
-              sx={{
-                borderRadius: "28px",
-                margin: ".5rem 0",
-              }}
-            >
+          <NavLink to="/">
+            <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
               <ListItemIcon>
-                <HomeIcon fontSize="medium" color="action" />
+                <HomeIcon
+                  fontSize="medium"
+                  sx={{ color: theme.palette.primary.main }}
+                />
               </ListItemIcon>
               <Hidden lgDown>
                 <ListItemText
+                  primary="Home"
                   primaryTypographyProps={{
                     fontSize: "18px",
                     color: theme.palette.action.active,
                   }}
-                  primary="Home"
                 />
               </Hidden>
             </ListItem>
           </NavLink>
 
-          <ListItem
-            button
-            sx={{
-              borderRadius: "28px",
-              margin: ".5rem 0",
-            }}
-          >
+          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
             <ListItemIcon>
-              <TagIcon fontSize="medium" color="action" />
+              <TagIcon
+                fontSize="medium"
+                sx={{ color: theme.palette.primary.main }}
+              />
             </ListItemIcon>
             <Hidden lgDown>
               <ListItemText
-                primaryTypographyProps={{
-                  fontSize: "18px",
-                  color: theme.palette.action.active,
-                }}
                 primary="Explore"
-              />
-            </Hidden>
-          </ListItem>
-          <ListItem
-            button
-            sx={{
-              borderRadius: "28px",
-              margin: ".5rem 0",
-            }}
-          >
-            <ListItemIcon>
-              <NotificationsNoneIcon fontSize="medium" color="action" />
-            </ListItemIcon>
-            <Hidden lgDown>
-              <ListItemText
                 primaryTypographyProps={{
                   fontSize: "18px",
                   color: theme.palette.action.active,
                 }}
+              />
+            </Hidden>
+          </ListItem>
+
+          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+            <ListItemIcon>
+              <NotificationsNoneIcon
+                fontSize="medium"
+                sx={{ color: theme.palette.primary.main }}
+              />
+            </ListItemIcon>
+            <Hidden lgDown>
+              <ListItemText
                 primary="Notifications"
-              />
-            </Hidden>
-          </ListItem>
-          <ListItem
-            button
-            sx={{
-              borderRadius: "28px",
-              margin: ".5rem 0",
-            }}
-          >
-            <ListItemIcon>
-              <MailOutlineIcon fontSize="medium" color="action" />
-            </ListItemIcon>
-            <Hidden lgDown>
-              <ListItemText
                 primaryTypographyProps={{
                   fontSize: "18px",
                   color: theme.palette.action.active,
                 }}
+              />
+            </Hidden>
+          </ListItem>
+
+          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+            <ListItemIcon>
+              <MailOutlineIcon
+                fontSize="medium"
+                sx={{ color: theme.palette.primary.main }}
+              />
+            </ListItemIcon>
+            <Hidden lgDown>
+              <ListItemText
                 primary="Messages"
-              />
-            </Hidden>
-          </ListItem>
-          <ListItem
-            button
-            sx={{
-              borderRadius: "28px",
-              margin: ".5rem 0",
-            }}
-          >
-            <ListItemIcon>
-              <BookmarkIcon fontSize="medium" color="action" />
-            </ListItemIcon>
-            <Hidden lgDown>
-              <ListItemText
                 primaryTypographyProps={{
                   fontSize: "18px",
                   color: theme.palette.action.active,
                 }}
+              />
+            </Hidden>
+          </ListItem>
+
+          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+            <ListItemIcon>
+              <BookmarkIcon
+                fontSize="medium"
+                sx={{ color: theme.palette.primary.main }}
+              />
+            </ListItemIcon>
+            <Hidden lgDown>
+              <ListItemText
                 primary="Bookmarks"
-              />
-            </Hidden>
-          </ListItem>
-          <ListItem
-            button
-            sx={{
-              borderRadius: "28px",
-              margin: ".5rem 0",
-            }}
-          >
-            <ListItemIcon>
-              <ListAltIcon fontSize="medium" color="action" />
-            </ListItemIcon>
-            <Hidden lgDown>
-              <ListItemText
                 primaryTypographyProps={{
                   fontSize: "18px",
                   color: theme.palette.action.active,
                 }}
-                primary="Lists"
               />
             </Hidden>
           </ListItem>
-          <NavLink
-            to={`/profile/${profile._id}`}
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-              backgroundColor: "inherit",
-            }}
-          >
-            <ListItem
-              button
-              sx={{
-                borderRadius: "28px",
-                margin: ".5rem 0",
-              }}
-            >
+
+          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+            <ListItemIcon>
+              <ListAltIcon
+                fontSize="medium"
+                sx={{ color: theme.palette.primary.main }}
+              />
+            </ListItemIcon>
+            <Hidden lgDown>
+              <ListItemText
+                primary="Lists"
+                primaryTypographyProps={{
+                  fontSize: "18px",
+                  color: theme.palette.action.active,
+                }}
+              />
+            </Hidden>
+          </ListItem>
+
+          <NavLink to={`/profile/${profile._id}`}>
+            <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
               <ListItemIcon>
-                <PersonOutlineIcon fontSize="medium" color="action" />
+                <PersonOutlineIcon
+                  fontSize="medium"
+                  sx={{ color: theme.palette.primary.main }}
+                />
               </ListItemIcon>
               <Hidden lgDown>
                 <ListItemText
+                  primary="Profile"
                   primaryTypographyProps={{
                     fontSize: "18px",
                     color: theme.palette.action.active,
                   }}
-                  primary="Profile"
                 />
               </Hidden>
             </ListItem>
@@ -322,7 +283,7 @@ export default function LeftSidebar() {
               <img
                 src={`data:image/jpg; base64,${profile.profilePicture}`}
                 alt="profile"
-                style={{width:"80px", borderRadius:"50%"}}
+                style={{ width: "80px", borderRadius: "50%" }}
               />
             </Grid>
             <Grid item flexGrow="1">

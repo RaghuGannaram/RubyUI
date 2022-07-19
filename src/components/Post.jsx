@@ -19,7 +19,7 @@ import {
   Favorite as FavoriteIcon,
   IosShare as IosShareIcon,
 } from "@mui/icons-material";
-import { Box } from "@mui/system";
+import { Box, useTheme } from "@mui/system";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import {
   getAllPosts,
@@ -31,6 +31,7 @@ import Modal from "./Modal";
 
 export default function Post({ post }) {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const [commentText, setCommentText] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -86,7 +87,7 @@ export default function Post({ post }) {
           padding="1rem"
           sx={{
             "&:hover": {
-              backgroundColor: "#eee",
+              backgroundColor: theme.palette.background.light,
             },
           }}
         >

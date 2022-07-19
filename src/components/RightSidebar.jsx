@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Input, Typography, Grid } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, useTheme } from "@mui/system";
 import { Search } from "@mui/icons-material";
 import WhoToFollow from "./WhoToFollow";
 import { getAllUsers } from "../Redux/userSlice";
 
 export default function RightSidebar() {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const { profile } = useSelector((state) => state.auth);
   const { users, status } = useSelector((state) => state.user);
   const [query, setQuery] = useState("");
@@ -87,7 +88,7 @@ export default function RightSidebar() {
                         overflow: "hidden",
                         padding: ".2rem 1rem",
                         "&:hover": {
-                          backgroundColor: "#eee",
+                          backgroundColor: theme.palette.background.light,
                         },
                       }}
                       container

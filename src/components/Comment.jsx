@@ -9,6 +9,7 @@ import { Box } from "@mui/system";
 import { useSelector, useDispatch} from "react-redux";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import {getComments, deleteComment, likeSpecificComment} from "../Redux/postSlice";
+import theme from "../Theme/customTheme";
 
 export default function Comment({ comment, post }) {
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ export default function Comment({ comment, post }) {
       padding="1rem"
       sx={{
         "&:hover": {
-          backgroundColor: "#eee",
+          backgroundColor: theme.palette.background.light,
         },
       }}
     >
