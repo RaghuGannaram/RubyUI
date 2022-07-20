@@ -39,7 +39,9 @@ export default function PostDetails() {
   const { postId } = useParams();
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.auth);
-  const { postStatus, commentStatus, post, comments } = useSelector((state) => state.post);
+  const { postStatus, commentStatus, post, comments } = useSelector(
+    (state) => state.post
+  );
   const [commentText, setCommentText] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -72,19 +74,19 @@ export default function PostDetails() {
     const response = await deletePost({ id: post._id });
     response && history.push("/");
   };
-  
+
   useEffect(() => {
     dispatch(getPostDetails(postId));
     dispatch(getComments(postId));
   }, [dispatch, postId]);
 
   return (
-    <Box>
+    <Box sx={{ color: theme.palette.secondary.main }}>
       <Box borderBottom="1px solid #ccc" padding="8px 20px">
         <Grid container alignItems="center">
           <Grid item sx={{ mr: "10px" }}>
             <IconButton onClick={() => history.goBack()}>
-              <ArrowBackIcon />
+              <ArrowBackIcon sx={{ color: theme.palette.primary.main }} />
             </IconButton>
           </Grid>
           <Grid item>
@@ -94,9 +96,7 @@ export default function PostDetails() {
       </Box>
       <Box height="92vh" sx={{ overflowY: "scroll" }}>
         <Box textAlign="center" marginTop="1rem">
-          {postStatus === "loading" && (
-            <CircularProgress size={20} color="primary" />
-          )}
+          {postStatus === "loading" && <CircularProgress size={20} />}
         </Box>
         {postStatus === "success" && (
           <Box padding="0 20px">
@@ -106,7 +106,7 @@ export default function PostDetails() {
                   <img
                     src={`data:image/jpg; base64,${post?.profilePicture}`}
                     alt="profile"
-                    style={{width:"80px", borderRadius:"50%"}}
+                    style={{ width: "80px", borderRadius: "50%" }}
                   />
                 </Grid>
                 <Grid item flexGrow="1">
@@ -115,7 +115,7 @@ export default function PostDetails() {
                       <Typography sx={{ fontSize: "16px", fontWeight: "500" }}>
                         {post?.author?.name}
                       </Typography>
-                      <Typography sx={{ fontSize: "15px", color: "#555" }}>
+                      <Typography sx={{ fontSize: "15px" }}>
                         @{post?.author?.handle}
                       </Typography>
                     </Grid>
@@ -125,7 +125,9 @@ export default function PostDetails() {
                           aria-expanded={Boolean(anchorEl) ? "true" : undefined}
                           onClick={(event) => setAnchorEl(event.currentTarget)}
                         >
-                          <MoreHorizIcon />
+                          <MoreHorizIcon
+                            sx={{ color: theme.palette.primary.main }}
+                          />
                         </IconButton>
                       )}
                       <Menu
@@ -145,7 +147,10 @@ export default function PostDetails() {
                         >
                           Delete Post
                           <IconButton>
-                            <DeleteIcon fontSize="small" />
+                            <DeleteIcon
+                              fontSize="small"
+                              sx={{ color: theme.palette.primary.main }}
+                            />
                           </IconButton>
                         </MenuItem>
                         <MenuItem
@@ -156,7 +161,10 @@ export default function PostDetails() {
                         >
                           Close Menu
                           <IconButton>
-                            <CloseIcon fontSize="small" />
+                            <CloseIcon
+                              fontSize="small"
+                              sx={{ color: theme.palette.primary.main }}
+                            />
                           </IconButton>
                         </MenuItem>
                       </Menu>
@@ -171,19 +179,17 @@ export default function PostDetails() {
               </Typography>
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
-              <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
+              <Typography sx={{ fontSize: "14px", mr: "6px" }}>
                 {post?.createdAt && format(new Date(post.createdAt), "HH:mm a")}
               </Typography>
-              <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                .
-              </Typography>
-              <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
+              <Typography sx={{ fontSize: "14px", mr: "6px" }}>.</Typography>
+              <Typography sx={{ fontSize: "14px", mr: "6px" }}>
                 {post?.createdAt &&
                   format(new Date(post.createdAt), "MMM dd yyyy")}
               </Typography>
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
-              <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
+              <Typography sx={{ fontSize: "14px", mr: "6px" }}>
                 <strong>{post?.likes?.length}</strong> Likes
               </Typography>
             </Box>
@@ -194,32 +200,41 @@ export default function PostDetails() {
               borderBottom="1px solid #ccc"
             >
               <IconButton size="small">
-                <SyncIcon fontSize="small" />
+                <SyncIcon
+                  fontSize="small"
+                  sx={{ color: theme.palette.primary.main }}
+                />
               </IconButton>
               <IconButton onClick={handleLikePost} size="small">
                 {post?.likes?.includes(profile._id) ? (
                   <FavoriteIcon fontSize="small" />
                 ) : (
-                  <FavoriteBorderIcon fontSize="small" />
+                  <FavoriteBorderIcon
+                    fontSize="small"
+                    sx={{ color: theme.palette.primary.main }}
+                  />
                 )}
               </IconButton>
               <IconButton size="small">
-                <IosShareIcon fontSize="small" />
+                <IosShareIcon
+                  fontSize="small"
+                  sx={{ color: theme.palette.primary.main }}
+                />
               </IconButton>
             </Box>
             <Box>
               <Grid container sx={{ mt: "10px" }}>
                 <Grid item>
-                <img
+                  <img
                     src={`data:image/jpg; base64,${profile.profilePicture}`}
                     alt="profile"
-                    style={{width:"80px", borderRadius:"50%"}}
+                    style={{ width: "80px", borderRadius: "50%" }}
                   />
                 </Grid>
                 <Grid item flexGrow="1">
                   <Box padding=".5rem">
                     <Input
-                      sx={{ width: "95%", ml: "10px" }}
+                      sx={{ width: "95%", ml: "10px", color: theme.palette.secondary.main }}
                       placeholder="Post your comment"
                       rows="2"
                       multiline
@@ -229,14 +244,21 @@ export default function PostDetails() {
                       onChange={(event) => setCommentText(event.target.value)}
                     />
                   </Box>
-                  <Box textAlign="right" paddingBottom=".5rem">
+                  <Box
+                    sx={{
+                      textAlign: "right",
+                      pb: "0.5rem",
+                    }}
+                  >
                     <Button
+                      disabled={commentText.length === 0}
                       sx={{
                         fontSize: "12px",
-                        color: "primary",
                         borderRadius: theme.shape.borderRadius,
+                        "&:disabled": {
+                          backgroundColor: theme.palette.primary.main,
+                        },
                       }}
-                      disabled={commentText.length === 0}
                       variant="contained"
                       onClick={handleAddComment}
                     >
@@ -246,9 +268,7 @@ export default function PostDetails() {
                 </Grid>
               </Grid>
               <Box textAlign="center" marginTop="1rem">
-                {commentStatus === "loading" && (
-                  <CircularProgress size={20} color="primary" />
-                )}
+                {commentStatus === "loading" && <CircularProgress size={20} />}
               </Box>
               {commentStatus === "success" &&
                 comments.map((comment, index) => (

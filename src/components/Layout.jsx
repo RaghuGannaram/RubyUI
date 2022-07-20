@@ -13,6 +13,7 @@ export default function Layout({ children }) {
       sx={{
         maxWidth: "90vw",
         margin: "0 auto",
+        padding:"0px 10px",
         backgroundColor: theme.palette.background.main,
       }}
     >
@@ -27,8 +28,8 @@ export default function Layout({ children }) {
                 sx={{
                   height: "100vh",
                   margin: "0 1rem",
-                  borderLeft: `1px solid ${theme.palette.background.light}`,
-                  borderRight: `1px solid ${theme.palette.background.light}`,
+                  borderLeft: `1px solid ${theme.palette.background.dark}`,
+                  borderRight: `1px solid ${theme.palette.background.dark}`,
                 }}
               >
                 {children}

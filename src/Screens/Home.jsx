@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CircularProgress, Grid, IconButton, Typography } from "@mui/material";
+import { useTheme, CircularProgress, Grid, IconButton, Typography } from "@mui/material";
 import {Assistant as AssistantIcon} from "@mui/icons-material";
 import { Box } from "@mui/system";
 import { getAllPosts } from "../Redux/postSlice";
@@ -8,6 +8,7 @@ import AddPost from "../Components/AddPost";
 import Post from "../Components/Post";
 
 export default function Home() {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { postStatus, posts } = useSelector((state) => state.post);
 
@@ -17,14 +18,14 @@ export default function Home() {
 
   return (
     <Box>
-      <Box borderBottom="1px solid #ccc" padding="8px 20px">
+      <Box sx={{borderBottom:`1px solid ${theme.palette.primary.main}`, padding:"8px 20px"}} >
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>
-            <Typography variant="h6">Home</Typography>
+            <Typography variant="h6" color={theme.palette.primary.main} >Home</Typography>
           </Grid>
           <Grid item>
             <IconButton>
-              <AssistantIcon />
+              <AssistantIcon sx={{ color: theme.palette.primary.main }} />
             </IconButton>
           </Grid>
         </Grid>
@@ -33,7 +34,7 @@ export default function Home() {
         <AddPost />
         <Box textAlign="center" marginTop="1rem">
           {postStatus === "loading" && (
-            <CircularProgress size={20} color="primary" />
+            <CircularProgress size={20} sx={{color:theme.palette.primary.main}} />
           )}
         </Box>
         {postStatus === "success" &&

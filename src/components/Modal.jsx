@@ -1,13 +1,23 @@
 import React from "react";
-import Button from "@mui/material/Button";
-import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
-import { IconButton } from "@mui/material";
-import {Close as CloseIcon} from "@mui/icons-material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  IconButton,
+} from "@mui/material";
 import { Box } from "@mui/system";
+import { Close as CloseIcon } from "@mui/icons-material";
 
-
-export default function Modal({children, open, handleClose, button, text, handleSubmit }) {
-
+export default function Modal({
+  children,
+  open,
+  handleClose,
+  button,
+  text,
+  handleSubmit,
+}) {
   const handleClick = () => {
     handleSubmit();
     handleClose();
@@ -25,7 +35,12 @@ export default function Modal({children, open, handleClose, button, text, handle
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button
-          sx={{ borderRadius: "5px",padding: "2px 5px ", fontSize: "13px", color:"primary"}}
+          sx={{
+            borderRadius: "5px",
+            padding: "2px 5px ",
+            fontSize: "13px",
+            color: "primary",
+          }}
           disabled={text === 0}
           variant="contained"
           size="small"

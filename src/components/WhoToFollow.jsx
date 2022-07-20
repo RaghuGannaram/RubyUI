@@ -10,11 +10,12 @@ export default function WhoToFollow({ user }) {
   return (
     <Box
       sx={{
-        border: "2px solid #333",
+        mt:"10px",
         padding: "5px",
-        borderRadius: "5px",
-        mt:"10px"
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: theme.palette.background.main,
       }}
+      
     >
       <Grid container sx={{ display: "flex", flexDirection: "column" }}>
         <Grid item>
@@ -34,10 +35,10 @@ export default function WhoToFollow({ user }) {
               />
             </Grid>
             <Grid item>
-              <Typography sx={{ fontSize: "16px", fontWeight: "500" }}>
+              <Typography sx={{ fontSize: "16px", fontWeight: "500", color: theme.palette.secondary.main }}>
                 {user.username}
               </Typography>
-              <Typography sx={{ fontSize: "14px", color: "#555" }}>
+              <Typography sx={{ fontSize: "14px", color: theme.palette.secondary.main }}>
                 @{user.handle}
               </Typography>
             </Grid>
@@ -55,12 +56,12 @@ export default function WhoToFollow({ user }) {
           <Grid item>
             <Typography
               sx={{
-                fontSize: "12px",
-                background: "#ccc",
-                borderRadius: theme.shape.borderRadius,
-                padding: "5px 10px",
+                fontSize: "13px",
+                padding: "4px 10px",
                 margin: "5px",
-                color: "#777",
+                borderRadius: theme.shape.borderRadius,
+                color: theme.palette.secondary.main,
+                backgroundColor: theme.palette.primary.main,
               }}
             >
               {user.followings.includes(profile._id) ? "" : "Not"} follows you
@@ -70,16 +71,16 @@ export default function WhoToFollow({ user }) {
             <Button
               size="small"
               sx={{
-                borderRadius: theme.shape.borderRadius,
                 textTransform: "capitalize",
-                padding: "3px 20px",
                 margin: "5px",
-                background: "#008ace",
+                padding: "2px 20px",
+                borderRadius: theme.shape.borderRadius,
+                color: theme.palette.secondary.main,
+                backgroundColor: theme.palette.primary.main,
                 "&:hover": {
-                  background: "#006192",
+                  backgroundColor: theme.palette.primary.dark,
                 },
               }}
-              variant="contained"
             >
               Follow
             </Button>

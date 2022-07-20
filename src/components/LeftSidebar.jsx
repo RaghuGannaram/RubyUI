@@ -71,7 +71,7 @@ export default function LeftSidebar() {
                   primary="Home"
                   primaryTypographyProps={{
                     fontSize: "18px",
-                    color: theme.palette.action.active,
+                    color: theme.palette.secondary.main,
                   }}
                 />
               </Hidden>
@@ -90,7 +90,7 @@ export default function LeftSidebar() {
                 primary="Explore"
                 primaryTypographyProps={{
                   fontSize: "18px",
-                  color: theme.palette.action.active,
+                  color: theme.palette.secondary.main,
                 }}
               />
             </Hidden>
@@ -108,7 +108,7 @@ export default function LeftSidebar() {
                 primary="Notifications"
                 primaryTypographyProps={{
                   fontSize: "18px",
-                  color: theme.palette.action.active,
+                  color: theme.palette.secondary.main,
                 }}
               />
             </Hidden>
@@ -126,7 +126,7 @@ export default function LeftSidebar() {
                 primary="Messages"
                 primaryTypographyProps={{
                   fontSize: "18px",
-                  color: theme.palette.action.active,
+                  color: theme.palette.secondary.main,
                 }}
               />
             </Hidden>
@@ -144,7 +144,7 @@ export default function LeftSidebar() {
                 primary="Bookmarks"
                 primaryTypographyProps={{
                   fontSize: "18px",
-                  color: theme.palette.action.active,
+                  color: theme.palette.secondary.main,
                 }}
               />
             </Hidden>
@@ -162,7 +162,7 @@ export default function LeftSidebar() {
                 primary="Lists"
                 primaryTypographyProps={{
                   fontSize: "18px",
-                  color: theme.palette.action.active,
+                  color: theme.palette.secondary.main,
                 }}
               />
             </Hidden>
@@ -181,7 +181,7 @@ export default function LeftSidebar() {
                   primary="Profile"
                   primaryTypographyProps={{
                     fontSize: "18px",
-                    color: theme.palette.action.active,
+                    color: theme.palette.secondary.main,
                   }}
                 />
               </Hidden>
@@ -202,13 +202,16 @@ export default function LeftSidebar() {
             }}
           >
             <ListItemIcon>
-              <MoreHorizIcon fontSize="medium" color="action" />
+              <MoreHorizIcon
+                fontSize="medium"
+                sx={{ color: theme.palette.primary.main }}
+              />
             </ListItemIcon>
             <Hidden lgDown>
               <ListItemText
                 primaryTypographyProps={{
                   fontSize: "18px",
-                  color: theme.palette.action.active,
+                  color: theme.palette.secondary.main,
                 }}
                 primary="More"
               />
@@ -277,7 +280,7 @@ export default function LeftSidebar() {
         text={postText.length}
         handleSubmit={handleAddPost}
       >
-        <Box>
+        <Box >
           <Grid container>
             <Grid item>
               <img

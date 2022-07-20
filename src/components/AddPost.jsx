@@ -11,7 +11,6 @@ export default function AddPost() {
   const { profile } = useSelector((state) => state.auth);
 
   const handleAddPost = async () => {
-    console.log("in the handlepost");
     let post = {
       author: {
         id: profile._id,
@@ -25,19 +24,24 @@ export default function AddPost() {
   };
 
   return (
-    <Box padding="1rem 1rem 0 1rem" borderBottom="1px solid #ccc">
+    <Box
+      sx={{
+        padding: "1rem",
+        borderBottom: `1px solid ${theme.palette.background.dark}`,
+      }}
+    >
       <Grid container>
         <Grid item sx={{ paddingRight: "1rem" }}>
           <img
             src={`data:image/jpg; base64,${profile?.profilePicture}`}
             alt="profile"
-            style={{width:"80px", borderRadius:"50%"}}
+            style={{ width: "80px", borderRadius: "50%" }}
           />
         </Grid>
         <Grid item flexGrow="1">
           <Box padding=".5rem 0">
             <Input
-              sx={{ width: "100%" }}
+              sx={{ width: "100%", color: theme.palette.secondary.main }}
               multiline
               rows="2"
               disableUnderline
@@ -48,19 +52,24 @@ export default function AddPost() {
             />
           </Box>
           <Box
-            textAlign="right"
-            padding=".5rem auto"
-            borderTop="1px solid #ccc"
+            sx={{
+              textAlign: "right",
+              padding: "0.5rem auto",
+              borderTop: `1px solid ${theme.palette.background.dark}`,
+            }}
           >
             <Button
+              disabled={postText.length === 0}
               sx={{
                 fontSize: "12px",
                 margin: "5px",
-                color: "primary",
                 borderRadius: theme.shape.borderRadius,
+                color: theme.palette.secondary.main,
+                "&:disabled": {
+                  backgroundColor: theme.palette.primary.main,
+                },
               }}
               variant="contained"
-              disabled={postText.length === 0}
               onClick={handleAddPost}
             >
               Post

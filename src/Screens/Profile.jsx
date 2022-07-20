@@ -36,14 +36,15 @@ export default function Profile() {
   const { userId } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { profile } = useSelector((state)=> state.auth);
-  const { user, status, followers, followings } = useSelector((state) => state.user);
+  const { profile } = useSelector((state) => state.auth);
+  const { user, status, followers, followings } = useSelector(
+    (state) => state.user
+  );
   const { postStatus, posts } = useSelector((state) => state.post);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [openBGIModal, setOpenBGIModal] = useState(false);
   const [profileData, setProfileData] = useState({});
-
 
   useEffect(() => {
     dispatch(getUserDetails(userId));
@@ -73,19 +74,24 @@ export default function Profile() {
   };
 
   return (
-    <Box>
-      <Box borderBottom="1px solid #ccc" padding="8px 20px">
+    <Box sx={{ color: theme.palette.secondary.main }}>
+      <Box
+        sx={{
+          borderBottom: `1px solid ${theme.palette.background.dark}`,
+          padding: "8px 20px",
+        }}
+      >
         <Grid container alignItems="center">
           <Grid item sx={{ mr: "10px" }}>
             <IconButton onClick={() => history.goBack()}>
-              <ArrowBackIcon />
+              <ArrowBackIcon sx={{ color: theme.palette.primary.main }} />
             </IconButton>
           </Grid>
 
           {status === "success" && (
             <Grid item>
               <Typography variant="h6">{user?.username}</Typography>
-              <Typography sx={{ fontSize: "12px", color: "#555" }}>
+              <Typography sx={{ fontSize: "12px" }}>
                 {user?.posts?.length} posts
               </Typography>{" "}
             </Grid>
@@ -93,7 +99,7 @@ export default function Profile() {
         </Grid>
       </Box>
       <Box textAlign="center">
-        {status === "loading" && <CircularProgress size={20} color="primary" />}
+        {status === "loading" && <CircularProgress size={20} />}
       </Box>
       {status === "success" && (
         <Box height="90vh" sx={{ overflowY: "scroll" }}>
@@ -101,21 +107,20 @@ export default function Profile() {
             <img
               src={`data:image/jpg; base64,${user?.backgroundImage}`}
               alt="background"
-              style={{width:"150px", borderRadius:"50%"}}
+              style={{ width: "150px", borderRadius: "50%" }}
             />
             <Box
               sx={{
                 position: "absolute",
                 top: 160,
                 right: 25,
-                background: "#eee",
                 borderRadius: "50%",
               }}
             >
               <img
                 src={`data:image/jpg; base64,${user?.profilePicture}`}
                 alt="profile"
-                style={{width:"80px", borderRadius:"50%"}}
+                style={{ width: "80px", borderRadius: "50%" }}
               />
             </Box>
           </Box>
@@ -125,9 +130,19 @@ export default function Profile() {
                 aria-expanded={Boolean(anchorEl) ? "true" : undefined}
                 onClick={(event) => setAnchorEl(event.currentTarget)}
               >
-                <MoreHorizIcon />
+                <MoreHorizIcon sx={{ color: theme.palette.primary.main }} />
               </IconButton>
             )}
+
+            {userId === profile._id && (
+              <IconButton
+                title="Update Background Image"
+                onClick={handleBGIupdate}
+              >
+                <EditOutlinedIcon sx={{ color: theme.palette.primary.main }} />
+              </IconButton>
+            )}
+
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -162,25 +177,18 @@ export default function Profile() {
               </MenuItem>
             </Menu>
             <IconButton>
-              <MailOutlineIcon />
-            </IconButton>
-            <IconButton title="Update Background Image" onClick={handleBGIupdate}>
-              <EditOutlinedIcon />
+              <MailOutlineIcon sx={{ color: theme.palette.primary.main }} />
             </IconButton>
             {userId !== profile._id && (
               <Button
                 onClick={handleFollow}
-                size="small"
                 sx={{
-                  borderRadius: theme.shape.borderRadius,
                   textTransform: "capitalize",
                   padding: "6px 20px",
-                  background: "black",
-                  "&:hover": {
-                    background: "#333",
-                  },
+                  borderRadius: theme.shape.borderRadius,
                 }}
                 variant="contained"
+                size="small"
               >
                 {followers.includes(profile._id) ? "Unfollow" : "Follow"}
               </Button>
@@ -190,10 +198,8 @@ export default function Profile() {
             <Typography variant="h6" sx={{ fontWeight: "500" }}>
               {user?.username}
             </Typography>
-            <Typography sx={{ fontSize: "14px", color: "#555" }}>
-              @{user?.handle}
-            </Typography>
-            <Typography fontSize="16px" color="#333" padding="10px 0">
+            <Typography sx={{ fontSize: "14px" }}>@{user?.handle}</Typography>
+            <Typography fontSize="16px" padding="10px 0">
               {user?.description}
             </Typography>
             <Box
@@ -203,34 +209,36 @@ export default function Profile() {
               flexWrap="wrap"
             >
               <Box display="flex">
-                <LocationOnIcon htmlColor="#555" />
-                <Typography sx={{ ml: "6px", color: "#555" }}>
-                  {user?.city}
-                </Typography>
+                <LocationOnIcon sx={{ color: theme.palette.primary.main }} />
+                <Typography sx={{ ml: "6px" }}>{user?.city}</Typography>
               </Box>
               <Box display="flex" marginLeft="1rem">
-                <DateRangeIcon htmlColor="#555" />
-                <Typography sx={{ ml: "6px", color: "#555" }}>
-                  {user && user.createdAt && format(new Date(user.createdAt), "MMM dd yyyy")}
+                <DateRangeIcon sx={{ color: theme.palette.primary.main }} />
+                <Typography sx={{ ml: "6px" }}>
+                  {user &&
+                    user.createdAt &&
+                    format(new Date(user.createdAt), "MMM dd yyyy")}
                 </Typography>
               </Box>
             </Box>
             <Box display="flex">
-              <Typography color="#555" marginRight="1rem">
-                <strong style={{ color: "black", marginRight: "5px" }}>
+              <Typography marginRight="1rem">
+                <strong style={{ marginRight: "5px" }}>
                   {followings.length}
                 </strong>
                 Following
               </Typography>
-              <Typography color="#555" marginRight="1rem">
-                <strong style={{ color: "black", marginRight: "5px" }}>
+              <Typography marginRight="1rem">
+                <strong style={{ marginRight: "5px" }}>
                   {followers.length}
                 </strong>
                 Followers
               </Typography>
             </Box>
           </Box>
-          <Box borderBottom="1px solid #ccc">
+          <Box
+            sx={{ borderBottom: `1px solid ${theme.palette.background.dark}` }}
+          >
             <Typography
               display="inline-block"
               variant="caption"
@@ -244,9 +252,7 @@ export default function Profile() {
             </Typography>
           </Box>
           <Box textAlign="center" marginTop="1rem">
-            {postStatus === "loading" && (
-              <CircularProgress size={20} color="primary" />
-            )}
+            {postStatus === "loading" && <CircularProgress size={20} />}
           </Box>
           {postStatus === "success" &&
             posts.map((post) => <Post key={post._id} post={post} />)}

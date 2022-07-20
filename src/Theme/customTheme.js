@@ -4,18 +4,18 @@ const theme = createTheme({
   palette: {
     primary: {
       main: "rgba(0,150,102,1)",
-      light: "rgba(105, 195, 156, 1)",
-      dark: "rgba(0, 119, 79, 1)",
+      light: "rgba(40, 166, 132, 1)",
+      dark: "rgba(0, 121, 86, 1)",
     },
     secondary: {
-      main: "rgba(0, 144, 175, 1)",
-      //   light: "",
-      //   dark: "",
+      main: "rgba(240, 240, 240, 1)",
+        light: "rgba(250, 250, 250, 1)",
+        dark: "rgba(230, 230, 230, 1)",
     },
     background: {
-      main: "rgba(100, 100, 100, 1)",
-      light: "rgba(150, 150, 150, 1)",
-      dark: "rgba(50, 50, 50, 1)",
+      main: "rgba(67, 67, 67, 1)",
+      light: "rgba(85, 85, 85, 1)",
+      dark: "rgba(38, 38, 38, 1)",
     },
   },
 });

@@ -86,6 +86,7 @@ export default function Post({ post }) {
         <Box
           padding="1rem"
           sx={{
+            color:theme.palette.secondary.main,
             "&:hover": {
               backgroundColor: theme.palette.background.light,
             },
@@ -117,23 +118,23 @@ export default function Post({ post }) {
                         {post.author.name}
                       </Typography>
                       <Typography
-                        sx={{ fontSize: "15px", mr: "6px", color: "#555" }}
+                        sx={{ fontSize: "15px", mr: "6px" }}
                       >
                         @{post.author.handle}
                       </Typography>
                       <Typography
-                        sx={{ fontSize: "15px", mr: "6px", color: "#555" }}
+                        sx={{ fontSize: "15px", mr: "6px" }}
                       >
                         .
                       </Typography>
                       <Typography
-                        sx={{ fontSize: "15px", mr: "6px", color: "#555" }}
+                        sx={{ fontSize: "15px", mr: "6px" }}
                       >
                         {formatDistanceToNow(new Date(post.createdAt))}
                       </Typography>
                     </Box>
                     <Box>
-                      <Typography sx={{ fontSize: "15px", color: "#555" }}>
+                      <Typography sx={{ fontSize: "15px" }}>
                         {post.description}
                       </Typography>
                     </Box>
@@ -147,7 +148,7 @@ export default function Post({ post }) {
                           setAnchorEl(event.currentTarget);
                         }}
                       >
-                        <MoreHorizIcon />
+                        <MoreHorizIcon sx={{color: theme.palette.primary.main}} />
                       </IconButton>
                     )}
                     <Menu
@@ -162,7 +163,7 @@ export default function Post({ post }) {
                       <MenuItem onClick={(event) => handleDeletePost(event)}>
                         Delete Post
                         <IconButton>
-                          <DeleteIcon fontSize="small" />
+                          <DeleteIcon fontSize="small" sx={{color: theme.palette.primary.main}} />
                         </IconButton>
                       </MenuItem>
                       <MenuItem
@@ -173,7 +174,7 @@ export default function Post({ post }) {
                       >
                         Close Menu
                         <IconButton>
-                          <CloseIcon fontSize="small" />
+                          <CloseIcon fontSize="small" sx={{color: theme.palette.primary.main}} />
                         </IconButton>
                       </MenuItem>
                     </Menu>
@@ -186,23 +187,23 @@ export default function Post({ post }) {
                   marginTop=".8rem"
                 >
                   <IconButton size="small" onClick={handleChatIconClick}>
-                    <ChatBubbleOutlineIcon fontSize="small" />
+                    <ChatBubbleOutlineIcon fontSize="small" sx={{color: theme.palette.primary.main}} />
                   </IconButton>
                   <IconButton size="small">
-                    <SyncIcon fontSize="small" />
+                    <SyncIcon fontSize="small" sx={{color: theme.palette.primary.main}}/>
                   </IconButton>
                   <IconButton
                     size="small"
                     onClick={(event) => handleLikePost(event)}
                   >
                     {post.likes.includes(profile._id) ? (
-                      <FavoriteIcon fontSize="small" />
+                      <FavoriteIcon fontSize="small" sx={{color: theme.palette.primary.main}} />
                     ) : (
-                      <FavoriteBorderIcon fontSize="small" />
+                      <FavoriteBorderIcon fontSize="small" sx={{color: theme.palette.primary.main}} />
                     )}
                   </IconButton>
                   <IconButton size="small">
-                    <IosShareIcon fontSize="small" />
+                    <IosShareIcon fontSize="small" sx={{color: theme.palette.primary.main}} />
                   </IconButton>
                 </Box>
               </Box>
