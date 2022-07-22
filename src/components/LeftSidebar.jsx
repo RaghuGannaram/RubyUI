@@ -15,6 +15,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import {
   Home as HomeIcon,
@@ -55,11 +56,30 @@ export default function LeftSidebar() {
         <Box sx={{ textAlign: "center", pt: "2rem" }}>
           <NavLink to="/">
             <img src="/logo.png" alt="logo" width="50px" />
+            <Typography
+              sx={{
+                color: theme.palette.secondary.main,
+                fontSize: "20px",
+                fontFamily: "sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              RubyNet
+            </Typography>
           </NavLink>
         </Box>
         <List>
           <NavLink to="/">
-            <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+            <ListItem
+              button
+              sx={{
+                borderRadius: "28px",
+                margin: ".5rem 0",
+                "&:hover": {
+                  backgroundColor: theme.palette.background.dark,
+                },
+              }}
+            >
               <ListItemIcon>
                 <HomeIcon
                   fontSize="medium"
@@ -78,7 +98,16 @@ export default function LeftSidebar() {
             </ListItem>
           </NavLink>
 
-          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+          <ListItem
+            button
+            sx={{
+              borderRadius: "28px",
+              margin: ".5rem 0",
+              "&:hover": {
+                backgroundColor: theme.palette.background.dark,
+              },
+            }}
+          >
             <ListItemIcon>
               <TagIcon
                 fontSize="medium"
@@ -96,7 +125,16 @@ export default function LeftSidebar() {
             </Hidden>
           </ListItem>
 
-          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+          <ListItem
+            button
+            sx={{
+              borderRadius: "28px",
+              margin: ".5rem 0",
+              "&:hover": {
+                backgroundColor: theme.palette.background.dark,
+              },
+            }}
+          >
             <ListItemIcon>
               <NotificationsNoneIcon
                 fontSize="medium"
@@ -114,7 +152,16 @@ export default function LeftSidebar() {
             </Hidden>
           </ListItem>
 
-          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+          <ListItem
+            button
+            sx={{
+              borderRadius: "28px",
+              margin: ".5rem 0",
+              "&:hover": {
+                backgroundColor: theme.palette.background.dark,
+              },
+            }}
+          >
             <ListItemIcon>
               <MailOutlineIcon
                 fontSize="medium"
@@ -132,7 +179,16 @@ export default function LeftSidebar() {
             </Hidden>
           </ListItem>
 
-          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+          <ListItem
+            button
+            sx={{
+              borderRadius: "28px",
+              margin: ".5rem 0",
+              "&:hover": {
+                backgroundColor: theme.palette.background.dark,
+              },
+            }}
+          >
             <ListItemIcon>
               <BookmarkIcon
                 fontSize="medium"
@@ -150,7 +206,16 @@ export default function LeftSidebar() {
             </Hidden>
           </ListItem>
 
-          <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+          <ListItem
+            button
+            sx={{
+              borderRadius: "28px",
+              margin: ".5rem 0",
+              "&:hover": {
+                backgroundColor: theme.palette.background.dark,
+              },
+            }}
+          >
             <ListItemIcon>
               <ListAltIcon
                 fontSize="medium"
@@ -169,7 +234,16 @@ export default function LeftSidebar() {
           </ListItem>
 
           <NavLink to={`/profile/${profile._id}`}>
-            <ListItem button sx={{ borderRadius: "28px", margin: ".5rem 0" }}>
+            <ListItem
+              button
+              sx={{
+                borderRadius: "28px",
+                margin: ".5rem 0",
+                "&:hover": {
+                  backgroundColor: theme.palette.background.dark,
+                },
+              }}
+            >
               <ListItemIcon>
                 <PersonOutlineIcon
                   fontSize="medium"
@@ -199,6 +273,9 @@ export default function LeftSidebar() {
             sx={{
               borderRadius: "28px",
               margin: ".5rem 0",
+              "&:hover": {
+                backgroundColor: theme.palette.background.dark,
+              },
             }}
           >
             <ListItemIcon>
@@ -245,7 +322,7 @@ export default function LeftSidebar() {
               textAlign: "center",
             }}
           >
-            <AddCircleOutlineIcon sx={{ color: theme.palette.primary.main }}/>
+            <AddCircleOutlineIcon sx={{ color: theme.palette.primary.main }} />
           </IconButton>
         </Hidden>
         <Menu
@@ -262,13 +339,19 @@ export default function LeftSidebar() {
           <MenuItem onClick={() => dispatch(logoutUser())}>
             Logout
             <IconButton>
-              <LogoutIcon fontSize="small" sx={{ color: theme.palette.primary.main }}/>
+              <LogoutIcon
+                fontSize="small"
+                sx={{ color: theme.palette.primary.main }}
+              />
             </IconButton>
           </MenuItem>
           <MenuItem onClick={() => setAnchorEl(null)}>
             Close
             <IconButton>
-              <CloseIcon fontSize="small" sx={{ color: theme.palette.primary.main }}/>
+              <CloseIcon
+                fontSize="small"
+                sx={{ color: theme.palette.primary.main }}
+              />
             </IconButton>
           </MenuItem>
         </Menu>
@@ -280,7 +363,7 @@ export default function LeftSidebar() {
         text={postText.length}
         handleSubmit={handleAddPost}
       >
-        <Box >
+        <Box>
           <Grid container>
             <Grid item>
               <img
@@ -299,7 +382,7 @@ export default function LeftSidebar() {
                   disableUnderline
                   type="text"
                   placeholder="What's happening?"
-                  sx={{ width: "100%" }}
+                  sx={{ width: "100%", color: theme.palette.secondary.main }}
                 />
               </Box>
             </Grid>

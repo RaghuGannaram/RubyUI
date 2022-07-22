@@ -17,10 +17,6 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (signInData) =
   return data;
 });
 
-export const getProfileDetails = createAsyncThunk("user/getUserDetails", async (userId) => {
-  const { data } = await axios.get(`/api/users/${userId}`);
-  return data;
-});
 
 export const authSlice = createSlice({
 
@@ -70,17 +66,6 @@ export const authSlice = createSlice({
       state.isLoggedIn = false;
     },
 
-    [getProfileDetails.pending]: (state, action) => {
-      state.status = "loading";
-    },
-    [getProfileDetails.fulfilled]: (state, action) => {
-      state.status = "success";
-      state.profile = action.payload;
-      localStorage.setItem("rubyNet", JSON.stringify({isLoggedIn: true, profile: {...action.payload}}));
-    },
-    [getProfileDetails.rejected]: (state, action) => {
-      state.status = "failed";
-    },
   },
 });
 

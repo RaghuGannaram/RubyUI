@@ -230,7 +230,7 @@ export default function Post({ post }) {
             <Grid item flexGrow="1">
               <Box padding=".5rem">
                 <Input
-                  sx={{ width: "95%", ml: "10px" }}
+                  sx={{ width: "95%", ml: "10px", color:theme.palette.secondary.main }}
                   placeholder="Post your comment"
                   rows="2"
                   multiline

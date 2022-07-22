@@ -26,11 +26,16 @@ export default function Modal({
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" sx={{backgroundColor:theme.palette.background.blur}}>
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>
-        <Box textAlign="right" borderBottom="1px solid #ccc">
+        <Box
+          sx={{
+            textAlign: "right",
+            borderBottom: `1px solid ${theme.palette.background.dark}`,
+          }}
+        >
           <IconButton onClick={handleClose}>
-            <CloseIcon sx={{ color: theme.palette.primary.main }}/>
+            <CloseIcon sx={{ color: theme.palette.primary.main }} />
           </IconButton>
         </Box>
       </DialogTitle>

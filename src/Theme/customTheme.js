@@ -17,6 +17,7 @@ const theme = createTheme({
       main: "rgba(67, 67, 67, 1)",
       light: "rgba(85, 85, 85, 1)",
       dark: "rgba(38, 38, 38, 1)",
+      paper: "rgba(67, 67, 67, 1)",
     },
   },
   shape:{

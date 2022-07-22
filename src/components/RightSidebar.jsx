@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Input, Typography, Grid } from "@mui/material";
+import { Input, Typography, Grid, CircularProgress } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
 import { Search } from "@mui/icons-material";
 import WhoToFollow from "./WhoToFollow";
@@ -80,7 +80,19 @@ export default function RightSidebar() {
                 </Typography>
               )}
               {queriedUsers().map((user, index) => (
-                <Box key={index}>
+                <Box
+                  key={index}
+                  sx={{
+                    mt: "10px",
+                    borderRadius: theme.shape.borderRadiusSmall,
+                    border: `1px solid ${theme.palette.background.dark}`,
+                    backgroundColor: theme.palette.background.main,
+                    boxShadow: 5,
+                    "&:hover": {
+                      backgroundColor: theme.palette.background.dark,
+                    },
+                  }}
+                >
                   <Link
                     onClick={() => setQuery("")}
                     style={{ textDecoration: "none" }}
@@ -90,40 +102,43 @@ export default function RightSidebar() {
                       sx={{
                         padding: "0.5rem",
                         margin: "0.5rem auto",
-                        border: `1px solid ${theme.palette.background.dark}`,
-                        "&:hover": {
-                          backgroundColor: theme.palette.background.main,
-                        },
                       }}
                       container
                       alignItems="center"
                     >
-                      <Grid item sx={{ mr:"20px"}}>
+                      <Grid item sx={{ mr: "20px" }}>
                         <img
                           src={`data:image/jpg; base64,${user?.profilePicture}`}
                           alt="profilPicture"
                           style={{ width: "80px", borderRadius: "50%" }}
                         />
                       </Grid>
-                      <Grid item >
-                        <Grid container sx={{display:"flex", flexDirection:"column", textAlign:"left"}}>
-                        <Typography
+                      <Grid item>
+                        <Grid
+                          container
                           sx={{
-                            fontSize: "16px",
-                            fontWeight: "500",
-                            color: theme.palette.secondary.main,
+                            display: "flex",
+                            flexDirection: "column",
+                            textAlign: "left",
                           }}
                         >
-                          {user.username}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            color: theme.palette.secondary.main,
-                          }}
-                        >
-                          @{user.handle}
-                        </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: "16px",
+                              fontWeight: "500",
+                              color: theme.palette.secondary.main,
+                            }}
+                          >
+                            {user.username}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: "14px",
+                              color: theme.palette.secondary.main,
+                            }}
+                          >
+                            @{user.handle}
+                          </Typography>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -135,11 +150,9 @@ export default function RightSidebar() {
         </Box>
         <Box
           sx={{
-            // margin: "1rem 0",
             padding: "10px",
             borderRadius: theme.shape.borderRadius,
             color: theme.palette.secondary.main,
-            // backgroundColor: theme.palette.background.light,
           }}
         >
           <Typography
@@ -148,14 +161,19 @@ export default function RightSidebar() {
           >
             Ruby Stars
           </Typography>
+
+          <Box sx={{ textAlign: "center", mt: "10px" }}>
+            {status === "loading" && <CircularProgress size={20} />}
+          </Box>
+
           {status === "success" &&
             users
               .filter((user) => user._id !== profile._id)
-              .sort((a, b) => {
-                return b.followers.length - a.followers.length;
-              })
+              .sort((a, b) => b.followers.length - a.followers.length)
               .slice(0, 3)
-              .map((item, index) => <WhoToFollow key={index} user={item} />)}
+              .map((item, index) => (
+                <WhoToFollow key={index} status={status} user={item} />
+              ))}
         </Box>
       </Box>
     </Box>

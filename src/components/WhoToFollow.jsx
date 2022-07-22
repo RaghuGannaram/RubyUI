@@ -1,36 +1,46 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useTheme, Typography, Button, Grid } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  useTheme,
+  Typography,
+  Button,
+  Grid,
+} from "@mui/material";
 import { Box } from "@mui/system";
+import { getAllUsers, followUser } from "../Redux/userSlice";
 
-export default function WhoToFollow({ user }) {
+export default function WhoToFollow({ status, user }) {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.auth);
+
+  const handleFollow = async (event) => {
+    const followData = {
+      followerId: profile._id,
+      userId: user._id,
+    };
+    await dispatch(followUser(followData));
+    await dispatch(getAllUsers());
+  };
 
   return (
     <Box
       sx={{
         mt: "10px",
-        padding: "5px",
         borderRadius: theme.shape.borderRadiusSmall,
         border: `1px solid ${theme.palette.background.dark}`,
         backgroundColor: theme.palette.background.main,
         boxShadow: 5,
+        "&:hover": {
+          backgroundColor: theme.palette.background.dark,
+        },
       }}
     >
       <Grid container sx={{ display: "flex", flexDirection: "column" }}>
         <Grid item>
-          <Grid
-            container
-            sx={{
-              display: "flex",
-              mt: "5px",
-              justifyContent: "space-around",
-              alignItems: "center",
-            }}
-          >
-            <Grid item>
+          <Grid container sx={{ padding: "10px 10px 2px 10px" }}>
+            <Grid item sx={{ alignSelf: "center", ml: "5px" }}>
               <Link to={`/profile/${user._id}`}>
                 <img
                   src={`data:image/jpg; base64,${user?.profilePicture}`}
@@ -39,7 +49,7 @@ export default function WhoToFollow({ user }) {
                 />
               </Link>
             </Grid>
-            <Grid item>
+            <Grid item sx={{ alignSelf: "center", ml: "20px" }}>
               <Link to={`/profile/${user._id}`}>
                 <Typography
                   sx={{
@@ -71,7 +81,8 @@ export default function WhoToFollow({ user }) {
             display: "flex",
             justifyContent: "space-around",
             alignItems: "center",
-            margin: "5px 0",
+            pt: "5px",
+            pb: "10px",
           }}
         >
           <Grid item>
@@ -79,7 +90,6 @@ export default function WhoToFollow({ user }) {
               sx={{
                 fontSize: "13px",
                 padding: "4px 10px",
-                margin: "5px",
                 borderRadius: theme.shape.borderRadius,
                 color: theme.palette.secondary.main,
                 backgroundColor: theme.palette.primary.main,
@@ -93,7 +103,6 @@ export default function WhoToFollow({ user }) {
               size="small"
               sx={{
                 textTransform: "capitalize",
-                margin: "5px",
                 padding: "2px 20px",
                 borderRadius: theme.shape.borderRadius,
                 color: theme.palette.secondary.main,
@@ -102,8 +111,9 @@ export default function WhoToFollow({ user }) {
                   backgroundColor: theme.palette.primary.dark,
                 },
               }}
+              onClick={handleFollow}
             >
-              Follow
+              {user.followers.includes(profile._id) ? "Unfollow" : "Follow"}
             </Button>
           </Grid>
         </Grid>

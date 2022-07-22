@@ -29,7 +29,7 @@ import Post from "../Components/Post";
 import Modal from "../Components/Modal";
 import UpdateForm from "../Components/UpdateForm";
 import UpdateBackgroundImageForm from "../Components/UpdateBackgroundImageForm";
-import {getProfileDetails} from "../Redux/authSlice";
+// import {getProfileDetails} from "../Redux/authSlice";
 import {
   getUserDetails,
   followUser,
@@ -74,7 +74,7 @@ export default function Profile() {
       data: profileData,
     };
     await dispatch(updateUser(updateData));
-    await dispatch(getProfileDetails(profile._id));
+    await dispatch(getUserDetails(profile._id));
   };
 
   const handleBackgroundImageUpdate = async () => {
@@ -83,7 +83,7 @@ export default function Profile() {
       data: backgroundImage,
     };
     await dispatch(updateBackgroundImage(updateData));
-    await dispatch(getProfileDetails(profile._id));
+    await dispatch(getUserDetails(profile._id));
   };
 
   return (
