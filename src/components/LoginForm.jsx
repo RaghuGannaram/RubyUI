@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, CircularProgress, TextField } from "@mui/material";
+import {
+  useTheme,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { loginUser } from "../Redux/authSlice";
 
 export default function LoginForm() {
   const history = useHistory();
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { status, isLoggedIn } = useSelector((state) => state.auth);
   const [logInData, setLogInData] = useState({});
+  const [err, setErr] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -23,6 +31,16 @@ export default function LoginForm() {
   useEffect(() => {
     isLoggedIn && history.push("/");
   }, [history, isLoggedIn]);
+
+  useEffect(() => {
+    if (status === "failed") {
+      setErr(true);
+      setLogInData({ email: null, password: null });
+    }
+    setTimeout(() => {
+      setErr(false);
+    }, 3000);
+  }, [status]);
 
   return (
     <>
@@ -55,6 +73,12 @@ export default function LoginForm() {
             }))
           }
         />
+
+        {err && (
+          <Typography sx={{ color: theme.palette.error.main }}>
+            Invalid Credentials, Unable to login...
+          </Typography>
+        )}
         <Button
           sx={{
             color: "primary",

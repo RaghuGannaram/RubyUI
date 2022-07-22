@@ -60,17 +60,19 @@ export default function RightSidebar() {
           />
           {query.length !== 0 && (
             <Box
-              width="100%"
+              width="90%"
               sx={{
-                backgroundColor: theme.palette.background.light,
-                border: "1px solid #eee",
-                borderRadius: theme.shape.borderRadius,
-                padding: "1rem 0",
-                zIndex: "999",
+                padding: "1rem",
+                textAlign: "center",
                 maxHeight: "50vh",
+                backgroundColor: theme.palette.background.light,
+                border: `1px solid ${theme.palette.background.dark}`,
+                borderRadius: theme.shape.borderRadius,
                 overflowY: "scroll",
+                zIndex: "999",
               }}
               position="absolute"
+              className="scrollhost"
             >
               {query.length !== 0 && queriedUsers().length === 0 && (
                 <Typography sx={{ padding: "0 1rem" }}>
@@ -86,9 +88,9 @@ export default function RightSidebar() {
                   >
                     <Grid
                       sx={{
-                        overflow: "hidden",
-                        padding: ".2rem 1rem",
-                        border: `1px solid ${theme.palette.secondary.dark}`,
+                        padding: "0.5rem",
+                        margin: "0.5rem auto",
+                        border: `1px solid ${theme.palette.background.dark}`,
                         "&:hover": {
                           backgroundColor: theme.palette.background.main,
                         },
@@ -96,37 +98,32 @@ export default function RightSidebar() {
                       container
                       alignItems="center"
                     >
-                      <Grid item sx={{ paddingRight: "12px" }}>
+                      <Grid item sx={{ mr:"20px"}}>
                         <img
                           src={`data:image/jpg; base64,${user?.profilePicture}`}
                           alt="profilPicture"
                           style={{ width: "80px", borderRadius: "50%" }}
                         />
                       </Grid>
-                      <Grid item>
-                        <Grid container alignItems="center">
-                          <Grid item>
-                            <Typography
-                              sx={{
-                                fontSize: "16px",
-                                fontWeight: "500",
-                                color: theme.palette.secondary.main,
-                              }}
-                            >
-                              {user.username}
-                            </Typography>
-                            <Box display="flex" alignItems="center">
-                              <Typography
-                                sx={{
-                                  fontSize: "14px",
-                                  mr: "6px",
-                                  color: theme.palette.secondary.main,
-                                }}
-                              >
-                                @{user.handle}
-                              </Typography>
-                            </Box>
-                          </Grid>
+                      <Grid item >
+                        <Grid container sx={{display:"flex", flexDirection:"column", textAlign:"left"}}>
+                        <Typography
+                          sx={{
+                            fontSize: "16px",
+                            fontWeight: "500",
+                            color: theme.palette.secondary.main,
+                          }}
+                        >
+                          {user.username}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            color: theme.palette.secondary.main,
+                          }}
+                        >
+                          @{user.handle}
+                        </Typography>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -138,18 +135,18 @@ export default function RightSidebar() {
         </Box>
         <Box
           sx={{
-            margin: "1rem 0",
-            padding: "20px",
+            // margin: "1rem 0",
+            padding: "10px",
             borderRadius: theme.shape.borderRadius,
             color: theme.palette.secondary.main,
-            backgroundColor: theme.palette.background.light,
+            // backgroundColor: theme.palette.background.light,
           }}
         >
           <Typography
             variant="h6"
             sx={{ fontWeight: "bold", textAlign: "center" }}
           >
-            Who to follow
+            Ruby Stars
           </Typography>
           {status === "success" &&
             users

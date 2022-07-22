@@ -94,7 +94,7 @@ export default function PostDetails() {
           </Grid>
         </Grid>
       </Box>
-      <Box height="92vh" sx={{ overflowY: "scroll" }}>
+      <Box height="92vh" sx={{ overflowY: "scroll" }}className="scrollhost">
         <Box textAlign="center" marginTop="1rem">
           {postStatus === "loading" && <CircularProgress size={20} />}
         </Box>

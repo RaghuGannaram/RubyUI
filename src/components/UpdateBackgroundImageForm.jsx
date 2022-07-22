@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  useTheme,
   Grid,
   IconButton,
   Box,
@@ -9,8 +10,9 @@ import {
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 
-function UpdateBGIImage() {
-  const [backgroundImage, setBackgroundImage] = useState(null);
+function UpdateBackgroundImageForm({setBackgroundImage}) {
+  const theme = useTheme();
+  const [bgImage, setBgImage] = useState(null);
 
   return (
     <>
@@ -46,21 +48,22 @@ function UpdateBGIImage() {
                 type="file"
                 onChange={(event) => {
                   setBackgroundImage(event.target.files[0]);
+                  setBgImage(event.target.files[0]);
                 }}
               />
             </Box>
           </Grid>
           <Grid item xs={4}>
-            {backgroundImage && (
+            {bgImage && (
               <Box>
                 <IconButton
                   sx={{ bgcolor: "#1976d2" }}
-                  onClick={() => setBackgroundImage(null)}
+                  onClick={() => setBgImage(null)}
                 >
-                  <CloseIcon fontSize="small" />
+                  <CloseIcon fontSize="small" sx={{ color: theme.palette.primary.main }}/>
                 </IconButton>
                 <img
-                  src={URL.createObjectURL(backgroundImage)}
+                  src={URL.createObjectURL(bgImage)}
                   style={{ borderRadius: "10px" }}
                   alt="icon"
                   width="100%"
@@ -75,4 +78,4 @@ function UpdateBGIImage() {
   );
 }
 
-export default UpdateBGIImage;
+export default UpdateBackgroundImageForm;

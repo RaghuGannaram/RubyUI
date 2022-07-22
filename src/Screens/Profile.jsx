@@ -19,6 +19,7 @@ import {
   Close as CloseIcon,
   Autorenew as AutorenewIcon,
   LocationOn as LocationOnIcon,
+  Home as HomeIcon,
   DateRange as DateRangeIcon,
   EditOutlined as EditOutlinedIcon,
 } from "@mui/icons-material/";
@@ -27,8 +28,14 @@ import format from "date-fns/format";
 import Post from "../Components/Post";
 import Modal from "../Components/Modal";
 import UpdateForm from "../Components/UpdateForm";
-import UpdateBGIImage from "../Components/UpdateBGIImage";
-import { getUserDetails, followUser, updateUser } from "../Redux/userSlice";
+import UpdateBackgroundImageForm from "../Components/UpdateBackgroundImageForm";
+import {getProfileDetails} from "../Redux/authSlice";
+import {
+  getUserDetails,
+  followUser,
+  updateUser,
+  updateBackgroundImage,
+} from "../Redux/userSlice";
 import { getUserPosts } from "../Redux/postSlice";
 
 export default function Profile() {
@@ -45,6 +52,7 @@ export default function Profile() {
   const [openModal, setOpenModal] = useState(false);
   const [openBGIModal, setOpenBGIModal] = useState(false);
   const [profileData, setProfileData] = useState({});
+  const [backgroundImage, setBackgroundImage] = useState({});
 
   useEffect(() => {
     dispatch(getUserDetails(userId));
@@ -66,11 +74,16 @@ export default function Profile() {
       data: profileData,
     };
     await dispatch(updateUser(updateData));
-    await dispatch(getUserDetails(profile._id));
+    await dispatch(getProfileDetails(profile._id));
   };
 
-  const handleBGIupdate = async () => {
-    setOpenBGIModal(true);
+  const handleBackgroundImageUpdate = async () => {
+    const updateData = {
+      userId: profile._id,
+      data: backgroundImage,
+    };
+    await dispatch(updateBackgroundImage(updateData));
+    await dispatch(getProfileDetails(profile._id));
   };
 
   return (
@@ -102,97 +115,109 @@ export default function Profile() {
         {status === "loading" && <CircularProgress size={20} />}
       </Box>
       {status === "success" && (
-        <Box height="90vh" sx={{ overflowY: "scroll" }}>
-          <Box position="relative">
+        <Box height="90vh" sx={{ overflowY: "scroll" }} className="scrollhost">
+          <Box>
             <img
               src={`data:image/jpg; base64,${user?.backgroundImage}`}
               alt="background"
-              style={{ width: "150px", borderRadius: "50%" }}
+              style={{ width: "100%" }}
             />
-            <Box
-              sx={{
-                position: "absolute",
-                top: 160,
-                right: 25,
-                borderRadius: "50%",
-              }}
-            >
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Box sx={{ padding: "10px" }}>
               <img
                 src={`data:image/jpg; base64,${user?.profilePicture}`}
                 alt="profile"
                 style={{ width: "80px", borderRadius: "50%" }}
               />
             </Box>
-          </Box>
-          <Box textAlign="right" padding="10px 20px">
-            {userId === profile._id && (
-              <IconButton
-                aria-expanded={Boolean(anchorEl) ? "true" : undefined}
-                onClick={(event) => setAnchorEl(event.currentTarget)}
-              >
-                <MoreHorizIcon sx={{ color: theme.palette.primary.main }} />
-              </IconButton>
-            )}
-
-            {userId === profile._id && (
-              <IconButton
-                title="Update Background Image"
-                onClick={handleBGIupdate}
-              >
-                <EditOutlinedIcon sx={{ color: theme.palette.primary.main }} />
-              </IconButton>
-            )}
-
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={() => setAnchorEl(null)}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem
-                onClick={(event) => {
-                  event.preventDefault();
-                  setOpenModal(true);
-                  setAnchorEl(null);
-                }}
-              >
-                Update Info
-                <IconButton>
-                  <AutorenewIcon fontSize="small" />
+            <Box textAlign="right" padding="10px">
+              {userId === profile._id && (
+                <IconButton
+                  aria-expanded={Boolean(anchorEl) ? "true" : undefined}
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                >
+                  <MoreHorizIcon sx={{ color: theme.palette.primary.main }} />
                 </IconButton>
-              </MenuItem>
-              <MenuItem
-                onClick={(event) => {
-                  event.preventDefault();
-                  setAnchorEl(null);
-                }}
-              >
-                Close Menu
-                <IconButton>
-                  <CloseIcon fontSize="small" />
+              )}
+
+              {userId === profile._id && (
+                <IconButton
+                  title="Update Background Image"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setOpenBGIModal(true);
+                  }}
+                >
+                  <EditOutlinedIcon
+                    sx={{ color: theme.palette.primary.main }}
+                  />
                 </IconButton>
-              </MenuItem>
-            </Menu>
-            <IconButton>
-              <MailOutlineIcon sx={{ color: theme.palette.primary.main }} />
-            </IconButton>
-            {userId !== profile._id && (
-              <Button
-                onClick={handleFollow}
-                sx={{
-                  textTransform: "capitalize",
-                  padding: "6px 20px",
-                  borderRadius: theme.shape.borderRadius,
+              )}
+
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
                 }}
-                variant="contained"
-                size="small"
               >
-                {followers.includes(profile._id) ? "Unfollow" : "Follow"}
-              </Button>
-            )}
+                <MenuItem
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setOpenModal(true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Update Info
+                  <IconButton>
+                    <AutorenewIcon
+                      fontSize="small"
+                      sx={{ color: theme.palette.primary.main }}
+                    />
+                  </IconButton>
+                </MenuItem>
+                <MenuItem
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setAnchorEl(null);
+                  }}
+                >
+                  Close Menu
+                  <IconButton>
+                    <CloseIcon
+                      fontSize="small"
+                      sx={{ color: theme.palette.primary.main }}
+                    />
+                  </IconButton>
+                </MenuItem>
+              </Menu>
+              <IconButton>
+                <MailOutlineIcon sx={{ color: theme.palette.primary.main }} />
+              </IconButton>
+              {userId !== profile._id && (
+                <Button
+                  onClick={handleFollow}
+                  sx={{
+                    textTransform: "capitalize",
+                    padding: "6px 20px",
+                    borderRadius: theme.shape.borderRadius,
+                  }}
+                  variant="contained"
+                  size="small"
+                >
+                  {followers.includes(profile._id) ? "Unfollow" : "Follow"}
+                </Button>
+              )}
+            </Box>
           </Box>
           <Box padding="10px 20px">
             <Typography variant="h6" sx={{ fontWeight: "500" }}>
@@ -212,6 +237,12 @@ export default function Profile() {
                 <LocationOnIcon sx={{ color: theme.palette.primary.main }} />
                 <Typography sx={{ ml: "6px" }}>{user?.city}</Typography>
               </Box>
+
+              <Box display="flex" marginLeft="1rem">
+                <HomeIcon sx={{ color: theme.palette.primary.main }} />
+                <Typography sx={{ ml: "6px" }}>{user?.from}</Typography>
+              </Box>
+
               <Box display="flex" marginLeft="1rem">
                 <DateRangeIcon sx={{ color: theme.palette.primary.main }} />
                 <Typography sx={{ ml: "6px" }}>
@@ -271,8 +302,9 @@ export default function Profile() {
         open={openBGIModal}
         handleClose={() => setOpenBGIModal(false)}
         button={"Update"}
+        handleSubmit={handleBackgroundImageUpdate}
       >
-        <UpdateBGIImage />
+        <UpdateBackgroundImageForm setBackgroundImage={setBackgroundImage} />
       </Modal>
     </Box>
   );

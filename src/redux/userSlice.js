@@ -31,6 +31,14 @@ export const updateUser = createAsyncThunk("user/updateUser", async (updateData)
   return data;
 });
 
+export const updateBackgroundImage = createAsyncThunk("user/updateBackgrounImage", async (updateData) => {
+  const formData = new FormData();
+  formData.append('userId',updateData.userId)
+  formData.append('backgroundImage',updateData.data)
+  const { data } = await axios.put(`/api/users/${updateData.userId}/backgroundImage`, formData);
+  return data;
+});
+
 export const deleteUser = createAsyncThunk("user/deleteUser", async (userData) => {
   const { data } = await axios.delete(`/api/users/${userData.userId}`, userData);
   return data;
@@ -83,6 +91,16 @@ export const userSlice = createSlice({
       state.status = "success";
     },
     [updateUser.rejected]: (state, action) => {
+      state.status = "failed";
+    },
+
+    [updateBackgroundImage.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [updateBackgroundImage.fulfilled]: (state, action) => {
+      state.status = "success";
+    },
+    [updateBackgroundImage.rejected]: (state, action) => {
       state.status = "failed";
     },
 

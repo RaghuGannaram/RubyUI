@@ -88,7 +88,7 @@ export default function Post({ post }) {
           sx={{
             color:theme.palette.secondary.main,
             "&:hover": {
-              backgroundColor: theme.palette.background.light,
+              backgroundColor: theme.palette.background.dark,
             },
           }}
         >

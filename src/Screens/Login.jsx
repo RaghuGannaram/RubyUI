@@ -27,7 +27,7 @@ export default function Login() {
         }}
       >
         <Box textAlign="center" marginBottom="1rem">
-          <img src="/icon.png" width={100} height={100} alt="icon" />
+          <img src="/logo.png" width={100} height={100} alt="icon" />
         </Box>
         {isLoginForm ? (
           <Typography variant="h5">Login to your account</Typography>

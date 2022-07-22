@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTheme, Typography, Button, Grid } from "@mui/material";
 import { Box } from "@mui/system";
@@ -10,12 +11,13 @@ export default function WhoToFollow({ user }) {
   return (
     <Box
       sx={{
-        mt:"10px",
+        mt: "10px",
         padding: "5px",
-        borderRadius: theme.shape.borderRadius,
+        borderRadius: theme.shape.borderRadiusSmall,
+        border: `1px solid ${theme.palette.background.dark}`,
         backgroundColor: theme.palette.background.main,
+        boxShadow: 5,
       }}
-      
     >
       <Grid container sx={{ display: "flex", flexDirection: "column" }}>
         <Grid item>
@@ -23,22 +25,41 @@ export default function WhoToFollow({ user }) {
             container
             sx={{
               display: "flex",
+              mt: "5px",
               justifyContent: "space-around",
               alignItems: "center",
             }}
           >
             <Grid item>
-              <img
-                src={`data:image/jpg; base64,${user?.profilePicture}`}
-                alt="profilPicture"
-                style={{ width: "80px", borderRadius: "50%" }}
-              />
+              <Link to={`/profile/${user._id}`}>
+                <img
+                  src={`data:image/jpg; base64,${user?.profilePicture}`}
+                  alt="profilPicture"
+                  style={{ width: "80px", borderRadius: "50%" }}
+                />
+              </Link>
             </Grid>
             <Grid item>
-              <Typography sx={{ fontSize: "16px", fontWeight: "500", color: theme.palette.secondary.main }}>
-                {user.username}
-              </Typography>
-              <Typography sx={{ fontSize: "14px", color: theme.palette.secondary.main }}>
+              <Link to={`/profile/${user._id}`}>
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    color: theme.palette.secondary.main,
+                    "&:hover": {
+                      color: theme.palette.secondary.dark,
+                    },
+                  }}
+                >
+                  {user.username}
+                </Typography>
+              </Link>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  color: theme.palette.secondary.main,
+                }}
+              >
                 @{user.handle}
               </Typography>
             </Grid>

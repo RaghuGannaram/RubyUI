@@ -245,7 +245,7 @@ export default function LeftSidebar() {
               textAlign: "center",
             }}
           >
-            <AddCircleOutlineIcon />
+            <AddCircleOutlineIcon sx={{ color: theme.palette.primary.main }}/>
           </IconButton>
         </Hidden>
         <Menu
@@ -262,13 +262,13 @@ export default function LeftSidebar() {
           <MenuItem onClick={() => dispatch(logoutUser())}>
             Logout
             <IconButton>
-              <LogoutIcon fontSize="small" />
+              <LogoutIcon fontSize="small" sx={{ color: theme.palette.primary.main }}/>
             </IconButton>
           </MenuItem>
           <MenuItem onClick={() => setAnchorEl(null)}>
             Close
             <IconButton>
-              <CloseIcon fontSize="small" />
+              <CloseIcon fontSize="small" sx={{ color: theme.palette.primary.main }}/>
             </IconButton>
           </MenuItem>
         </Menu>

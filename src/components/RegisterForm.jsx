@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, CircularProgress, TextField } from "@mui/material";
+import {
+  useTheme,
+  Typography,
+  Button,
+  CircularProgress,
+  TextField,
+} from "@mui/material";
 import { registerUser } from "../Redux/authSlice";
 
 export default function RegisterForm() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const theme = useTheme();
   const { status, isLoggedIn } = useSelector((state) => state.auth);
   const [registerData, setRegisterData] = useState({});
+  const [err, setErr] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,6 +26,16 @@ export default function RegisterForm() {
   useEffect(() => {
     isLoggedIn && history.push("/");
   }, [history, isLoggedIn]);
+
+  useEffect(() => {
+    if (status === "failed") {
+      setErr(true);
+      setRegisterData({});
+    }
+    setTimeout(() => {
+      setErr(false);
+    }, 3000);
+  }, [status]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -77,6 +95,12 @@ export default function RegisterForm() {
           }))
         }
       />
+
+      {err && (
+        <Typography sx={{ color: theme.palette.error.main }}>
+          Registration failed, Kindly try with different email and username...
+        </Typography>
+      )}
       <Button
         sx={{
           width: "100%",

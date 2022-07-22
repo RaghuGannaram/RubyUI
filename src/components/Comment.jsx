@@ -90,7 +90,7 @@ export default function Comment({ comment, post }) {
                       setAnchorEl(event.currentTarget);
                     }}
                   >
-                    <MoreHorizIcon />
+                    <MoreHorizIcon sx={{ color: theme.palette.primary.main }}/>
                   </IconButton>
                 )}
                 <Menu
@@ -124,7 +124,7 @@ export default function Comment({ comment, post }) {
                 size="small"
                 onClick={handleLikeAComment}
               >
-                {comment?.likes?.includes(profile._id) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" /> }
+                {comment?.likes?.includes(profile._id) ? <FavoriteIcon fontSize="small" sx={{ color: theme.palette.primary.main }}/> : <FavoriteBorderIcon fontSize="small" sx={{ color: theme.palette.primary.main }}/> }
               </IconButton>
             </Box>
           </Box>

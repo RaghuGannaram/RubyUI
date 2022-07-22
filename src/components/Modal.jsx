@@ -1,5 +1,7 @@
 import React from "react";
 import {
+  useTheme,
+  Box,
   Dialog,
   DialogActions,
   DialogContent,
@@ -7,7 +9,6 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import { Close as CloseIcon } from "@mui/icons-material";
 
 export default function Modal({
@@ -18,17 +19,18 @@ export default function Modal({
   text,
   handleSubmit,
 }) {
+  const theme = useTheme();
   const handleClick = () => {
     handleSubmit();
     handleClose();
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" sx={{backgroundColor:theme.palette.background.blur}}>
       <DialogTitle>
         <Box textAlign="right" borderBottom="1px solid #ccc">
           <IconButton onClick={handleClose}>
-            <CloseIcon />
+            <CloseIcon sx={{ color: theme.palette.primary.main }}/>
           </IconButton>
         </Box>
       </DialogTitle>
@@ -39,7 +41,10 @@ export default function Modal({
             borderRadius: "5px",
             padding: "2px 5px ",
             fontSize: "13px",
-            color: "primary",
+            color: theme.palette.secondary.main,
+            "&:disabled": {
+              backgroundColor: theme.palette.primary.main,
+            },
           }}
           disabled={text === 0}
           variant="contained"

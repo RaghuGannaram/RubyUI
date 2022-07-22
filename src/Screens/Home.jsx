@@ -30,7 +30,7 @@ export default function Home() {
           </Grid>
         </Grid>
       </Box>
-      <Box height="92vh" sx={{ overflowY: "scroll" }}>
+      <Box height="92vh" sx={{ overflowY: "scroll" }} className="scrollhost">
         <AddPost />
         <Box textAlign="center" marginTop="1rem">
           {postStatus === "loading" && (
